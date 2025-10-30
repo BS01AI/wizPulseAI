@@ -68,7 +68,107 @@
 
 ---
 
-### 🔍 监控和调试
+### 🔀 Git 多项目监控
+
+#### `git-status-all.sh` ⭐ 推荐
+**快速查看所有子项目的 Git 状态**
+
+功能：
+- 显示每个子项目的分支、状态
+- 统计未提交文件数、未推送提交数
+- 清晰的视觉标识（✅ 干净 / ⚠️ 有变更）
+- 显示最近一次提交信息
+
+使用方法：
+```bash
+./scripts/git-status-all.sh
+```
+
+输出示例：
+```
+🔍 WizPulseAI 子项目 Git 状态
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ 干净 Auth站点
+   📁 目录: auth-wizpulseai-com
+   🌿 分支: main
+   📝 未提交文件: 0 个
+   ⬆️  未推送提交: 0 个
+   🕐 最近提交: a1b2c3d - feat: add login page (2 hours ago)
+```
+
+---
+
+#### `git-diff-all.sh`
+**查看所有子项目的详细差异**
+
+功能：
+- 显示每个文件的具体改动
+- 支持多种模式（未暂存/已暂存/全部）
+- 统计改动行数
+
+使用方法：
+```bash
+# 查看未暂存的改动
+./scripts/git-diff-all.sh
+
+# 查看已暂存的改动
+./scripts/git-diff-all.sh --staged
+
+# 查看所有改动
+./scripts/git-diff-all.sh --all
+
+# 只显示统计信息（快速）
+./scripts/git-diff-all.sh --stat
+```
+
+---
+
+#### `git-interactive.sh`
+**交互式 Git 管理工具**
+
+功能：
+- 菜单选择要管理的子项目
+- 执行常用 Git 操作（status, diff, log, branch）
+- 支持自定义 Git 命令
+- 查看所有项目概览
+
+使用方法：
+```bash
+./scripts/git-interactive.sh
+
+# 然后按照菜单提示选择：
+# 1-3: 选择子项目
+# a: 查看所有项目概览
+# q: 退出
+```
+
+---
+
+#### `git-dashboard.sh`
+**图形化仪表盘**
+
+功能：
+- 彩色表格展示所有项目状态
+- 进度条显示改动比例
+- 实时统计总览
+- 支持 watch 模式实时监控
+
+使用方法：
+```bash
+# 单次查看
+./scripts/git-dashboard.sh
+
+# 实时监控（每5秒刷新）
+watch -n 5 ./scripts/git-dashboard.sh
+
+# 或使用 watch 的彩色模式
+watch -n 5 -c ./scripts/git-dashboard.sh
+```
+
+---
+
+### 🔍 站点监控和调试
 
 #### `check-status.sh`
 **检查站点运行状态**
