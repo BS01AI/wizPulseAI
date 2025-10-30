@@ -1,0 +1,19 @@
+{
+  "name": "wizpulseai-e2e",
+  "private": true,
+  "version": "0.1.0",
+  "devDependencies": {
+    "@playwright/test": "^1.47.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.0"
+  },
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:local": "PLAY_MODE=local playwright test",
+    "test:online": "PLAY_MODE=online playwright test",
+    "codegen": "playwright codegen"
+  }
+}
+

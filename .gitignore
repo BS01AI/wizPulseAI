@@ -1,0 +1,64 @@
+# ===== 忽略3个子项目（它们有自己的 Git 仓库）=====
+auth-wizpulseai-com/
+db-wizPulseAI-com/
+wizPulseAI-com/
+
+# ===== Node.js =====
+node_modules/
+.pnp
+.pnp.js
+
+# ===== 构建产物 =====
+.next/
+out/
+build/
+dist/
+
+# ===== 环境变量（敏感信息）=====
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.mcp.json
+
+# ===== 日志文件 =====
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# ===== 操作系统 =====
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ===== IDE 和编辑器 =====
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ===== 临时文件 =====
+*.pid
+*.seed
+*.pid.lock
+
+# ===== 备份和补丁文件 =====
+backups/
+*.sql
+*.patch
+*.backup
+
+# ===== 归档目录 =====
+archive/
+
+# ===== 文档草稿 =====
+docs/commit_log.md
