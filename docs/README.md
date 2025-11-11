@@ -161,7 +161,7 @@ docs/
 → [../scripts/README.md](../scripts/README.md)
 
 **查看项目总览**
-→ [../README.md](../README.md)
+→ [../README.md](../z-系统配置/README.md)
 
 **查看 AI 记忆**
 → [../CLAUDE.md](../CLAUDE.md)
@@ -171,7 +171,7 @@ docs/
 ## 📌 重要文档
 
 ### 新成员必读
-1. [../README.md](../README.md) - 项目总览
+1. [../README.md](../z-系统配置/README.md) - 项目总览
 2. [guides/LOCAL_TEST_GUIDE.md](guides/LOCAL_TEST_GUIDE.md) - 本地测试
 3. [technical-docs/00-shared/00-ARCH-三站点架构总览-v1.0.md](technical-docs/00-shared/00-ARCH-三站点架构总览-v1.0.md) - 架构理解
 

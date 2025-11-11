@@ -332,7 +332,7 @@ git init
 ## 📚 相关文档
 
 - [scripts/README.md](../../scripts/README.md) - 完整脚本文档
-- [../README.md](../../README.md) - 项目总览
+- [../README.md](../../z-系统配置/README.md) - 项目总览
 - [LOCAL_TEST_GUIDE.md](LOCAL_TEST_GUIDE.md) - 本地测试指南
 
 ---

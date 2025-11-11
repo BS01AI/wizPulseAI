@@ -62,3 +62,6 @@ archive/
 
 # ===== 文档草稿 =====
 docs/commit_log.md
+
+# Playwright test outputs
+.playwright-mcp/
