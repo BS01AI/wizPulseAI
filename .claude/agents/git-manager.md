@@ -28,11 +28,70 @@ model: haiku
 ```
 主仓库: /Users/bms/Work/CodeWork/Web/wizPulseAI
   ├── auth-wizpulseai-com/    → git@github.com:BS01AI/auth-wizpulseai-com.git
+  │   ├── dev 分支 (开发环境，Vercel Preview)
+  │   └── main 分支 (生产环境，Vercel Production) ⭐
+  │
   ├── db-wizPulseAI-com/      → git@github.com:BS01AI/db-wizPluseAI-com.git
+  │   └── master 分支 (生产环境，Vercel Production) ⭐
+  │
   ├── wizPulseAI-com/         → git@github.com:BS01AI/wizPulseAI-com.git
+  │   ├── dev 分支 (开发环境，Vercel Preview)
+  │   └── main 分支 (生产环境，Vercel Production) ⭐
+  │
   ├── (未来) quickslide-com/  → 可能新增的产品站点
   └── (主仓库本身)            → git@github.com:BS01AI/wizPulseAI.git
+      └── main 分支
 ```
+
+## 🚀 分支策略和部署流程（重要！）⭐
+
+### Git分支策略
+- **dev分支**：开发和测试环境
+  - 开发过程中的所有提交
+  - 触发Vercel Preview部署（临时预览URL）
+  - **不会部署到生产环境**
+
+- **main/master分支**：生产环境
+  - 只有测试通过的稳定代码
+  - 触发Vercel Production自动部署
+  - **直接影响用户访问的网站**
+
+### Vercel自动部署规则
+```bash
+# dev分支推送 → Preview部署
+git push origin dev
+# 结果：创建临时预览URL（如 xxx-git-dev.vercel.app）
+# 影响：无，不影响生产环境
+
+# main/master分支推送 → Production部署
+git push origin main
+# 结果：自动部署到生产域名
+# 影响：立即更新用户访问的网站
+```
+
+### 标准部署流程（两步走）
+```bash
+# 第1步：开发和测试（dev分支）
+git checkout dev
+git add .
+git commit -m "feat: xxx"
+git push origin dev
+# → 本地测试 → Preview测试 → 确认无误
+
+# 第2步：发布到生产（main分支）
+git checkout main
+git merge dev          # 合并dev分支
+git push origin main   # ← 触发生产部署
+# → 自动部署到生产环境
+```
+
+### 当前项目分支状态
+| 站点 | 开发分支 | 生产分支 | 当前工作分支 |
+|------|---------|---------|------------|
+| Auth | dev | main | dev ✅ |
+| Dashboard | - | master | master ✅ |
+| Main | dev | main | dev ✅ |
+| 主仓库 | - | main | main ✅ |
 
 ## 核心功能
 

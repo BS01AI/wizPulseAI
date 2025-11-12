@@ -274,16 +274,40 @@ wizPulseAI/
 - [x] ✅ Phase 3: 跨站点配置验证（已完成 2025-11-12）
 - [x] ✅ Phase 3: P0问题修复（Cookie域 + 术语统一）（已完成 2025-11-12）
 
+**🔧 重要发现：发布管理机制** ⚠️
+- **Git分支策略**：
+  - Auth站点：dev分支（开发） / main分支（生产）
+  - Dashboard站点：master分支（生产）
+  - Main站点：dev分支（开发） / main分支（生产）
+  - 主仓库：main分支（生产）
+
+- **Vercel自动部署规则**：
+  - ✅ `main`或`master`分支推送 → 自动部署到生产环境
+  - ⚠️ `dev`分支推送 → 仅创建Preview部署（不影响生产）
+  - 当前状态：Phase 3改动提交到dev分支，**未部署到生产环境**
+
+- **部署流程**（标准操作）：
+  ```bash
+  # 1. dev分支开发和测试
+  git checkout dev
+  git add .
+  git commit -m "feat: xxx"
+  git push origin dev
+
+  # 2. 测试通过后合并到main
+  git checkout main
+  git merge dev
+  git push origin main  # ← 触发Vercel生产部署
+  ```
+
 **待办事项**：
-- [ ] 📋 浏览器测试验收（Main/Auth/Dashboard 4语言切换）
+- [x] ✅ Git提交Phase 3改动到dev分支（已完成）
+- [ ] 📋 浏览器测试验收（本地环境 localhost:3010/3011/3012）
   - 测试日语/英语/阿拉伯语/繁体中文切换
   - 验证RTL布局（阿拉伯语）
   - 测试SSO跨站点登录
-- [ ] 🔐 Git提交Phase 3改动（三站点 + 文档）
-  - Main站点：messages/翻译文件 + shared/config修改
-  - Auth站点：lib/i18n/auth-center.ts术语统一
-  - Dashboard站点：translations.ts + locales.ts修改
-  - 文档：TRANSLATION_GLOSSARY.md
+- [ ] 🚀 合并dev到main分支（测试通过后）
+  - 触发Vercel自动部署到生产环境
 - [ ] 📝 修复P1问题（可选，不紧急）
   - 统一依赖版本（Supabase 2.57.2 + Next.js 14.2.28）
   - 添加Dashboard语言切换UI
