@@ -42,6 +42,13 @@
 - ✅ SSO Cookie域正确配置
 - ✅ 用户体验术语一致
 
+- 📋 **测试准备完成**：
+  - ✅ 创建完整测试计划文档（PHASE_3_TEST_PLAN.md）
+  - ✅ 设置Todo清单（6项测试任务）
+  - ✅ Sub-agent分工明确（sso-tester + performance-analyzer）
+  - ✅ 测试工具验证（Playwright + Chrome DevTools已就绪）
+  - ✅ 更新发布管理记忆（Git分支策略）
+
 **Phase 3 规划完成** ⭐
 - 📋 **三站点现状调查**：
   - Auth站点：有基础3语言，但硬编码，缺少阿拉伯语
@@ -302,10 +309,17 @@ wizPulseAI/
 
 **待办事项**：
 - [x] ✅ Git提交Phase 3改动到dev分支（已完成）
-- [ ] 📋 浏览器测试验收（本地环境 localhost:3010/3011/3012）
-  - 测试日语/英语/阿拉伯语/繁体中文切换
-  - 验证RTL布局（阿拉伯语）
-  - 测试SSO跨站点登录
+- [x] ✅ 创建测试计划文档（PHASE_3_TEST_PLAN.md）
+- [ ] 🧪 **执行本地功能测试**（下一步重点）⭐
+  - 测试计划：`PHASE_3_TEST_PLAN.md`（已创建）
+  - 测试负责：Claude AI + Sub-agents（sso-tester + performance-analyzer）
+  - 测试范围：
+    - Main站点：4语言切换 + RTL布局
+    - Auth站点：新UI + 登录功能
+    - Dashboard站点：首页重构 + 4语言
+    - SSO流程：跨站点登录完整流程
+  - 预计时间：90分钟
+  - 输出：测试报告 + 截图 + 问题清单
 - [ ] 🚀 合并dev到main分支（测试通过后）
   - 触发Vercel自动部署到生产环境
 - [ ] 📝 修复P1问题（可选，不紧急）
