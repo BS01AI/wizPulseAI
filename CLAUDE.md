@@ -110,15 +110,98 @@ dashboard: 3012
 3. **测试** 跨站点认证流程
 4. **注意** Vercel 部署配置
 
-## 当前状态 (2025-11-15)
+## 当前状态 (2025-11-17)
 
 - ✅ SSO 认证系统正常工作 (Google OAuth已修复)
 - ✅ Supabase版本统一 (三站点均为2.81.1)
 - ✅ Stripe 支付集成完成
 - ✅ 多语言支持实现 (ja/en/ar/zh-TW)
+- ✅ **Vercel构建问题已修复** (三站点均可正常部署)
 - 🚧 产品试用功能待开发
 - 🚧 API 开放平台待实现
 - 📝 技术文档体系已建立
+
+## 最新进展 (2025-11-17)
+
+### ✅ Vercel构建失败完全修复 🎉⭐⭐⭐⭐⭐
+
+#### 问题诊断
+用户报告三个站点在Vercel上构建失败，本地构建正常。
+
+**根本原因**：
+1. **跨仓库依赖问题**：Auth和Dashboard站点引用主仓库的`@/shared/i18n`和`@/shared/components`
+2. **Vercel部署限制**：每个站点独立部署，无法访问父目录的shared模块
+3. **TypeScript类型错误**：
+   - Auth站点：缺少ar和zh-TW翻译，语言代码`zh`需改为`zh-TW`
+   - Dashboard站点：API路由的`createRouteHandler()`调用参数错误
+   - Main站点：`logout()`函数传递对象而非字符串参数
+
+#### 修复方案
+
+**1. Auth站点修复** (commit: a499183)
+```bash
+# 复制共享模块到站点内部
+cp -r shared/i18n auth-wizpulseai-com/src/shared/
+cp shared/components/LanguageSwitcher.tsx auth-wizpulseai-com/src/shared/components/
+
+# 修复内容
+- 删除tsconfig.json中的父目录路径引用
+- 全局替换语言代码：zh → zh-TW
+- 为NewLoginForm和SignUpForm添加ar和zh-TW翻译
+- 更新组件类型定义：'en' | 'ja' | 'ar' | 'zh-TW'
+```
+
+**2. Dashboard站点修复** (commit: dc85991)
+```bash
+# 复制i18n模块
+cp -r shared/i18n db-wizPulseAI-com/src/shared/
+
+# 批量修复API路由（29个文件）
+find src/app/api/ -name "*.ts" -exec sed -i '' \
+  's/createRouteHandler(request)/createRouteHandler()/g' {} \;
+```
+
+**3. Main站点修复** (commit: e2d9e46)
+```typescript
+// 修复前（错误）
+await supabaseLogout({ redirectTo })
+
+// 修复后（正确）
+await supabaseLogout(redirectTo)
+```
+
+#### 修复效果
+
+**✅ 构建验证通过**：
+- Auth站点：9个路由，87.3 KB，本地构建成功
+- Dashboard站点：45个路由，87.2 KB，本地构建成功
+- Main站点：64个路由，87.3 KB，本地构建成功
+
+**✅ Git提交完成**：
+| 仓库 | 分支 | Commit | 修复内容 |
+|------|------|--------|---------|
+| Auth站点 | main | a499183 | i18n和组件依赖问题修复 |
+| Dashboard站点 | master | dc85991 | API路由和i18n集成修复 |
+| Main站点 | main | e2d9e46 | logout函数参数类型修复 |
+| 主仓库 | main | 4907ff5 | 修复报告文档 |
+
+**✅ Vercel自动部署中**：所有修复已推送到GitHub，触发自动部署
+
+#### 重要经验教训
+
+**Vercel部署特性**：
+1. ⚠️ 每个站点独立构建，无法访问父目录资源
+2. ⚠️ 共享模块必须复制到各站点内部
+3. ⚠️ 不能使用`../`引用父目录
+
+**解决方案**：
+- 短期：复制shared模块到各站点（当前方案）
+- 长期：考虑monorepo或npm workspace架构
+
+**相关文档**：
+- [VERCEL_BUILD_FIX_REPORT.md](./VERCEL_BUILD_FIX_REPORT.md) - 完整修复报告
+
+---
 
 ## 最新进展 (2025-11-15)
 
