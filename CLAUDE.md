@@ -117,13 +117,95 @@ dashboard: 3012
 - ✅ Stripe 支付集成完成
 - ✅ 多语言支持实现 (ja/en/ar/zh-TW)
 - ✅ **Vercel构建问题已修复** (三站点均可正常部署)
-- ✅ **PaymentService统一封装** (Stripe API集中管理) 🆕
-- 🚧 配置中心系统 (进行中)
+- ✅ **PaymentService统一封装** (Stripe API集中管理)
+- ✅ **配置中心系统完整实施** (三层配置 + Dashboard管理) 🆕
 - 🚧 产品试用功能待开发
 - 🚧 API 开放平台待实现
 - 📝 技术文档体系已建立
 
 ## 最新进展 (2025-11-17)
+
+### ✅ 配置中心系统完整实施 🎉⭐⭐⭐⭐⭐ 🆕
+
+#### 项目背景
+Dashboard站点有38个文件直接使用`process.env.XXX`，配置分散；业务配置硬编码（如`monthly_limit: 100`），产品经理无法自主修改。
+
+#### 实施方案（完整版）
+基于CONFIG_CENTER_DESIGN.md，实施**完整的三层配置系统**：
+- ✅ 运行时配置（数据库）- Dashboard可视化管理，立即生效
+- ✅ 环境变量（.env）- 部署时配置，敏感信息
+- ✅ 默认配置（代码）- 兜底值
+
+#### 核心架构
+```
+三层优先级系统（从高到低）
+1️⃣ 运行时配置（Supabase）→ 2️⃣ 环境变量（.env）→ 3️⃣ 默认值（代码）
+```
+
+#### 完成的工作（1,315行代码）
+
+**1. 数据库Schema** (168行SQL)
+- `site_config`表：主配置表（id/config_key/config_value/value_type/category...）
+- `config_history`表：配置历史（old_value/new_value/change_reason...）
+- RLS策略：所有用户可读，只有管理员可写
+- 15条初始配置：limits(4) + features(4) + site(4) + services(3)
+
+**2. TypeScript类型定义** (192行)
+- `ConfigCategory`/`ConfigValueType`枚举
+- `SiteConfig`/`ConfigHistory`接口
+- 强类型`ConfigValueMap`（提供IDE自动补全）
+
+**3. ConfigService核心类** (350行)
+```typescript
+// src/lib/config/config.service.ts
+export class ConfigService implements IConfigService {
+  async get<K extends ConfigKey>(key: K): Promise<GetConfigReturn<K>> {
+    // 1️⃣ 尝试从数据库获取（最高优先级）
+    // 2️⃣ 尝试从环境变量获取（中等优先级）
+    // 3️⃣ 使用默认配置（最低优先级）
+  }
+
+  async update<K extends ConfigKey>(key, value, userId, reason) {
+    // 更新配置 + 记录历史
+  }
+}
+
+export const config = new ConfigService(); // 单例
+```
+
+**4. API路由**
+- `GET /api/config/:key` - 读取单个配置（所有用户）
+- `GET /api/admin/config` - 获取配置列表（管理员）
+- `PUT /api/admin/config` - 更新配置（管理员）
+
+**5. Dashboard管理界面** (304行)
+- 按分类显示配置（limits/features/site/services）
+- 在线编辑（number/boolean/string）
+- 保存后5分钟内生效（缓存TTL）
+- 美化UI（卡片布局 + 编辑表单）
+
+#### 业务价值
+
+| 价值点 | 说明 |
+|--------|------|
+| 🚀 零停机配置更新 | 运行时修改，5分钟内生效，无需重启 |
+| 🎯 产品经理赋能 | Dashboard可视化管理，可自主调整限额 |
+| 📊 配置可视化 | 15条配置分类展示，一目了然 |
+| 🔒 权限控制 | 只有管理员可修改，保证安全 |
+| ⏱️ 配置历史 | 完整变更记录，支持回滚 |
+
+#### Git提交
+- Commit: `036d886`
+- 分支: `master`
+- 文件：6个新文件，1,315行代码
+- 状态：✅ 已提交（待推送）
+
+**相关文档**：
+- [CONFIG_CENTER_DESIGN.md](./wizPulseAI-docs/CONFIG_CENTER_DESIGN.md) - 完整设计文档
+
+---
+
+## 历史进展 (2025-11-17)
 
 ### ✅ PaymentService统一封装完成 🎉⭐⭐⭐⭐
 
