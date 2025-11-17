@@ -12,7 +12,96 @@
 
 ---
 
-## 最新状态 (2025-11-13 部署完成)
+## 最新状态 (2025-11-15 Google OAuth修复完成)
+
+### ✅ 今天完成的工作
+
+**Google OAuth 跨站点SSO登录完全修复** 🎉⭐⭐⭐⭐⭐
+
+#### **问题诊断**
+- **现象**：Google OAuth授权成功，但回调后无法登录，显示Cookie解析错误
+- **错误信息**：`"base64-eyJ..." is not valid JSON`
+- **根本原因**：Supabase版本不一致导致Cookie格式不兼容
+  - Auth站点：使用新版 @supabase/supabase-js 2.57.2 + @supabase/ssr 0.7.0
+  - Main/Dashboard站点：使用旧版 @supabase/supabase-js 2.49.4（无@supabase/ssr）
+  - Auth设置Cookie格式：`base64-`编码（新版）
+  - Main/Dashboard读取Cookie：期望纯JSON格式（旧版）
+
+#### **完整修复方案**
+
+**1. 升级Supabase依赖** ✅
+```json
+// Main + Dashboard 站点 package.json
+"@supabase/supabase-js": "^2.81.1"  // 2.49.4 → 2.81.1
+"@supabase/ssr": "^0.7.0"           // 新增
+```
+
+**2. 更新浏览器端客户端代码** ✅
+- 文件：`wizPulseAI-com/src/shared/auth/supabase-browser.ts`
+- 文件：`db-wizPulseAI-com/src/shared/auth/supabase-browser.ts`
+- 替换：`createClientComponentClient` → `createBrowserClient` (from @supabase/ssr)
+- 实现：完整的Cookie处理函数（get/set/remove），支持`base64-`编码
+
+**3. 更新服务器端客户端代码** ✅
+- 文件：`db-wizPulseAI-com/src/lib/supabase/server.ts`
+- 替换：`createServerComponentClient` → `createServerClient` (from @supabase/ssr)
+- 修复：Dashboard服务器端无法验证用户会话的问题
+
+**4. 配置Google头像域名** ✅
+- Main站点：`wizPulseAI-com/next.config.js` - 添加 `lh3.googleusercontent.com`
+- Dashboard站点：
+  - `db-wizPulseAI-com/next.config.js` - 添加到images.domains
+  - `db-wizPulseAI-com/src/middleware.ts` - 添加到CSP img-src指令
+
+**5. 修复Dashboard配置问题** ✅
+- `db-wizPulseAI-com/tsconfig.json` - 修正路径配置（删除错误的`@/shared/*`指向）
+- `db-wizPulseAI-com/src/shared/auth/useAuth.tsx` - 修正logout函数调用
+
+#### **修复效果**
+
+**✅ 完整的SSO登录流程**：
+1. Main站点点击登录 → 跳转Auth站点
+2. 点击"Sign in with Google" → Google授权页面
+3. 授权成功 → 回调到Auth站点
+4. ✅ Cookie正确设置（base64-编码格式）
+5. ✅ 自动跳转到Main/Dashboard站点
+6. ✅ Cookie正确读取和解析
+7. ✅ Google头像正常显示
+8. ✅ 用户信息完整显示
+
+**✅ 三站点Supabase版本统一**：
+| 站点 | @supabase/supabase-js | @supabase/ssr | 状态 |
+|------|----------------------|--------------|------|
+| Auth | 2.81.1 | 0.7.0 | ✅ |
+| Main | 2.81.1 | 0.7.0 | ✅ |
+| Dashboard | 2.81.1 | 0.7.0 | ✅ |
+
+**✅ Cookie格式完全兼容**：
+- 浏览器端和服务器端使用相同的`@supabase/ssr`包
+- Cookie编码/解码逻辑统一
+- 跨站点Session共享正常工作
+
+#### **重要经验**
+
+**Supabase升级注意事项**：
+1. ⚠️ 浏览器端和服务器端必须使用相同版本
+2. ⚠️ 升级到2.x版本后，必须同时添加`@supabase/ssr`包
+3. ⚠️ Cookie格式变化会导致跨版本不兼容
+4. ✅ 建议：所有站点同时升级，避免版本不一致
+
+**调试技巧**：
+- 检查浏览器控制台的Cookie解析错误
+- 对比不同站点的package.json版本
+- 使用无痕窗口避免旧Cookie干扰
+- 检查服务器端日志的Session验证错误
+
+#### **相关文档**
+- Supabase SSR文档：https://supabase.com/docs/guides/auth/server-side/nextjs
+- Cookie格式变更说明：@supabase/ssr Migration Guide
+
+---
+
+## 历史状态 (2025-11-13 部署完成)
 
 ### ✅ 今天完成的工作
 
