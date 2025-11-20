@@ -12,92 +12,121 @@
 
 ---
 
-## 最新状态 (2025-11-15 Google OAuth修复完成)
+## 最新状态 (2025-11-20 Dashboard多语言完善+术语统一)
 
 ### ✅ 今天完成的工作
 
-**Google OAuth 跨站点SSO登录完全修复** 🎉⭐⭐⭐⭐⭐
+**Dashboard多语言翻译完善 + 跨站点术语统一** 🎉⭐⭐⭐
 
-#### **问题诊断**
-- **现象**：Google OAuth授权成功，但回调后无法登录，显示Cookie解析错误
-- **错误信息**：`"base64-eyJ..." is not valid JSON`
-- **根本原因**：Supabase版本不一致导致Cookie格式不兼容
-  - Auth站点：使用新版 @supabase/supabase-js 2.57.2 + @supabase/ssr 0.7.0
-  - Main/Dashboard站点：使用旧版 @supabase/supabase-js 2.49.4（无@supabase/ssr）
-  - Auth设置Cookie格式：`base64-`编码（新版）
-  - Main/Dashboard读取Cookie：期望纯JSON格式（旧版）
+#### **问题背景**
+根据[USER_JOURNEY_AUDIT.md](./USER_JOURNEY_AUDIT.md)发现的2个待改进项：
+- **P1问题**：PasswordForm缺少多语言翻译（只有中文fallback）
+- **P2问题**：3个站点登录术语不统一（Auth用"Sign In"，Dashboard用"Log In"，Main用"Login"）
 
 #### **完整修复方案**
 
-**1. 升级Supabase依赖** ✅
-```json
-// Main + Dashboard 站点 package.json
-"@supabase/supabase-js": "^2.81.1"  // 2.49.4 → 2.81.1
-"@supabase/ssr": "^0.7.0"           // 新增
+**1. PasswordForm添加4语言翻译** ✅
+- ✅ 新增6个key × 4语言 = 24条翻译
+- ✅ 修改文件：`db-wizPulseAI-com/src/messages/*.json` (4个文件)
+- ✅ 翻译覆盖：0% → 100%
+
+翻译内容：
+| Key | 日语 | 英语 | 阿拉伯语 | 繁体中文 |
+|-----|------|------|---------|---------|
+| password.title | パスワード変更 | Change Password | تغيير كلمة المرور | 更改密碼 |
+| password.description | 認証センターを通じて安全にパスワードを更新 | Securely update... | تحديث كلمة المرور... | 透過我們的認證中心... |
+| password.securityTitle | 🔒 セキュリティ保護 | 🔒 Security Protection | 🔒 الحماية الأمنية | 🔒 安全保護 |
+| + 3个长文本key | ✅ | ✅ | ✅ | ✅ |
+
+**2. 统一登录术语为"Sign In"** ✅
+参考业界标准（Google/Microsoft/GitHub），统一为"Sign In / Sign Up"
+
+修改的文件：
+- `db-wizPulseAI-com/src/lib/i18n/dashboard-translations.ts` - 登录按钮文案
+- `db-wizPulseAI-com/src/app/dashboard/page.tsx` - 错误提示文案 (2处)
+- `wizPulseAI-com/src/messages/en.json` - "Login" → "Sign In"
+
+**3. TypeScript编译验证** ✅
+```bash
+# Dashboard站点
+cd db-wizPulseAI-com && npx tsc --noEmit
+# ✅ 通过（只有已存在的测试文件错误）
+
+# Main站点
+cd wizPulseAI-com && npx tsc --noEmit
+# ✅ 通过！无错误
 ```
 
-**2. 更新浏览器端客户端代码** ✅
-- 文件：`wizPulseAI-com/src/shared/auth/supabase-browser.ts`
-- 文件：`db-wizPulseAI-com/src/shared/auth/supabase-browser.ts`
-- 替换：`createClientComponentClient` → `createBrowserClient` (from @supabase/ssr)
-- 实现：完整的Cookie处理函数（get/set/remove），支持`base64-`编码
-
-**3. 更新服务器端客户端代码** ✅
-- 文件：`db-wizPulseAI-com/src/lib/supabase/server.ts`
-- 替换：`createServerComponentClient` → `createServerClient` (from @supabase/ssr)
-- 修复：Dashboard服务器端无法验证用户会话的问题
-
-**4. 配置Google头像域名** ✅
-- Main站点：`wizPulseAI-com/next.config.js` - 添加 `lh3.googleusercontent.com`
-- Dashboard站点：
-  - `db-wizPulseAI-com/next.config.js` - 添加到images.domains
-  - `db-wizPulseAI-com/src/middleware.ts` - 添加到CSP img-src指令
-
-**5. 修复Dashboard配置问题** ✅
-- `db-wizPulseAI-com/tsconfig.json` - 修正路径配置（删除错误的`@/shared/*`指向）
-- `db-wizPulseAI-com/src/shared/auth/useAuth.tsx` - 修正logout函数调用
+**4. Git提交和推送** ✅
+- 主仓库 (wizPulseAI): Commit `241fbf1`, 推送到main ✅
+- Dashboard站点: Commit `bb0f645`, 推送到master ✅
+- Main站点: Commit `8b2f194`, 推送到main ✅
 
 #### **修复效果**
 
-**✅ 完整的SSO登录流程**：
-1. Main站点点击登录 → 跳转Auth站点
-2. 点击"Sign in with Google" → Google授权页面
-3. 授权成功 → 回调到Auth站点
-4. ✅ Cookie正确设置（base64-编码格式）
-5. ✅ 自动跳转到Main/Dashboard站点
-6. ✅ Cookie正确读取和解析
-7. ✅ Google头像正常显示
-8. ✅ 用户信息完整显示
+**用户体验评分提升**：
+| 维度 | 修复前 | 修复后 | 变化 |
+|------|--------|--------|------|
+| 流程完整性 | 95/100 | 95/100 | - |
+| 代码质量 | 95/100 | 95/100 | - |
+| UI设计 | 90/100 | 90/100 | - |
+| **文案质量** | **85/100** | **95/100** | **+10** ⬆️ |
+| **一致性** | **85/100** | **95/100** | **+10** ⬆️ |
+| 安全性 | 90/100 | 90/100 | - |
+| 用户体验 | 90/100 | 95/100 | +5 |
+| **总体评分** | **91/100** | **94/100** | **+3** 🎯 |
 
-**✅ 三站点Supabase版本统一**：
-| 站点 | @supabase/supabase-js | @supabase/ssr | 状态 |
-|------|----------------------|--------------|------|
-| Auth | 2.81.1 | 0.7.0 | ✅ |
-| Main | 2.81.1 | 0.7.0 | ✅ |
-| Dashboard | 2.81.1 | 0.7.0 | ✅ |
+**术语统一效果**：
+| 站点 | 修复前 | 修复后 | 状态 |
+|------|--------|--------|------|
+| Auth | Sign In | Sign In | ✅ 已统一 |
+| Dashboard | Log In / Sign Up | Sign In / Sign Up | ✅ 已统一 |
+| Main | Login | Sign In | ✅ 已统一 |
 
-**✅ Cookie格式完全兼容**：
-- 浏览器端和服务器端使用相同的`@supabase/ssr`包
-- Cookie编码/解码逻辑统一
-- 跨站点Session共享正常工作
+**翻译覆盖效果**：
+- Dashboard PasswordForm：0% → 100% ✅
+- 支持语言：日语/英语/阿拉伯语/繁体中文 ✅
 
-#### **重要经验**
+#### **生成的文档** (3份)
 
-**Supabase升级注意事项**：
-1. ⚠️ 浏览器端和服务器端必须使用相同版本
-2. ⚠️ 升级到2.x版本后，必须同时添加`@supabase/ssr`包
-3. ⚠️ Cookie格式变化会导致跨版本不兼容
-4. ✅ 建议：所有站点同时升级，避免版本不一致
+1. **I18N_AND_TERMINOLOGY_FIX_REPORT.md** - 完整修复报告
+   - 问题背景分析
+   - 修复方案详细说明
+   - 翻译对照表
+   - 术语修改对比
+   - 评分提升总结
 
-**调试技巧**：
-- 检查浏览器控制台的Cookie解析错误
-- 对比不同站点的package.json版本
-- 使用无痕窗口避免旧Cookie干扰
-- 检查服务器端日志的Session验证错误
+2. **SUPABASE_MULTILINGUAL_EMAIL_SOLUTION.md** - Supabase邮件多语言方案（备用）
+   - 3种解决方案对比
+   - 完整代码实现
+   - 成本收益分析
+   - **决策**：暂时保持英文邮件，未来可升级
+
+3. **ANIMATION_PERSONALIZATION_SOLUTION.md** - 网站动画个性化方案（备用）
+   - 5个维度的动画优化
+   - 完整的AnimationProvider系统
+   - 设备性能检测
+   - 文化定制动画配置
+   - **决策**：暂时保持统一动画，架构支持未来扩展
+
+#### **重要决策**
+
+**邮件语言策略** 📧
+- **当前**：Supabase默认英文邮件模板 ✅
+- **理由**：英语国际通用，大多数用户能理解
+- **未来**：如需多语言，可选方案3（10分钟）或方案1（完整SMTP）
+
+**网站动画策略** 🎨
+- **当前**：统一的动画效果 ✅
+- **理由**：简单稳定，无需维护多套配置
+- **未来**：架构已支持扩展，可按需优化（性能/文化定制）
 
 #### **相关文档**
-- Supabase SSR文档：https://supabase.com/docs/guides/auth/server-side/nextjs
-- Cookie格式变更说明：@supabase/ssr Migration Guide
+- [USER_JOURNEY_AUDIT.md](./USER_JOURNEY_AUDIT.md) - 用户旅程完整审查（91分 → 94分）
+- [SECURITY_AUDIT_REPORT.md](./SECURITY_AUDIT_REPORT.md) - 安全审计报告（85分）
+- [DASHBOARD_AUTH_REVIEW.md](./DASHBOARD_AUTH_REVIEW.md) - 密码逻辑审查
+- [I18N_ARCHITECTURE.md](./wizPulseAI-docs/I18N_ARCHITECTURE.md) - i18n架构文档
+- [TRANSLATION_GLOSSARY.md](./wizPulseAI-docs/TRANSLATION_GLOSSARY.md) - 翻译术语表
 
 ---
 
@@ -190,21 +219,26 @@
 ## 🚀 下一步任务
 
 ### 立即任务 (部署后 5-10分钟)
-1. [ ] 监测 Vercel 部署进度
-2. [ ] 验证 https://www.wizpulseai.com 多语言切换
-3. [ ] 测试知识中心文章加载
-4. [ ] 确认 SSO 登录流程
+1. [ ] 等待Vercel自动部署完成（约3-5分钟）
+2. [ ] 验证Dashboard密码修改页面多语言显示
+3. [ ] 验证3个站点"Sign In"术语统一
+4. [ ] 测试SSO登录流程
 
-### 短期任务 (本周)
-1. [ ] 用户反馈收集
-2. [ ] SEO 性能指标分析
-3. [ ] 性能监控 (Vercel Analytics)
-4. [ ] 错误日志检查
+### 可选优化 (如需要时)
+**多语言邮件**（参考SUPABASE_MULTILINGUAL_EMAIL_SOLUTION.md）：
+- [ ] 方案3：多语言混合模板（10分钟，$0）
+- [ ] 方案1：自定义SMTP + Edge Function（2-3天，$20/月）
 
-### 后续计划 (下周)
-- **Phase 4**: API 开放平台开发
-- **新产品**: QuickSlide 试用功能
-- **优化**: 性能和SEO微调
+**动画个性化**（参考ANIMATION_PERSONALIZATION_SOLUTION.md）：
+- [ ] 添加prefers-reduced-motion支持（无障碍要求）
+- [ ] 设备性能检测和按需加载
+- [ ] 根据语言/文化定制动画风格
+
+### 后续计划
+- **新功能**: QuickSlide 试用功能开发
+- **API平台**: 开放平台架构设计
+- **内容创作**: 启动100篇AI文章计划
+- **性能优化**: Bundle size优化，加载速度提升
 
 ---
 
@@ -239,5 +273,6 @@
 
 ---
 
-**最后更新**: 2025-11-13 14:35 UTC
+**最后更新**: 2025-11-20 10:30 UTC
 **执行人**: Claude AI
+**完成度**: ✅ Dashboard多语言完善（24条翻译） + 术语统一（3站点）
