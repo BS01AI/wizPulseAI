@@ -12,7 +12,412 @@
 
 ---
 
-## 最新状态 (2025-11-20 Dashboard多语言完善+术语统一)
+## 最新状态 (2025-11-21 类型更新工具完成 + TypeScript类型生成) 🎉⭐⭐⭐⭐⭐
+
+### ✅ 今天完成的工作
+
+**Supabase 类型更新工具完整实现 + Dashboard TypeScript 类型生成**
+
+#### **执行时间**
+- 开始：2025-11-21 16:40 UTC
+- 完成：2025-11-21 20:30 UTC
+- 耗时：约4小时
+
+#### **完成的核心工作**
+
+**1. 创建类型更新脚本工具** ✅
+创建了完整的类型更新工具体系（4个文件）：
+- `scripts/update-types.js` - Node.js高级脚本（400行，带彩色输出、备份、错误处理）
+- `scripts/update-types-simple.sh` - Shell简单脚本（**最终方案，已测试可用**）
+- `scripts/README_UPDATE_TYPES.md` - 详细使用文档（完整指南）
+- `scripts/ACCESS_TOKEN_GUIDE.md` - Access Token获取和使用指南
+
+**2. 使用 Supabase MCP 生成类型** ✅
+- ✅ 使用 `mcp__supabase__generate_typescript_types` 工具
+- ✅ 成功生成 **1046行** 完整类型定义
+- ✅ 保存到 `src/types/supabase.types.ts`
+- ✅ 包含所有16个表（含Phase 1的6个新表）+ 2个视图 + 11个函数
+
+**3. 诊断和修复权限问题** ✅
+**问题根源**：
+- WizPulseAI项目（`lhofjwiqjqjtycnhliga`）不在当前Supabase账户列表中
+- SPF项目可以工作：因为在账户列表中（`ultnmjhwerioeoawbcvc`）
+
+**解决方案**：
+- ✅ 方案A：Access Token（已实施）
+  - 用户在 `.env.local` 添加 `SUPABASE_ACCESS_TOKEN`
+  - 验证可用：`export SUPABASE_ACCESS_TOKEN=... && npx supabase projects list`
+  - 显示项目：wizPulseAI-Local (`lhofjwiqjqjtycnhliga`) ✅
+
+**4. 创建简单Shell脚本（最终方案）** ✅
+**Node.js脚本问题**：
+- ❌ `dotenv` 加载环境变量不稳定
+- ❌ `execSync` 的 `env` 选项传递问题
+- ❌ 调试复杂
+
+**Shell脚本优势**：
+- ✅ 直接读取 `.env.local`（`grep` + `export`）
+- ✅ 环境变量传递可靠
+- ✅ 简单明了，易于调试
+- ✅ **实测成功！** 输出：1046行类型文件
+
+**5. 更新 package.json** ✅
+```json
+{
+  "update-types": "bash scripts/update-types-simple.sh",
+  "update-types:advanced": "node scripts/update-types.js"
+}
+```
+
+#### **类型文件统计**
+
+```
+✅ 文件路径: src/types/supabase.types.ts
+✅ 总行数: 1046 行
+✅ 数据表: 16 个
+✅ 视图: 2 个（active_api_keys, recent_audit_logs）
+✅ 函数: 11 个（create_api_key, verify_api_key, is_admin等）
+✅ 枚举: 3 个（price_interval, price_type, subscription_status）
+
+核心表：
+  ✓ users, products, prices, subscriptions
+  ✓ features, plan_features, usage_records
+  ✓ site_config, config_history
+  ✓ ai_products ⭐ (Phase 1)
+  ✓ resource_permissions ⭐ (Phase 1)
+  ✓ resource_access_logs ⭐ (Phase 1)
+  ✓ api_keys ⭐ (Phase 1)
+  ✓ api_key_usage ⭐ (Phase 1)
+  ✓ audit_logs ⭐ (Phase 1)
+```
+
+#### **使用方法**
+
+**方式1：npm命令（推荐）**
+```bash
+npm run update-types
+```
+
+**方式2：直接运行**
+```bash
+bash scripts/update-types-simple.sh
+```
+
+**输出**：
+```
+✅ Access Token 已加载
+⏳ 正在生成类型...
+✅ 类型文件更新成功！
+📊 总行数: 1046
+📁 文件: src/types/supabase.types.ts
+```
+
+#### **创建的文档**
+
+1. **TYPE_UPDATE_TOOL_SUMMARY.md** - 快速使用指南（主仓库根目录）
+   - 3种使用方法
+   - 问题诊断和解决方案
+   - 快速参考命令
+
+2. **scripts/README_UPDATE_TYPES.md** - 详细使用文档
+   - 完整使用方法（3种方式）
+   - 权限问题解决方案（3种方案）
+   - 故障排查指南
+   - 输出示例和使用提示
+
+3. **scripts/ACCESS_TOKEN_GUIDE.md** - Access Token指南
+   - 获取Token步骤
+   - 使用方法（临时/持久）
+   - 安全最佳实践
+   - 故障排查
+
+#### **Git提交状态**
+- ⏳ 待提交：8个文件
+  - `db-wizPulseAI-com/scripts/update-types.js`
+  - `db-wizPulseAI-com/scripts/update-types-simple.sh`
+  - `db-wizPulseAI-com/scripts/README_UPDATE_TYPES.md`
+  - `db-wizPulseAI-com/scripts/ACCESS_TOKEN_GUIDE.md`
+  - `db-wizPulseAI-com/src/types/supabase.types.ts`
+  - `db-wizPulseAI-com/package.json`
+  - `TYPE_UPDATE_TOOL_SUMMARY.md`
+  - `WORK_LOG.md`
+
+#### **重要决策和经验**
+
+**1. 为什么需要Access Token** ⭐⭐⭐⭐⭐
+- WizPulseAI项目不在当前Supabase CLI登录账户的项目列表中
+- SPF项目在列表中，所以脚本可以直接工作
+- Access Token是跨账户访问项目的标准方案
+
+**2. 为什么Shell脚本优于Node.js** ⭐⭐⭐⭐
+- Node.js的 `dotenv` 包在某些情况下加载 `.env.local` 不稳定
+- `execSync` 的环境变量传递在嵌套命令中有问题
+- Shell脚本的 `export` + `&&` 是最可靠的环境变量传递方式
+- 简单性：30行Shell vs 400行Node.js
+
+**3. 双脚本策略** ⭐⭐⭐
+- 保留Node.js脚本（`update-types:advanced`）：备用，功能更丰富
+- Shell脚本作为主方案（`update-types`）：简单可靠，实测可用
+- 给用户选择：高级功能 vs 简单可靠
+
+**4. MCP工具的价值** ⭐⭐⭐⭐⭐
+- 绕过CLI权限限制
+- 立即可用，无需配置
+- 适合一次性生成或临时需求
+- 缺点：需要手动复制，不适合频繁更新
+
+---
+
+### 🎯 下一步行动
+
+**立即可做**（今天/本周）：
+1. ✅ 提交类型更新工具到Git（8个文件）
+2. 开始Phase 2功能开发：
+   - API密钥管理页面（类型已就绪）
+   - AI产品列表页面（类型已就绪）
+   - 审计日志查看页面（管理员，类型已就绪）
+3. 测试类型在代码中的使用
+
+**短期优化**（1-2周内）：
+1. 升级Supabase CLI到最新版（v2.58.5）
+2. 实现Dashboard Phase 2 UI界面
+3. 集成API密钥创建功能
+
+**长期规划**（1个月内）：
+1. API开放平台（使用api_keys表）
+2. AI产品试用功能（QuickSlide等）
+3. 完整的审计日志分析和报表
+
+---
+
+### 📝 重要提醒
+
+**类型更新时机**：
+- ✅ 创建新数据库表后
+- ✅ 修改表结构（添加/删除列）后
+- ✅ 添加新的枚举类型后
+- ✅ Phase 2/3 数据库迁移完成后
+- ❌ 只修改数据（INSERT/UPDATE）时不需要
+
+**安全提醒**：
+- ⚠️ `.env.local` 已包含 `SUPABASE_ACCESS_TOKEN`
+- ⚠️ 确保 `.env.local` 在 `.gitignore` 中
+- ⚠️ 不要提交 Access Token 到Git
+
+**使用提醒**：
+- ✅ 直接运行：`npm run update-types`
+- ✅ 输出1046行表示成功
+- ✅ TypeScript类型会自动更新
+
+---
+
+### 📚 相关文档位置
+
+**工具脚本**：
+- `/db-wizPulseAI-com/scripts/update-types-simple.sh` - Shell脚本（主方案）
+- `/db-wizPulseAI-com/scripts/update-types.js` - Node.js脚本（备用）
+
+**使用文档**：
+- `/TYPE_UPDATE_TOOL_SUMMARY.md` - 快速指南
+- `/db-wizPulseAI-com/scripts/README_UPDATE_TYPES.md` - 详细文档
+- `/db-wizPulseAI-com/scripts/ACCESS_TOKEN_GUIDE.md` - Token指南
+
+**类型文件**：
+- `/db-wizPulseAI-com/src/types/supabase.types.ts` - TypeScript类型（1046行）
+
+**Phase 1文档**：
+- `/DASHBOARD_ARCHITECTURE_DESIGN.md` - 完整架构设计
+- `/DASHBOARD_PHASE1_IMPLEMENTATION.md` - 实施指南
+
+---
+
+## 历史状态 (2025-11-21 Dashboard Phase 1 数据库迁移完成) 🎉⭐⭐⭐⭐⭐
+
+### ✅ 今天完成的工作
+
+**Dashboard Phase 1 数据库迁移 + 安全修复完整实施**
+
+#### **执行时间**
+- 开始：2025-11-21 03:40 UTC
+- 完成：2025-11-21 05:10 UTC
+- 耗时：约1.5小时
+
+#### **完成的核心工作**
+
+**1. 数据库迁移执行** ✅
+创建了6个新表（共820行SQL）：
+- `ai_products` - AI产品管理（3条示例数据：QuickSlide, CodeSpark, ChatBot）
+- `resource_permissions` - 资源权限控制（6条示例权限规则）
+- `resource_access_logs` - 访问日志追踪
+- `api_keys` - API密钥管理
+- `api_key_usage` - API使用记录
+- `audit_logs` - 审计日志系统
+
+**2. 安全修复应用** ✅（420行修复代码）
+- ✅ **P0修复**：API密钥哈希强制执行
+  - 添加CHECK约束：`key_hash ~ '^[0-9a-f]{64}$'`
+  - 创建`create_api_key()`安全函数（自动SHA-256哈希）
+  - 创建`verify_api_key()`验证函数
+
+- ✅ **P1修复**：RLS性能优化
+  - 创建`is_admin()`函数（STABLE类型，带缓存）
+  - 添加复合索引：`idx_users_id_role`
+  - 更新所有6个表的RLS策略使用优化函数
+
+- ✅ **P1修复**：函数输入验证
+  - `log_audit()`添加完整参数验证（长度、格式、必填）
+  - 自动截断过长字段（防止注入攻击）
+
+- ✅ **P1修复**：审计触发器完整性
+  - 记录所有操作（包括系统操作，不仅管理员）
+  - 添加`operator_type`字段（system/admin/user）
+  - 自动过滤敏感字段（password_hash）
+
+- ✅ **P2修复**：日志不可变 + 过期自动化 + 时区修正
+  - 禁止DELETE/UPDATE审计日志
+  - 创建`active_api_keys`视图（自动过滤过期）
+  - 创建`disable_expired_api_keys()`定时函数
+  - 速率限制使用UTC时间（避免时区问题）
+
+**3. 关键功能创建** ✅
+6个SECURITY DEFINER函数：
+- `create_api_key()` - 安全创建API密钥（返回明文，只显示一次）
+- `verify_api_key()` - 验证密钥（自动检查active和expires_at）
+- `is_admin()` - 管理员检查（带缓存优化）
+- `check_api_key_rate_limit()` - 速率限制检查
+- `disable_expired_api_keys()` - 过期密钥自动禁用
+- `log_audit()` - 审计日志记录（完整输入验证）
+
+2个视图：
+- `active_api_keys` - 自动过滤过期密钥
+- `recent_audit_logs` - 最近100条审计日志
+
+**4. 数据验证** ✅
+- ✅ 所有6个表创建成功
+- ✅ CHECK约束验证通过（`check_key_hash_format`）
+- ✅ 所有6个SECURITY DEFINER函数正常工作
+- ✅ 示例数据插入成功（3个AI产品 + 6条权限规则）
+- ✅ 审计日志记录完整（安全修复执行已记录）
+
+**5. TypeScript类型生成** ✅
+- 通过Supabase MCP生成完整类型定义
+- 用户已手动更新`src/types/supabase.types.ts`（1059行）
+- 包含所有新表、视图、函数的完整类型
+
+#### **安全评分提升**
+
+| 维度 | 迁移前 | 迁移后 | 提升 |
+|------|--------|--------|------|
+| 数据保护 | 60/100 🔴 | 95/100 🟢 | +35⭐ |
+| RLS性能 | 70/100 🟡 | 90/100 🟢 | +20⭐ |
+| 审计完整性 | 75/100 🟡 | 95/100 🟢 | +20⭐ |
+| 输入验证 | 70/100 🟡 | 90/100 🟢 | +20⭐ |
+| **总体评分** | **75/100** 🟡 | **95/100** 🟢 | **+20⭐** |
+
+**评级提升**：良好但有严重问题 → 生产级别标准 ✅
+
+#### **创建的文档**
+
+1. **迁移文件**（5个SQL文件）
+   - `20251120_ALL_MIGRATIONS.sql` (820行) - 基础表结构
+   - `20251120_SECURITY_FIX.sql` (420行) - 安全修复
+   - 以及分步执行的4个迁移文件
+
+2. **技术文档**
+   - `execute_migrations.md` - 执行指南（方式1和方式2）
+   - `DASHBOARD_ARCHITECTURE_DESIGN.md` - 完整架构设计（520行）
+   - `DASHBOARD_PHASE1_IMPLEMENTATION.md` - 实施指南
+
+3. **安全审计报告**（由security-auditor agent生成）
+   - 完整的安全评分（75/100 → 95/100）
+   - P0/P1/P2问题清单和修复方案
+   - 攻击场景模拟和防御措施
+
+#### **Git提交状态**
+- ⏳ 所有文件已创建，待用户确认后统一提交
+- 涉及文件：8个新文件（SQL + 文档）
+
+#### **重要决策和经验**
+
+**1. 安全优先原则** ⭐⭐⭐⭐⭐
+- 不直接执行原始迁移，先进行安全审计
+- 发现P0问题（API密钥存储）后立即创建修复脚本
+- 按顺序执行：基础迁移 → 安全修复 → 验证
+
+**2. 协作流程优化**
+- 使用security-auditor agent进行专业审计
+- AI和Agent协作完成复杂任务
+- 审计报告包含详细的修复代码示例
+
+**3. PostgreSQL特性利用**
+- 生成列（GENERATED ALWAYS）遇到问题，改用触发器
+- WHEN条件中不能使用子查询，改为函数内部检查
+- CHECK约束强制执行数据格式（安全关键）
+
+**4. 数据库迁移最佳实践**
+- 使用Supabase MCP工具执行迁移（自动记录版本）
+- 分步执行复杂迁移（表 → RLS → 函数 → 修复）
+- 每步执行后立即验证结果
+
+---
+
+### 🎯 下一步行动
+
+**立即可做**（今天/本周）：
+1. ✅ 使用命令手动更新TypeScript类型文件（用户已完成）
+2. 开始实现Dashboard Phase 2功能：
+   - API密钥管理页面（创建/查看/删除）
+   - AI产品列表页面
+   - 审计日志查看页面（管理员）
+3. 测试`create_api_key()`和`verify_api_key()`函数
+
+**短期优化**（1-2周内）：
+1. 添加pg_cron扩展（自动禁用过期密钥）
+2. 实现知识库文章权限检查中间件
+3. 创建资源访问日志记录API
+
+**长期规划**（1个月内）：
+1. 实现AI产品试用功能（QuickSlide等）
+2. API开放平台（使用api_keys表）
+3. 完整的审计日志分析和报表
+
+---
+
+### 📝 重要提醒
+
+**数据库相关**：
+- ⚠️ 新表已创建，但Stripe产品关联尚未配置
+- ⚠️ `ai_products.required_product_id`目前为NULL，需要后续关联Pro套餐
+- ⚠️ pg_cron扩展未启用，过期密钥需要手动或API触发禁用
+
+**安全相关**：
+- ✅ CHECK约束已生效，应用层无需再验证密钥格式
+- ✅ 必须使用`create_api_key()`函数创建密钥（不能直接INSERT）
+- ✅ 审计日志会自动记录所有users表的变更
+
+**开发相关**：
+- TypeScript类型文件包含完整的新表定义
+- 使用`Database['public']['Tables']['ai_products']['Row']`引用类型
+- 所有SECURITY DEFINER函数可直接在TypeScript中调用
+
+---
+
+### 📚 相关文档位置
+
+**迁移文件**：
+- `/db-wizPulseAI-com/supabase/migrations/20251120_*.sql`
+
+**设计文档**：
+- `/DASHBOARD_ARCHITECTURE_DESIGN.md` - 完整架构设计
+- `/DASHBOARD_PHASE1_IMPLEMENTATION.md` - 实施指南
+- `/execute_migrations.md` - 执行指南
+
+**类型文件**：
+- `/db-wizPulseAI-com/src/types/supabase.types.ts` - TypeScript类型定义
+
+---
+
+## 历史状态 (2025-11-20 Dashboard多语言完善+术语统一)
 
 ### ✅ 今天完成的工作
 
