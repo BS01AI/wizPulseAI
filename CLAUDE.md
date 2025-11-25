@@ -39,6 +39,20 @@ WizPulseAI 是一个多站点 SaaS 平台，包含3个独立部署的 Next.js �
 - Cookie 设置: `secure: true, sameSite: 'lax', httpOnly: false`
 - 共享认证状态通过 Supabase JWT
 
+### 跨站点主题系统 (2025-11-25) 🆕
+- **Cookie 名称**: `WIZPULSE_THEME`
+- **Cookie 域**: `.wizpulseai.com`
+- **可选值**: `light` | `dark` | `system`
+- **设置入口**: Dashboard → 設定 → 外観設定
+
+**适用范围**:
+| 站点 | 使用共享主题 | 说明 |
+|------|-------------|------|
+| Auth / Dashboard / Main | ✅ 是 | 管理类站点，统一品牌体验 |
+| App 子域名 (QuickSlide等) | ❌ 否 | 产品类站点，独立主题系统 |
+
+**详细文档**: `/db-wizPulseAI-com/DASHBOARD_THEME_SYSTEM.md`
+
 ### 数据库架构
 
 **核心表（原有）**：
