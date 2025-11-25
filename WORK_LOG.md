@@ -12,7 +12,40 @@
 
 ---
 
-## 最新状态 (2025-11-23 下午 - 5个核心页面迁移全部完成！) 🎉⭐⭐⭐⭐⭐⭐
+## 最新状态 (2025-11-25 - 跨站点主题系统完成！) 🎉⭐⭐⭐⭐⭐
+
+### ✅ 主题系统完成
+
+**功能**：Dashboard设置主题 → Auth/Main自动同步
+
+**技术实现**：
+- Cookie: `WIZPULSE_THEME` (domain: `.wizpulseai.com`)
+- 可选值: `light` | `dark` | `system`
+- 设置入口: Dashboard → 設定 → 外観設定
+
+**提交记录**：
+| 仓库 | Commit | 内容 |
+|------|--------|------|
+| Dashboard | `e5eb6d2` | ThemeSwitcher + Cookie存储 |
+| Auth | `1afb053` | ThemeProvider读取Cookie |
+| Main | `021a91a` | ThemeProvider + ThemeScript |
+| 主仓库 | `e31e6e0` | 文档更新 |
+
+**适用范围（重要决策）**：
+| 站点类型 | 使用共享主题 |
+|---------|-------------|
+| Auth / Dashboard / Main | ✅ 是 |
+| App子域名 (QuickSlide等) | ❌ 否（独立主题） |
+
+**原因**：产品类站点需要独立品牌风格
+
+**相关文档**：
+- `CLAUDE.md` - 主题系统概览
+- `db-wizPulseAI-com/DASHBOARD_THEME_SYSTEM.md` - 完整架构
+
+---
+
+## 历史状态 (2025-11-23 下午 - 5个核心页面迁移全部完成！) 🎉⭐⭐⭐⭐⭐⭐
 
 ### ✅ 新增完成（下午第二轮）
 
