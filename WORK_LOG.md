@@ -12,7 +12,89 @@
 
 ---
 
-## 最新状态 (2025-11-25 - 跨站点主题系统完成！) 🎉⭐⭐⭐⭐⭐
+## 最新状态 (2025-11-26 下午 - 子域名架构 + 品牌LP完成！) 🎉⭐⭐⭐⭐⭐
+
+### ✅ 子域名架构设计与文档
+
+**讨论结果**：
+1. **wiz-saas-starter** = 独立开发平台（用于快速开发 AI App）
+2. **wizPulseAI** = 发布平台（统一 SSO、Stripe、用户数据）
+3. 从开发平台导出 App → 部署到发布平台
+
+**架构决策**：
+| 组件 | 决策 |
+|------|------|
+| SSO 认证 | ✅ 共享 `auth.wizpulseai.com` |
+| Stripe 支付 | ✅ 共享（统一计费） |
+| AI 代码/工具函数 | ❌ 各 App 独立 |
+| life/biz 入口 | ✅ 主站子路由（非独立子域名） |
+
+**创建的文件**：
+| 文件 | 说明 |
+|------|------|
+| `wizPulseAI-docs/SUBDOMAIN_ARCHITECTURE.md` | 完整架构文档 |
+| `shared/auth/*` (6个文件) | SSO 认证 SDK |
+
+### ✅ 品牌落地页创建
+
+**决策**：life/biz 使用主站子路由（简单、无需额外 SSO 接入）
+
+| 页面 | URL | 风格 | 状态 |
+|------|-----|------|------|
+| WizLife LP | `/life` | 金色+粉色、活泼 | ✅ 完成 |
+| WizPulse LP | `/biz` | 深蓝+专业、商务 | ✅ 完成 |
+
+**页面特点**：
+- `/life`: Fashion Advisor / Style Diary / Shopping Advisor 展示
+- `/biz`: Research Assistant / Doc Expert / Data Analyst 展示
+- 双语支持（英语 + 日语标注）
+- Framer Motion 动画
+- Light/Dark 主题适配
+
+### 下一步
+- [ ] 从 wiz-saas-starter 迁移 Fashion Advisor 到 `fashion.wizpulseai.com`
+- [ ] 测试 SSO SDK 在新 App 中的接入
+
+---
+
+## 历史状态 (2025-11-26 上午 - Auth/Main Light模式支持完成！) 🎉⭐⭐⭐⭐⭐
+
+### ✅ Auth 和 Main 站点 Light 模式样式升级
+
+**背景问题**：
+- 之前 Auth 和 Main 站点只有深色设计，没有响应主题切换
+- Dashboard 设置 Light 主题后，Auth/Main 仍显示深色
+
+**解决方案**：为 Auth 和 Main 站点添加完整的 light/dark 双主题 CSS 支持
+
+**修改文件清单**：
+
+| 站点 | 文件 | 修改内容 |
+|------|------|----------|
+| **Auth** | `globals.css` | 添加 light/dark CSS 变量（92→175行） |
+| **Auth** | `NewLoginForm.tsx` | 组件样式支持 `dark:` 前缀 |
+| **Auth** | `SignUpForm.tsx` | 组件样式支持 `dark:` 前缀 |
+| **Auth** | `auth/page.tsx` | 页面背景 + 语言切换器双主题 |
+| **Main** | `styles.css` | 添加 light/dark CSS 变量（21→60行） |
+| **Main** | `Header.tsx` | 导航链接 + Logo 双主题 |
+| **Main** | `Footer.tsx` | 全部元素双主题支持 |
+
+**配色设计**：
+| 模式 | 背景 | 主色调 | 文字 |
+|------|------|--------|------|
+| **Light** | 白色/浅灰渐变 | violet-600/indigo-600 | slate-900/700 |
+| **Dark** | 深蓝灰渐变 | purple-500/blue-500 | white/slate-200 |
+
+**测试方法**：
+1. Dashboard → 設定 → 外観設定 → 选择 Light
+2. 访问 Auth (localhost:3011/auth) 验证浅色背景
+3. 访问 Main (localhost:3010) 验证 Header/Footer 浅色
+
+**待提交**：本地修改完成，等待测试验证后提交
+
+---
+
+## 历史状态 (2025-11-25 - 跨站点主题系统完成！) 🎉⭐⭐⭐⭐⭐
 
 ### ✅ 主题系统完成
 

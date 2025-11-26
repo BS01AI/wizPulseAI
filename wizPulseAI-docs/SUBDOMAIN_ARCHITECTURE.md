@@ -30,9 +30,9 @@
 │   └─────────────────────────────────────────────────────┘   │
 │                                                             │
 │   ┌─────────────────────────────────────────────────────┐   │
-│   │                    品牌入口 (LP)                      │   │
-│   │  biz.wizpulseai.com ──── WizPulse 商业版落地页       │   │
-│   │  life.wizpulseai.com ─── WizLife 生活版落地页        │   │
+│   │              品牌入口 (主站子路由)                    │   │
+│   │  wizpulseai.com/biz ──── WizPulse 商业版落地页       │   │
+│   │  wizpulseai.com/life ─── WizLife 生活版落地页        │   │
 │   └─────────────────────────────────────────────────────┘   │
 │                                                             │
 │   ┌─────────────────────────────────────────────────────┐   │
@@ -58,12 +58,17 @@
 | `auth.wizpulseai.com` | SSO 认证中心 | `auth-wizpulseai-com/` | ✅ 生产 |
 | `dashboard.wizpulseai.com` | 用户中心 | `db-wizPulseAI-com/` | ✅ 生产 |
 
-### 2.2 品牌入口（规划中）
+### 2.2 品牌入口（主站子路由）
 
-| 子域名 | 用途 | 目录 | 状态 |
-|--------|------|------|------|
-| `biz.wizpulseai.com` | WizPulse 商业版 LP | `biz-wizpulseai-com/` | 📋 规划 |
-| `life.wizpulseai.com` | WizLife 生活版 LP | `life-wizpulseai-com/` | 📋 规划 |
+> **决策记录 (2025-11-26)**：
+> life/biz 只是落地页（LP），功能简单，决定使用主站子路由而非独立子域名。
+> 优势：无需额外 SSO 接入、维护成本低、SEO 权重集中。
+> 未来如需独立功能（博客、社区），可再拆分为独立子域名。
+
+| URL | 用途 | 位置 | 状态 |
+|-----|------|------|------|
+| `wizpulseai.com/life` | WizLife 生活版 LP | `wizPulseAI-com/src/app/[locale]/life/` | 🚧 开发中 |
+| `wizpulseai.com/biz` | WizPulse 商业版 LP | `wizPulseAI-com/src/app/[locale]/biz/` | 🚧 开发中 |
 
 ### 2.3 产品站点
 
@@ -243,12 +248,9 @@ wizPulseAI/                          ← 发布平台根目录
 │   ├── i18n/                        ← 多语言
 │   └── components/                  ← 共享 UI 组件
 │
-├── wizPulseAI-com/                  ← 主站
+├── wizPulseAI-com/                  ← 主站（含 /life 和 /biz 落地页）
 ├── auth-wizpulseai-com/             ← 认证中心
 ├── db-wizPulseAI-com/               ← Dashboard
-│
-├── life-wizpulseai-com/             ← WizLife LP（规划）
-├── biz-wizpulseai-com/              ← WizPulse LP（规划）
 │
 ├── fashion-wizpulseai-com/          ← Fashion Advisor（开发中）
 ├── novel-wizpulseai-com/            ← Novel Writer（规划）
