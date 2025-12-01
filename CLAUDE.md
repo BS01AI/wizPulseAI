@@ -39,7 +39,7 @@ WizPulseAI 是一个多站点 SaaS 平台，包含3个独立部署的 Next.js �
 - Cookie 设置: `secure: true, sameSite: 'lax', httpOnly: false`
 - 共享认证状态通过 Supabase JWT
 
-### 跨站点主题系统 (2025-11-25) 🆕
+### 跨站点主题系统 (2025-11-26 更新) 🆕
 - **Cookie 名称**: `WIZPULSE_THEME`
 - **Cookie 域**: `.wizpulseai.com`
 - **可选值**: `light` | `dark` | `system`
@@ -50,6 +50,17 @@ WizPulseAI 是一个多站点 SaaS 平台，包含3个独立部署的 Next.js �
 |------|-------------|------|
 | Auth / Dashboard / Main | ✅ 是 | 管理类站点，统一品牌体验 |
 | App 子域名 (QuickSlide等) | ❌ 否 | 产品类站点，独立主题系统 |
+
+**Light/Dark 样式支持** (2025-11-26 新增)：
+| 站点 | Light 模式 | Dark 模式 | 实现方式 |
+|------|-----------|-----------|----------|
+| Auth | ✅ 浅灰背景+紫罗兰主色 | ✅ 深蓝背景+紫色主色 | Tailwind `dark:` 前缀 |
+| Main | ✅ 白色背景+紫罗兰主色 | ✅ 深蓝背景+紫色主色 | Tailwind `dark:` 前缀 |
+| Dashboard | ✅ 已有完整支持 | ✅ 已有完整支持 | next-themes |
+
+**关键文件**：
+- Auth: `globals.css`, `NewLoginForm.tsx`, `SignUpForm.tsx`, `auth/page.tsx`
+- Main: `styles.css`, `Header.tsx`, `Footer.tsx`
 
 **详细文档**: `/db-wizPulseAI-com/DASHBOARD_THEME_SYSTEM.md`
 

@@ -87,9 +87,15 @@
 |------|------|------|
 | **SSO 认证** | Cookie 域 `.wizpulseai.com` | `auth.wizpulseai.com` |
 | **Stripe 支付** | 统一计费、订阅管理 | `dashboard.wizpulseai.com` |
-| **用户数据** | profiles, subscriptions | Supabase 共享项目 |
+| **积分系统** ⭐ | 点数购买、余额管理、交易记录 | `dashboard.wizpulseai.com/api/credits/*` |
+| **用户数据** | profiles, subscriptions, credits | Supabase 共享项目 |
 | **认证 SDK** | 快速接入 SSO 的代码包 | `shared/auth/` |
 | **主题系统** | Light/Dark 跨站点同步 | Cookie `WIZPULSE_THEME` |
+
+> **积分系统说明 (2025-11-27)**：
+> 产品站点（Fashion 等）的购买 UI 保持在站内，但 API 代理到 Dashboard。
+> Webhook 统一由 Dashboard 处理。管理员在 Dashboard 查看所有积分数据。
+> 详见 [CREDITS_SYSTEM.md](./CREDITS_SYSTEM.md)
 
 ### 3.2 独立组件（每个 App 自带）
 
