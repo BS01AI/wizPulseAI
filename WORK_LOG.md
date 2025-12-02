@@ -12,7 +12,127 @@
 
 ---
 
-## 最新状态 (2025-11-26 下午 - 子域名架构 + 品牌LP完成！) 🎉⭐⭐⭐⭐⭐
+## 最新状态 (2025-12-02 - Fashion Advisor 多语言 + 设置 + 安全审计) 🎉⭐⭐⭐⭐
+
+### ✅ 今日完成
+
+**1. Build 错误修复**：
+- server-only 模块分离（创建 client.ts）
+- Stripe SDK v20 API 版本更新
+- useSearchParams Suspense 包裹
+- 类型错误修复（as any 临时方案）
+
+**2. Next.js 降级**：
+- 15.5.6 → 14.2.18（更稳定）
+- Bundle size 减少 15%
+
+**3. 多语言架构**：
+- 4语言支持：ja/en/ar/zh-TW
+- RTL 阿拉伯语支持
+- Cookie 跨域同步
+- 文件：`src/lib/i18n/`
+
+**4. Fashion 设置页面**：
+- `/fashion/settings` 新页面
+- 风格偏好设置
+- 账户管理跳转 Dashboard
+- 语言切换组件
+
+**5. 安全审计**：
+| 级别 | 数量 | 状态 |
+|------|------|------|
+| P0 严重 | 0 | ✅ 无 |
+| P1 高风险 | 3 | ⚠️ 后续修复 |
+| P2 中风险 | 4 | 📝 建议优化 |
+| 安全评分 | 72/100 | |
+
+**P1 待修复**：
+- 开发模式判断改用服务端变量
+- test-vision API 添加保护
+- Cookie maxAge 缩短
+
+**Git 提交**：`ee1dc31` → GitHub ✅
+
+### 🚧 待测试
+- 照片上传分析流程（需登录或开启 DEV_MODE）
+- AI Token 消耗日志查看
+
+---
+
+## 历史记录 (2025-12-01 - Fashion Advisor 分级系统 + Prompt 管理) 🎉⭐⭐⭐⭐⭐
+
+### ✅ 用户设置智能默认
+
+**完成内容**：
+| 功能 | 说明 |
+|------|------|
+| 角色默认值 | 专家 (`expert`) |
+| 场景默认值 | 休闲 (`casual`) |
+| 季节自动检测 | 根据系统月份（12月→冬） |
+| localStorage 持久化 | 用户选择后自动保存 |
+
+**文件**：`src/hooks/useFashionSettings.ts` (171行)
+
+### ✅ 用户分级返回系统
+
+**等级权限**：
+| 级别 | 意见类别 | 字数限制 | 图片生成 |
+|------|---------|---------|---------|
+| Free | 3类 | 50字 | ❌ |
+| Basic | 5类 | 100字 | ❌ |
+| Pro | 5类 | 200字 | ❌ |
+| Premium | 5类 | 无限 | ✅ |
+
+**文件**：`src/lib/tier/` 目录
+
+### ✅ 五边形评分系统（Z世代友好）
+
+**五维评分**：
+- 🎨 配色 (color)
+- 👗 版型 (fit)
+- ✨ 质感 (texture)
+- 💎 细节 (detail)
+- 📍 场合 (occasion)
+
+**特点**：
+- 雷达图可视化
+- emoji 丰富
+- 闺蜜式语气
+- 评分等级：S/A/B/C/D
+
+**文件**：
+- `src/lib/tier/pentagon-score.types.ts`
+- `src/lib/tier/pentagon-score.service.ts`
+- `src/components/fashion/PentagonRadar.tsx`
+
+### ✅ Prompt 管理系统
+
+**版本管理**：
+| 版本 | 名称 | 特点 |
+|------|------|------|
+| `basic` | 基础版 | 段落式、详细分析 |
+| `pentagon` | 五边形版 | Z世代友好、emoji |
+
+**自动选择规则**：
+- 约会/休闲 → pentagon
+- 专家+面试 → basic
+- 年轻用户 → pentagon
+- 默认 → pentagon
+
+**文件**：`src/lib/ai/prompts/` 目录
+
+### ✅ Prompt Designer Agent
+
+**新增 Agent**：`prompt-designer`
+- 职责：设计和优化 AI Prompt
+- Z世代友好风格管理
+- 多语言一致性
+
+**文件**：`.claude/agents/prompt-designer.md`
+
+---
+
+## 历史状态 (2025-11-26 下午 - 子域名架构 + 品牌LP完成！) 🎉⭐⭐⭐⭐⭐
 
 ### ✅ 子域名架构设计与文档
 

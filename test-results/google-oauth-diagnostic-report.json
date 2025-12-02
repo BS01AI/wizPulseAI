@@ -1,0 +1,38 @@
+{
+  "test_name": "Main站点登录 + Auth站点Google OAuth诊断",
+  "test_date": "2025-11-15T00:07:21.954886",
+  "test_steps": [],
+  "findings": [
+    "Auth站点已修复(page.tsx)，返回200 OK",
+    "✅ Auth站点page.tsx已修复 - 旧的i18n导入已更新为新的SimpleI18nProvider",
+    "✅ Google OAuth处理器已在auth/page.tsx中实现 (handleGoogleAuth函数)",
+    "✅ Google登录按钮已连接到处理器 (onGoogleLogin={handleGoogleAuth})",
+    "⚠️  需要验证: Supabase Google OAuth配置是否在Supabase Console中启用",
+    "⚠️  需要验证: Google OAuth会被调用，但是否能成功取决于Supabase的Google提供商配置"
+  ],
+  "recommendations": [
+    "1. 在Supabase Console中验证Google OAuth提供商是否已启用",
+    "   - 访问: https://app.supabase.com/project/lhofjwiqjqjtycnhliga/auth/providers",
+    "   - 检查Google提供商状态",
+    "",
+    "2. 确保Supabase中已配置正确的Google OAuth客户端ID和密钥",
+    "   - 需要在Google Cloud Console中创建OAuth 2.0应用",
+    "",
+    "3. 验证Redirect URLs已正确配置",
+    "   - 本地: http://localhost:3011/api/auth/callback",
+    "   - 生产: https://auth.wizpulseai.com/api/auth/callback",
+    "",
+    "4. 测试流程:",
+    "   a. 访问 http://localhost:3010",
+    "   b. 点击右上角登录按钮",
+    "   c. 应跳转到 http://localhost:3011/auth",
+    "   d. 在登录页找到 'Sign in with Google' 按钮",
+    "   e. 点击应跳转到Google授权页面",
+    "",
+    "5. 调试步骤:",
+    "   - 打开浏览器DevTools (F12)",
+    "   - 检查Console标签查看任何错误消息",
+    "   - 检查Network标签查看OAuth请求状态",
+    "   - 查看auth/page.tsx中的console.log输出"
+  ]
+}

@@ -16,6 +16,13 @@
 - **工具**：Bash、Read、Grep
 - **模型**：Haiku
 
+### 3. prompt-designer（Prompt 设计专家）🆕
+- **职责**：设计和优化 AI Prompt，确保 Z世代友好风格
+- **使用场景**：新增 AI 功能、优化输出风格
+- **工具**：Read、Write、WebSearch
+- **模型**：Sonnet
+- **管理范围**：Fashion Advisor、未来其他 AI 产品
+
 ---
 
 ## 🎯 如何使用 Sub-agent
@@ -221,9 +228,10 @@ sso-tester 会生成详细报告和截图，检查 `/logs/` 目录。
 
 ```
 .claude/agents/
-├── README.md           (本文件)
-├── sso-tester.md      (SSO 测试专家)
-└── git-manager.md     (Git 管理专家)
+├── README.md            (本文件)
+├── sso-tester.md       (SSO 测试专家)
+├── git-manager.md      (Git 管理专家)
+└── prompt-designer.md  (Prompt 设计专家) 🆕
 ```
 
 ---

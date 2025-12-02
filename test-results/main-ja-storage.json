@@ -1,0 +1,15 @@
+{
+  "cookies": [
+    {
+      "name": "NEXT_LOCALE",
+      "value": "ja",
+      "domain": "localhost",
+      "path": "/",
+      "expires": 1794496090.516904,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": []
+}
