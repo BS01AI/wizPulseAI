@@ -32,6 +32,43 @@ WizPulseAI 是一个多站点 SaaS 平台，包含3个独立部署的 Next.js �
   - 3D 动画效果
   - 知识中心文章系统
 
+## 产品站点架构 (2025-12-03 新增)
+
+### 品牌层次结构
+```
+wizPulseAI (母品牌/平台)
+    ├── WizLife (生活AI) → /life
+    │   ├── Fashion Advisor ✅ → fashion.wizpulseai.com
+    │   ├── Style Diary 🚧
+    │   └── Shopping Advisor 🚧
+    ├── WizBiz (商务AI) → /biz
+    │   ├── Research Assistant 🚧
+    │   ├── Doc Expert 🚧
+    │   └── Data Analyst 🚧
+    └── QuickSlide (创作AI) → /products
+```
+
+### 产品站点
+
+| 站点 | 域名 | 目录 | 状态 | 多语言 |
+|------|------|------|------|--------|
+| Fashion Advisor | fashion.wizpulseai.com | `/fashion-wizpulseai-com/` | ✅ 上线 | ❌ 仅日语 |
+| QuickSlide | - | 规划中 | 🚧 开发中 | - |
+
+### 用户流程 (需优化)
+```
+首页 → WizLife页面 → Fashion Advisor站点
+         ↑ Header导航已添加 (2025-12-03)
+```
+
+**待优化项**：
+- [ ] 首页添加产品生态展示区域
+- [ ] Fashion站点添加返回导航
+- [ ] Fashion站点多语言支持
+- [ ] 统一品牌视觉识别
+
+**架构文档**: `/wizPulseAI-docs/WEBSITE_ARCHITECTURE.md`
+
 ## 技术要点
 
 ### SSO 实现
@@ -102,10 +139,11 @@ WizPulseAI 是一个多站点 SaaS 平台，包含3个独立部署的 Next.js �
 ### 技术文档
 - `/wizPulseAI-docs/technical-docs/` - 架构设计文档
 - `/wizPulseAI-docs/DEVELOPMENT_PLAN.md` - 开发规划
+- `/wizPulseAI-docs/WEBSITE_ARCHITECTURE.md` - 🆕 网站架构与用户引导策略
 
 ### AI 记忆 (已整合到此文件)
 - 原 auth-site-CLAUDE.md
-- 原 dashboard-site-CLAUDE.md  
+- 原 dashboard-site-CLAUDE.md
 - 原 main-site-CLAUDE.md
 
 ## 开发环境
@@ -148,21 +186,47 @@ dashboard: 3012
 3. **测试** 跨站点认证流程
 4. **注意** Vercel 部署配置
 
-## 当前状态 (2025-11-21)
+## 当前状态 (2025-12-03)
 
 - ✅ SSO 认证系统正常工作 (Google OAuth已修复)
 - ✅ Supabase版本统一 (三站点均为2.81.1)
 - ✅ Stripe 支付集成完成
 - ✅ 多语言支持实现 (ja/en/ar/zh-TW)
 - ✅ **Vercel构建问题已修复** (三站点均可正常部署)
-- ✅ **PaymentService统一封装** (Stripe API集中管理)
 - ✅ **配置中心系统完整实施** (三层配置 + Dashboard管理)
-- ✅ **Dashboard Phase 1数据库迁移完成** (6表+6函数+安全修复) 🆕
-- 🚧 产品试用功能待开发（数据库已就绪）
-- 🚧 API 开放平台待实现（数据库已就绪）
-- 📝 技术文档体系已建立
+- ✅ **Fashion Advisor站点已上线** (fashion.wizpulseai.com)
+- ✅ **WizLife/WizBiz品牌页面已创建** (/life, /biz)
+- ✅ **通用Logger系统已实施** (三站点共享)
+- 🚧 网站用户流程优化中（见WEBSITE_ARCHITECTURE.md）
+- 🚧 Fashion站点多语言待接入
+- 📝 网站架构文档已建立
 
-## 最新进展 (2025-11-21)
+## 最新进展 (2025-12-03)
+
+### ✅ 网站架构与用户流程规划 🆕
+
+#### 完成内容
+1. **Header导航更新**
+   - 主站Header添加WizLife/WizBiz入口
+   - 4语言翻译文件同步更新
+
+2. **网站架构文档创建**
+   - 品牌层次结构定义 (wizPulseAI → Life/Biz → Products)
+   - 用户旅程地图 (Awareness → Consideration → Conversion → Retention)
+   - 转化漏斗模型 (6层漏斗，目标转化率)
+   - SEO/引流策略规划
+   - 优化任务清单 (P0/P1/P2分级)
+
+3. **待优化项识别**
+   - P0: 首页产品生态区域、Fashion返回导航、品牌可视化
+   - P1: 面包屑导航、Fashion多语言
+   - P2: Header统一、Footer补充、SEO优化
+
+**架构文档**: `/wizPulseAI-docs/WEBSITE_ARCHITECTURE.md`
+
+---
+
+## 历史进展 (2025-11-21)
 
 ### ✅ Dashboard Phase 1 数据库迁移完成 🎉⭐⭐⭐⭐⭐ 🆕
 
