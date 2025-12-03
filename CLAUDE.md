@@ -55,18 +55,34 @@ wizPulseAI (母品牌/平台)
 | Fashion Advisor | fashion.wizpulseai.com | `/fashion-wizpulseai-com/` | ✅ 上线 | ❌ 仅日语 |
 | QuickSlide | - | 规划中 | 🚧 开发中 | - |
 
-### 用户流程 (需优化)
+### 用户流程 (优化中)
 ```
-首页 → WizLife页面 → Fashion Advisor站点
-         ↑ Header导航已添加 (2025-12-03)
+首页 → ProductEcosystem → WizLife页面 → Fashion Advisor站点
+  ↑                           ↑              ↑
+Header导航              产品生态区域      返回导航
+(2025-12-03)           (2025-12-03)     (2025-12-03)
 ```
 
-**待优化项**：
-- [ ] 首页添加产品生态展示区域
-- [ ] Fashion站点添加返回导航
+**任务状态**：
+- [x] 首页添加产品生态展示区域 ✅
+- [x] Fashion站点添加返回导航 ✅
 - [ ] Fashion站点多语言支持
 - [ ] 统一品牌视觉识别
 
+### Agent团队 (15个专业助手)
+
+| 部门 | Agent | 主要职责 |
+|------|-------|----------|
+| 开发 | `multi-site-coder` | 多站点代码开发 |
+| 开发 | `supabase-manager` | 数据库管理 |
+| 测试 | `sso-tester`, `stripe-tester`, `cross-site-validator` | 功能验证 |
+| 审查 | `security-auditor`, `performance-analyzer` | 安全/性能 |
+| 翻译 | `translation-manager` + `layer1/2/3` | 多语言翻译 |
+| 内容 | `content-writer` | AI内容创作 |
+| UI | `rtl-ui-specialist`, `prompt-designer` | 界面/Prompt |
+| 管理 | `git-manager` | Git提交管理 |
+
+**工作计划文档**: `/wizPulseAI-docs/TEAM_WORK_PLAN.md`
 **架构文档**: `/wizPulseAI-docs/WEBSITE_ARCHITECTURE.md`
 
 ## 技术要点
@@ -139,7 +155,8 @@ wizPulseAI (母品牌/平台)
 ### 技术文档
 - `/wizPulseAI-docs/technical-docs/` - 架构设计文档
 - `/wizPulseAI-docs/DEVELOPMENT_PLAN.md` - 开发规划
-- `/wizPulseAI-docs/WEBSITE_ARCHITECTURE.md` - 🆕 网站架构与用户引导策略
+- `/wizPulseAI-docs/WEBSITE_ARCHITECTURE.md` - 网站架构与用户引导策略
+- `/wizPulseAI-docs/TEAM_WORK_PLAN.md` - 🆕 团队工作计划（Agent分工+任务状态）
 
 ### AI 记忆 (已整合到此文件)
 - 原 auth-site-CLAUDE.md
@@ -203,26 +220,33 @@ dashboard: 3012
 
 ## 最新进展 (2025-12-03)
 
-### ✅ 网站架构与用户流程规划 🆕
+### ✅ 网站架构与P0任务执行 🆕
 
-#### 完成内容
-1. **Header导航更新**
-   - 主站Header添加WizLife/WizBiz入口
-   - 4语言翻译文件同步更新
+#### 1. 文档体系建立
+- **网站架构文档**: `/wizPulseAI-docs/WEBSITE_ARCHITECTURE.md`
+- **团队工作计划**: `/wizPulseAI-docs/TEAM_WORK_PLAN.md`
 
-2. **网站架构文档创建**
-   - 品牌层次结构定义 (wizPulseAI → Life/Biz → Products)
-   - 用户旅程地图 (Awareness → Consideration → Conversion → Retention)
-   - 转化漏斗模型 (6层漏斗，目标转化率)
-   - SEO/引流策略规划
-   - 优化任务清单 (P0/P1/P2分级)
+#### 2. P0任务完成 (Agent协作)
 
-3. **待优化项识别**
-   - P0: 首页产品生态区域、Fashion返回导航、品牌可视化
-   - P1: 面包屑导航、Fashion多语言
-   - P2: Header统一、Footer补充、SEO优化
+| 任务 | Agent | 状态 |
+|------|-------|------|
+| Header添加WizLife/WizBiz导航 | - | ✅ 完成 |
+| Fashion Header返回导航 | `multi-site-coder` | ✅ 完成 |
+| 首页ProductEcosystem组件 | `multi-site-coder` | ✅ 完成 |
 
-**架构文档**: `/wizPulseAI-docs/WEBSITE_ARCHITECTURE.md`
+#### 3. 代码提交记录
+
+| 仓库 | Commit | 内容 |
+|------|--------|------|
+| wizPulseAI-com | `cac006d` | Header添加WizLife/WizBiz导航 |
+| wizPulseAI-com | `3b62391` | 首页ProductEcosystem组件 |
+| fashion-wizpulseai-com | `d1080ed` | Header/Footer返回导航 |
+| wizPulseAI | `cc3ccda` | 架构文档+记忆更新 |
+
+#### 4. 下一步 (P0剩余+P1)
+- [ ] 品牌层次可视化
+- [ ] Life/Biz面包屑导航
+- [ ] Fashion多语言 (`translation-manager`)
 
 ---
 
