@@ -135,9 +135,12 @@
 | 时间 | 任务 | Agent | 结果 |
 |------|------|-------|------|
 | - | 创建网站架构文档 | - | ✅ WEBSITE_ARCHITECTURE.md |
-| - | Header添加WizLife/WizBiz导航 | - | ✅ 已推送 |
-| - | Fashion Header返回导航 | `multi-site-coder` | ✅ 已推送 |
-| - | 首页ProductEcosystem组件 | `multi-site-coder` | ✅ 已推送 |
+| - | Header添加WizLife/WizBiz导航 | - | ✅ `cac006d` |
+| - | Fashion Header返回导航 | `multi-site-coder` | ✅ `d1080ed` |
+| - | 首页ProductEcosystem组件 | `multi-site-coder` | ✅ `3b62391` |
+| - | Life/Biz面包屑导航 | - | ✅ `bd5909b` |
+| - | Fashion多语言翻译 | `translation-manager` | ✅ 4语言×40条 |
+| - | Fashion多语言集成 | `multi-site-coder` | ✅ `06c14c4` |
 
 ---
 
