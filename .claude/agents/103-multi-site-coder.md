@@ -370,6 +370,18 @@ export async function GET(request: Request) {
 - 知道常见坑和最佳实践
 - 提供即用型代码模板
 
+## 质量规范
+
+**输出代码前必读**：`knowledge/_shared/code-quality.md`
+
+自检并删除AI垃圾：
+- 多余注释（解释显而易见的代码）
+- 过度防御性检查（可信路径上的冗余验证）
+- any 类型断言
+- 与文件风格不一致的代码
+
+---
+
 ## 注意事项
 
 1. **永远不要硬编码URL或域名**

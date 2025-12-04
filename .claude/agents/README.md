@@ -1,271 +1,239 @@
-# WizPulseAI Sub-agent 系统
+# WizPulseAI AI 团队
 
-专为 WizPulseAI 三站点 SSO 项目设计的智能助手团队。
-
-## 📋 Sub-agent 总览
-
-### 1. sso-tester（SSO 测试专家）⭐ 最常用
-- **职责**：自动化测试 SSO 单点登录流程
-- **使用场景**：修改认证相关代码后
-- **工具**：Playwright、Chrome DevTools
-- **模型**：Haiku（快速、经济）
-
-### 2. git-manager（Git 管理专家）⭐ 最智能
-- **职责**：管理 4 个独立 Git 仓库的提交和推送
-- **使用场景**：功能完成、测试通过后
-- **工具**：Bash、Read、Grep
-- **模型**：Haiku
-
-### 3. prompt-designer（Prompt 设计专家）🆕
-- **职责**：设计和优化 AI Prompt，确保 Z世代友好风格
-- **使用场景**：新增 AI 功能、优化输出风格
-- **工具**：Read、Write、WebSearch
-- **模型**：Sonnet
-- **管理范围**：Fashion Advisor、未来其他 AI 产品
+> 基于 Anthropic 官方最佳实践的编排器-工作者模式
+>
+> **编码规则**: 3位数字 `XYY`
+> - X = 层级（1开发/2测试/3内容/4管理/5商业）
+> - YY = 序号（01-99）
 
 ---
 
-## 🎯 如何使用 Sub-agent
+## 架构概览
 
-### 方式1：自动调度（推荐）
-
-主 AI 会根据上下文自动调用合适的 Sub-agent：
-
-```bash
-# 你：修改了登录逻辑
-"我修改了 Auth 站点的登录表单验证"
-
-# 主 AI 自动调度：
-# 1. 完成代码修改
-# 2. 自动调用 sso-tester 测试
-# 3. 测试通过后询问是否提交
-# 4. 用户确认后调用 git-manager 提交
 ```
-
-### 方式2：手动指定
-
-你也可以明确调用某个 Sub-agent：
-
-```bash
-# 直接调用测试
-"用 sso-tester 测试一下登录功能"
-
-# 直接调用 Git 管理
-"用 git-manager 提交所有改动"
-
-# 只检查状态不提交
-"用 git-manager 检查所有仓库的状态"
+主 Claude（编排器）
+├── 读取记忆（CLAUDE.md, WORK_LOG.md）
+├── 读取任务（TASKS.md, SESSION.md）
+├── 调度专家 Agent（通过 Task 工具）
+└── 综合结果，边做边存
+        ↓
+专家 Agent（工作者）- 17个
 ```
 
 ---
 
-## 📊 典型工作流
+## 完整 Agent 清单
 
-### 场景1：修改 Auth 站点登录逻辑
+### 1xx - 开发类（5个）
 
-```bash
-你: "修改登录表单，添加邮箱格式验证"
+| 编号 | 文件 | 职责 | 触发词 |
+|------|------|------|--------|
+| 101 | `101-database-expert.md` | 数据库+Supabase操作 | 表结构、RLS、SQL、日志 |
+| 102 | `102-architecture-guardian.md` | 架构守护、代码Review | Review、架构、规范 |
+| 103 | `103-multi-site-coder.md` | 三站点开发、SSO | 多站点、跨站点 |
+| 104 | `104-rtl-ui-specialist.md` | RTL布局、阿拉伯语UI | RTL、阿拉伯语、ar |
+| 105 | `105-prompt-designer.md` | AI产品Prompt设计 | Prompt、提示词 |
 
-主AI:
-  → 分析需求
-  → 修改 src/components/NewLoginForm.tsx
-  → 自动调用 sso-tester 测试登录流程
+### 2xx - 测试类（4个）
 
-sso-tester:
-  → 运行自动化测试
-  → 生成测试报告
-  → ✅ 所有测试通过
+| 编号 | 文件 | 职责 | 触发词 |
+|------|------|------|--------|
+| 201 | `201-site-validator.md` | SSO测试+跨站点验证 | 测试登录、验证配置 |
+| 202 | `202-stripe-tester.md` | 支付流程测试 | 支付测试、Stripe |
+| 203 | `203-security-auditor.md` | 安全审计 | 安全、漏洞、审计 |
+| 204 | `204-performance-analyzer.md` | 性能分析 | 性能、优化、加载 |
 
-主AI: "测试通过！是否提交这些修改？"
+### 3xx - 内容类（5个）
 
-你: "提交吧"
+| 编号 | 文件 | 职责 | 触发词 |
+|------|------|------|--------|
+| 301 | `301-content-writer.md` | 文章/知识库创作 | 写文章、内容 |
+| 302 | `302-translation-manager.md` | 翻译管理（3层流程）| 翻译、多语言 |
+| 303 | `303-translator-layer1.md` | 初译 | - |
+| 304 | `304-translator-layer2.md` | 校对 | - |
+| 305 | `305-translator-layer3.md` | 润色 | - |
 
-git-manager:
-  → 检查 auth-wizpulseai-com 仓库状态
-  → 提交修改: "feat: 添加邮箱格式验证"
-  → 推送到 GitHub
-  → ✅ 推送成功
+### 4xx - 管理类（1个）
+
+| 编号 | 文件 | 职责 | 触发词 |
+|------|------|------|--------|
+| 401 | `401-git-manager.md` | Git提交、多仓库管理 | 提交、推送、Git |
+
+### 5xx - 商业类（2个）
+
+| 编号 | 文件 | 职责 | 触发词 |
+|------|------|------|--------|
+| 501 | `501-business-analyst.md` | 客户定位、留存、转化、埋点 | 客户、留存、转化、漏斗、埋点 |
+| 502 | `502-seo-expert.md` | SEO/GEO/AEO优化 | SEO、GEO、关键词、排名 |
+
+---
+
+## 使用方式
+
+### 自动调度（推荐）
+
+主 Claude 根据上下文自动调用专家：
+
+```
+你: "帮我检查一下数据库的 RLS 策略"
+主AI: → 自动调用 101-database-expert
 ```
 
-### 场景2：在 Main 站点添加产品页面（当前阶段重点）
+### 手动指定
 
-```bash
-你: "在 Main 站点添加 QuickSlide 产品介绍页面"
-
-主AI:
-  → 创建 /products/quickslide 页面
-  → 添加产品特性、截图、定价
-  → 优化 SEO 和响应式布局
-  → 本地预览确认
-
-主AI: "QuickSlide 页面已完成，是否提交？"
-
-你: "提交"
-
-git-manager:
-  → 检测到 wizPulseAI-com（Main站点）有改动
-  → 提交修改: "feat: 添加 QuickSlide 产品页面"
-  → 推送到 GitHub
-  → ✅ Main 站点提交成功
 ```
-
-### 场景3：部署前完整检查
-
-```bash
-你: "准备部署到生产环境，帮我做全面检查"
-
-主AI:
-  → 调用 sso-tester 运行完整测试套件
-  → 检查所有站点的编译
-  → 验证环境变量配置
-
-sso-tester:
-  → 测试1: 登录流程 ✅
-  → 测试2: 登出流程 ✅
-  → 测试3: 跨站点Session ✅
-  → 测试4: Cookie域验证 ✅
-
-git-manager:
-  → 检查所有仓库是否已推送
-  → 验证版本一致性
-  → 生成部署报告
-
-主AI: "✅ 所有检查通过，可以部署！"
+你: "用 201-site-validator 测试登录流程"
+你: "用 401-git-manager 提交改动"
 ```
 
 ---
 
-## 🧠 git-manager 的智能判断
+## Task 调用机制
 
-### ✅ 什么时候会自动提交
+### 并行执行
 
-1. **功能完成** + 测试通过
-2. **阶段性工作**完成（如一篇文章、一个页面）
-3. **Bug修复**完成且验证
-4. **你明确说**"可以提交了"
+同一消息发起多个 Task = 并行运行（最多10个）
 
-### ❌ 什么时候不会提交
-
-1. 工作还在进行中（功能一半）
-2. 实验性修改（你说"试试看"）
-3. 测试失败
-4. 代码有错误
-
----
-
-## 🛠️ 手动工具脚本
-
-如果 Sub-agent 不可用，也可以直接使用脚本：
-
-### Git 管理脚本
-
-```bash
-# 检查所有仓库状态
-./git-push-all.sh status
-
-# 拉取所有仓库最新代码
-./git-push-all.sh pull
-
-# 批量提交所有仓库
-./git-push-all.sh commit "feat: 添加新功能"
-
-# 查看帮助
-./git-push-all.sh help
+```
+┌─ 101-database-expert ─┐
+├─ 203-security-auditor ├─→ 同时执行
+└─ 102-architecture-guardian ─┘
 ```
 
-### 服务管理脚本
+### 串行执行
 
-```bash
-# 启动所有站点
-./start-all.sh
+分开消息各发一个 Task = 顺序运行
 
-# 停止所有站点
-./stop-all.sh
-
-# 检查服务状态
-./check-status.sh
-
-# 实时监控日志
-./monitor-logs.sh
+```
+需求分析 → 架构设计 → 代码实现
 ```
 
 ---
 
-## 📈 业务发展阶段（git-manager 理解的）
+## 核心原则
 
-### 阶段1：三站点基础架构期（已完成）
-- Auth/Dashboard/Main 频繁修改
-- 三个子站点都会经常提交
-
-### 阶段2：内容扩展期（当前）⭐ 重点
-- **Main 站点**高频提交（产品页面、知识中心）
-- 主仓库中频提交（文档、脚本）
-- Auth/Dashboard 低频提交（偶尔修复bug）
-
-### 阶段3：新服务扩展期（未来）
-- 可能添加新站点（QuickSlide 等）
-- 架构支持扩展到 5、6、7 个仓库
+1. **人类决策**：AI 给建议，用户做决定
+2. **边做边存**：每完成里程碑就更新记录
+3. **摘要返回**：专家返回摘要，不是完整分析
+4. **简单透明**：保持可见性，每步可 Review
 
 ---
 
-## 🎯 最佳实践
-
-### 1. 信任自动调度
-让主 AI 自动判断何时调用 Sub-agent，不需要每次手动指定。
-
-### 2. 明确表达意图
-如果你想测试但不想提交，明确说"先测试，不要提交"。
-
-### 3. 利用智能判断
-git-manager 会根据业务阶段智能判断，你只需说"完成了"。
-
-### 4. 查看测试报告
-sso-tester 会生成详细报告和截图，检查 `/logs/` 目录。
-
----
-
-## 📝 Sub-agent 文件位置
+## 文件结构
 
 ```
 .claude/agents/
-├── README.md            (本文件)
-├── sso-tester.md       (SSO 测试专家)
-├── git-manager.md      (Git 管理专家)
-└── prompt-designer.md  (Prompt 设计专家) 🆕
+├── README.md                   # 本文件
+├── AGENT-TEMPLATE.md           # 创建新Agent的模板
+│
+├── # === Agent 配置文件（简洁版） ===
+├── 1xx-*.md                    # 开发类（5个）
+├── 2xx-*.md                    # 测试类（4个）
+├── 3xx-*.md                    # 内容类（5个）
+├── 4xx-*.md                    # 管理类（1个）
+├── 5xx-*.md                    # 商业类（2个）
+│
+└── knowledge/                  # 📚 专业知识库
+    ├── _shared/                # 🔧 通用质量规范
+    │   ├── code-quality.md     # 代码去水规范
+    │   └── doc-quality.md      # 文档去水规范
+    │
+    ├── 501-business/           # 商业分析知识
+    │   ├── STARTUP.md          # 启动必读
+    │   └── tracking-guide.md   # 埋点规划
+    │
+    └── 502-seo/                # SEO/AEO/GEO 知识
+        ├── STARTUP.md          # 启动必读
+        ├── seo-aeo-geo-guide.md # 完整指南
+        └── checklists.md       # 检查清单
+```
+
+## 知识库架构
+
+**设计原则**：配置简洁 + 知识分离
+
+| 文件类型 | 内容 | 长度 |
+|---------|------|------|
+| `XXX-agent.md` | Agent配置（职责、工具、触发词） | ~50行 |
+| `knowledge/_shared/*.md` | 通用质量规范（代码/文档去水） | ~80行 |
+| `knowledge/XXX/STARTUP.md` | 启动必读（核心概念） | ~50行 |
+| `knowledge/XXX/*.md` | 详细指南、模板、检查清单 | 按需 |
+
+**质量规范引用**：
+
+| Agent | 引用规范 |
+|-------|---------|
+| 102-architecture-guardian | code-quality.md |
+| 103-multi-site-coder | code-quality.md |
+| 301-content-writer | doc-quality.md |
+| 502-seo-expert | doc-quality.md |
+
+**Agent 启动流程**：
+```
+1. 主Claude调用 Task(subagent_type='seo-expert')
+2. Agent 读取 502-seo-expert.md（简洁配置）
+3. Agent 读取 knowledge/502-seo/STARTUP.md（核心概念）
+4. 如需详细信息，读取对应的指南文件
 ```
 
 ---
 
-## 🚀 未来计划
+## 记忆系统
 
-### 即将添加的 Sub-agent
-
-1. **stripe-tester** - 支付流程测试
-2. **performance-analyzer** - 性能分析
-3. **security-auditor** - 安全审计
-4. **multi-site-coder** - 多站点代码编写
-
----
-
-## 💡 常见问题
-
-### Q1: Sub-agent 会自动运行吗？
-A: 是的，主 AI 会根据上下文自动调用。你也可以手动指定。
-
-### Q2: 如何关闭自动测试？
-A: 说"跳过测试"或"不需要测试"。
-
-### Q3: git-manager 会不会误提交？
-A: 不会，它会根据智能判断规则决定，并且在提交前会询问你。
-
-### Q4: 测试失败了怎么办？
-A: sso-tester 会生成详细的错误报告，主 AI 会帮你定位问题。
-
-### Q5: 如何添加新的 Sub-agent？
-A: 在 `.claude/agents/` 目录创建新的 Markdown 文件即可。
+| 文件 | 用途 | 位置 |
+|------|------|------|
+| `CLAUDE.md` | 长期记忆 | 根目录 |
+| `CLAUDE-PROTOCOL.md` | 主Claude协议 | 根目录 |
+| `WORK_LOG.md` | 工作日志 | 根目录 |
+| `TASKS.md` | 当前任务 | 根目录 |
+| `SESSION.md` | 会话日志 | 根目录 |
+| `PROGRESS.md` | 进度追踪 | 根目录 |
 
 ---
 
-**最后更新**: 2025-11-10
-**维护者**: Claude AI
-**项目**: WizPulseAI SSO System
+## 创建新 Agent
+
+1. 复制 `AGENT-TEMPLATE.md`
+2. 确定编号（层级 + 下一个序号）
+3. 修改 YAML 头部
+4. 填写职责和触发词
+5. 更新本 README
+
+---
+
+## 变更记录
+
+### 2025-12-04 v2.0 重构
+
+**新编码系统**：
+- 采用3位数字编码 `XYY`
+- 1xx开发 / 2xx测试 / 3xx内容 / 4xx管理 / 5xx商业
+
+**合并**：
+- database-expert + supabase-manager → 101-database-expert
+- sso-tester + cross-site-validator → 201-site-validator
+
+**保留独立**：
+- 104-rtl-ui-specialist（阿拉伯语专项）
+- 105-prompt-designer（AI Prompt设计）
+- 翻译团队（302-305）
+
+---
+
+## 常用脚本
+
+```bash
+# Git 管理
+./git-push-all.sh status
+
+# 服务管理
+./start-all.sh
+./stop-all.sh
+./check-status.sh
+```
+
+---
+
+**最后更新**: 2025-12-04
+**Agent 数量**: 17个
+**架构版本**: v2.1（新增商业类）
