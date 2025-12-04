@@ -1,5 +1,17 @@
 # WizPulseAI 项目 AI 助手记忆文档
 
+> **协议文件**: 详细行为规范见 [CLAUDE-PROTOCOL.md](./CLAUDE-PROTOCOL.md)
+>
+> **记忆系统**:
+> - 长期记忆: 本文件 (CLAUDE.md)
+> - 工作日志: [WORK_LOG.md](./WORK_LOG.md)
+> - 当前任务: [TASKS.md](./TASKS.md)
+> - 会话日志: [SESSION.md](./SESSION.md)
+> - 进度追踪: [PROGRESS.md](./PROGRESS.md)
+> - 专家团队: [.claude/agents/README.md](./.claude/agents/README.md)
+
+---
+
 ## 项目概述
 WizPulseAI 是一个多站点 SaaS 平台，包含3个独立部署的 Next.js 应用，通过顶级域 Cookie 实现 SSO 单点登录。
 
@@ -54,6 +66,64 @@ wizPulseAI (母品牌/平台)
 |------|------|------|------|--------|
 | Fashion Advisor | fashion.wizpulseai.com | `/fashion-wizpulseai-com/` | ✅ 上线 | ✅ 4语言 (ja/en/ar/zh-TW) |
 | QuickSlide | - | 规划中 | 🚧 开发中 | - |
+
+### Fashion站点架构 (2025-12-03 SPF标准化) 🆕
+
+**基于SPF系统架构v1.7进行标准化调整**
+
+#### 新目录结构
+```
+fashion-wizpulseai-com/src/
+├── domains/                      # 业务域（核心）
+│   ├── fashion-advisor/          # Fashion业务域
+│   │   ├── entities/
+│   │   ├── mappers/
+│   │   ├── services/
+│   │   ├── constants/
+│   │   └── hooks/               # 🆕 域专属Hook
+│   ├── credits/                  # 🆕 积分业务域（从core迁移）
+│   ├── _composite/              # 跨域服务
+│   └── _contracts/              # 接口契约
+│
+├── infrastructure/               # 🆕 基础设施
+│   ├── supabase/                # Supabase客户端
+│   ├── auth/                    # 认证服务
+│   ├── storage/                 # 存储服务
+│   └── monitoring/              # 监控服务
+│
+├── shared/                       # 跨域资源
+│   ├── ui/                      # 🆕 共享UI组件（从components迁移）
+│   ├── hooks/                   # 🆕 共享Hooks（从hooks迁移）
+│   ├── auth/                    # 认证组件
+│   └── errors/                  # 错误处理
+│
+├── lib/                          # 技术工具（无业务逻辑）
+├── extensions/                   # 供应商抽象（保留）
+└── config/                       # 应用配置
+```
+
+#### 目录职责定义
+| 目录 | 职责 | 判断标准 |
+|------|------|----------|
+| `domains/` | 业务逻辑 | 包含业务规则和实体 |
+| `infrastructure/` | 基础设施 | 第三方服务封装 |
+| `lib/` | 技术工具 | **无业务逻辑**，可复用到任何项目 |
+| `shared/` | 跨域资源 | **包含业务概念**，被多个域共享 |
+| `extensions/` | 供应商抽象 | 可切换的第三方供应商 |
+
+#### 导入规范
+```typescript
+// ✅ 新路径（推荐）
+import { createClient } from '@/infrastructure/supabase/server'
+import { CreditsService } from '@/domains/credits'
+import { DashboardNav } from '@/shared/ui'
+
+// ⚠️ 旧路径（deprecated，仍可用）
+import { createClient } from '@/core/database/supabase/server'
+import { CreditsService } from '@/core/payment/credits'
+```
+
+**架构文档**: `/fashion-wizpulseai-com/ARCHITECTURE.md`
 
 ### 用户流程 (优化中)
 ```

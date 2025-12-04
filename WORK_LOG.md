@@ -12,7 +12,72 @@
 
 ---
 
-## 最新状态 (2025-12-02 - Fashion Advisor 多语言 + 设置 + 安全审计) 🎉⭐⭐⭐⭐
+## 最新状态 (2025-12-03 - Fashion站点架构调整) 🎉⭐⭐⭐⭐⭐
+
+### ✅ 今日完成：架构重构
+
+**目标**：将Fashion站点从混乱的目录结构调整为清晰的分层架构
+
+**新目录结构**：
+```
+src/
+├── domains/                      # 业务域
+│   ├── fashion-advisor/          # Fashion业务域
+│   │   └── hooks/                # 🆕 域专属Hook
+│   └── credits/                  # 🆕 积分业务域
+│
+├── infrastructure/               # 🆕 基础设施
+│   ├── supabase/                 # Supabase客户端
+│   └── auth/                     # 认证服务
+│
+├── shared/                       # 跨域资源
+│   ├── ui/                       # 🆕 共享UI组件
+│   │   └── dashboard/
+│   └── hooks/                    # 🆕 共享Hooks
+│
+├── lib/                          # 技术工具（保留）
+├── extensions/                   # 供应商抽象（保留）
+└── config/                       # 配置（保留）
+```
+
+**完成的迁移**：
+| 迁移 | 旧路径 | 新路径 |
+|------|-------|-------|
+| Supabase | `@/core/database/supabase/*` | `@/infrastructure/supabase/*` |
+| Auth | `@/lib/auth/*` | `@/infrastructure/auth/*` |
+| Credits | `@/core/payment/credits` | `@/domains/credits` |
+| UI组件 | `@/components/dashboard/*` | `@/shared/ui/dashboard/*` |
+| Hooks | `@/hooks/useSound` | `@/shared/hooks/useSound` |
+
+**向后兼容**：旧路径通过deprecated重导出保持可用
+
+**Git提交**：`79b08b1` - 49文件，+3446行，-1018行
+
+### 📋 架构方针（后续开发要遵守）
+
+```typescript
+// ✅ 新代码使用新路径
+import { createClient } from '@/infrastructure/supabase/server'
+import { CreditsService } from '@/domains/credits'
+import { DashboardNav } from '@/shared/ui'
+
+// ⚠️ 旧路径仍可用但不推荐
+import { createClient } from '@/lib/supabase/server'  // deprecated
+```
+
+### 🚧 待继续
+
+1. 逐步更新使用旧路径的文件（18个文件使用@/lib/supabase）
+2. 测试完整功能流程
+3. 推送到GitHub
+
+### 📚 相关文档
+- `fashion-wizpulseai-com/ARCHITECTURE.md` - 完整架构设计
+- `fashion-wizpulseai-com/infrastructure/README.md` - 基础设施说明
+
+---
+
+## 历史状态 (2025-12-02 - Fashion Advisor 多语言 + 设置 + 安全审计) 🎉⭐⭐⭐⭐
 
 ### ✅ 今日完成
 
