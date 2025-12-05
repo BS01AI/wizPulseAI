@@ -12,6 +12,29 @@
 
 ---
 
+## ⭐ 记忆同步规则（必须遵守）
+
+**核心原则**：完成一步，推进一步，立即更新记录
+
+**更新触发点**：
+| 触发事件 | 更新文件 |
+|----------|----------|
+| 完成一个子任务 | TASKS.md（打勾 + 下一步标记）|
+| 产出文档/代码 | SESSION.md（记录产出文件）|
+| 等待外部（客户确认等）| TASKS.md（标记等待状态）|
+| 会话结束前 | SESSION.md + TASKS.md 同步 |
+
+**禁止行为**：
+- ❌ 做完多个任务才一次性更新
+- ❌ 忘记更新就继续下一个任务
+- ❌ TASKS.md 和实际进度不一致
+
+**检查习惯**：
+- 每完成一个动作，问自己："TASKS.md 需要更新吗？"
+- 产出文件后，问自己："SESSION.md 记录了吗？"
+
+---
+
 ## 项目概述
 WizPulseAI 是一个多站点 SaaS 平台，包含3个独立部署的 Next.js 应用，通过顶级域 Cookie 实现 SSO 单点登录。
 
@@ -50,7 +73,7 @@ WizPulseAI 是一个多站点 SaaS 平台，包含3个独立部署的 Next.js �
 ```
 wizPulseAI (母品牌/平台)
     ├── WizLife (生活AI) → /life
-    │   ├── Fashion Advisor ✅ → fashion.wizpulseai.com
+    │   ├── マジコーデ (Magicoord) ✅ → magicoord.wizpulseai.com
     │   ├── Style Diary 🚧
     │   └── Shopping Advisor 🚧
     ├── WizBiz (商务AI) → /biz
@@ -64,7 +87,7 @@ wizPulseAI (母品牌/平台)
 
 | 站点 | 域名 | 目录 | 状态 | 多语言 |
 |------|------|------|------|--------|
-| Fashion Advisor | fashion.wizpulseai.com | `/fashion-wizpulseai-com/` | ✅ 上线 | ✅ 4语言 (ja/en/ar/zh-TW) |
+| マジコーデ (Magicoord) | magicoord.wizpulseai.com | `/fashion-wizpulseai-com/` | ✅ 上线 | ✅ 4语言 (ja/en/ar/zh-TW) |
 | QuickSlide | - | 规划中 | 🚧 开发中 | - |
 
 ### Fashion站点架构 (2025-12-03 SPF标准化) 🆕
@@ -127,7 +150,7 @@ import { CreditsService } from '@/core/payment/credits'
 
 ### 用户流程 (优化中)
 ```
-首页 → ProductEcosystem → WizLife页面 → Fashion Advisor站点
+首页 → ProductEcosystem → WizLife页面 → マジコーデ站点
   ↑                           ↑              ↑
 Header导航              产品生态区域      返回导航
 (2025-12-03)           (2025-12-03)     (2025-12-03)
@@ -282,7 +305,7 @@ dashboard: 3012
 - ✅ 多语言支持实现 (ja/en/ar/zh-TW)
 - ✅ **Vercel构建问题已修复** (三站点均可正常部署)
 - ✅ **配置中心系统完整实施** (三层配置 + Dashboard管理)
-- ✅ **Fashion Advisor站点已上线** (fashion.wizpulseai.com)
+- ✅ **マジコーデ站点已上线** (magicoord.wizpulseai.com)
 - ✅ **WizLife/WizBiz品牌页面已创建** (/life, /biz)
 - ✅ **通用Logger系统已实施** (三站点共享)
 - 🚧 网站用户流程优化中（见WEBSITE_ARCHITECTURE.md）
