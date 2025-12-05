@@ -10,7 +10,7 @@ export const AUTH_CONFIG = {
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL || '',
   supabaseAnonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
 
-  // Cookie 域名（所有子站点共享）
+  // Cookie 域名（所有子站点共享）- 生产环境默认 .wizpulseai.com
   cookieDomain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN || '.wizpulseai.com',
 
   // 认证中心 URL

@@ -66,7 +66,7 @@ export const supabase = createBrowserClient(
           }
         }
 
-        const maxAge = options.maxAge || (60 * 60 * 24 * 365)
+        const maxAge = options.maxAge || (60 * 60 * 24 * 7)
         cookieString += `; max-age=${maxAge}`
 
         if (options.expires) {
