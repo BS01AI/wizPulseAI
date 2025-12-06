@@ -20,7 +20,7 @@ export type SiteId =
   | 'auth'      // auth.wizpulseai.com
   | 'dashboard' // dashboard.wizpulseai.com
   | 'main'      // www.wizpulseai.com
-  | 'fashion'   // fashion.wizpulseai.com
+  | 'fashion'   // magicoord.wizpulseai.com
   | 'shared'    // 共享模块
   | string      // 未来站点
 
