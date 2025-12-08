@@ -4,9 +4,20 @@
 
 ---
 
-## 当前 Sprint: 矩阵网站UI清理 (2025-12-05)
+## 当前 Sprint: Fashion 功能修复 (2025-12-08)
 
-### 🟢 今日已完成 (6项)
+### 🔄 进行中
+- [ ] **Fashion 照片分析功能** - 等待验证 `gemini-pro-vision` 模型
+
+### 🟢 今日已完成 (2025-12-08)
+- [x] Fashion: RLS INSERT/UPDATE/DELETE 策略 (analyses表)
+- [x] Fashion: RLS UPDATE 策略 (photos表)
+- [x] Fashion: 添加缺失字段 (app_source, advisor_persona_used, tone_used)
+- [x] Fashion: AI Provider 切换到 Google (Gemini)
+- [x] Fashion: 模型名称修复 (gemini-1.5-flash → gemini-pro-vision)
+- [x] Fashion: 添加详细调试日志
+
+### 🟢 历史已完成 (2025-12-05)
 - [x] Fashion: 删除_template目录(12文件)
 - [x] Fashion: 移除测试卡号4242
 - [x] Fashion: 品牌名已统一为マジコーデ
@@ -14,7 +25,7 @@
 - [x] Auth: 升级Supabase到2.81.1
 - [x] Main: 修复断链href=#(8处)
 
-### 🔄 进行中 (3项)
+### 📋 待办
 - [ ] Dashboard: AI产品Modal实现 (3h)
 - [ ] Main: 日文翻译补齐(88行)
 - [ ] 架构: Tailwind配置统一
@@ -124,4 +135,4 @@
 
 ---
 
-**最后更新**: 2025-12-05
+**最后更新**: 2025-12-08
