@@ -12,7 +12,176 @@
 
 ---
 
-## 最新状态 (2025-12-05 - 矩阵网站UI清理完成) 🎉⭐⭐⭐⭐⭐
+## 最新状态 (2025-12-09 - Storage 架构重构) 🔒
+
+### ✅ 今日完成：Fashion Storage 架构重构
+
+**背景**:
+1. 上传照片流程太慢（需要几十秒）
+2. R2 存储配置复杂，且不确定是否配置正确
+3. 用户隐私保护需求
+
+**完成的工作**:
+
+#### 1. Storage 架构简化
+- ❌ 去掉 Cloudflare R2
+- ✅ 改用 Supabase Storage（已有账号，零配置）
+- ✅ 原图不存储（分析完即丢弃，节省 87% 存储）
+- ✅ 只存缩略图（200x200，约 15KB/张）
+
+#### 2. 私有存储 + 签名 URL
+- Bucket 设为私有（`public: false`）
+- 使用签名 URL 访问（1小时有效期）
+- 数据库存储路径，不存 URL
+- 前端通过 API 获取签名 URL
+
+#### 3. RLS 安全策略
+- 普通用户：只能访问自己的文件
+- 管理员：可以查看/删除所有用户的文件（使用 `is_admin()` 函数）
+- 路径遍历防护
+
+**新增/修改的文件**:
+```
+fashion-wizpulseai-com/
+├── src/infrastructure/supabase/storage.ts  # 🆕 Storage 工具函数
+├── src/app/api/fashion/upload/route.ts     # ✏️ 改用 Supabase Storage
+├── src/lib/storage/r2.ts                   # ⚠️ 标记为废弃
+├── supabase/migrations/009_fashion_storage_bucket.sql  # 🆕 Bucket + RLS
+└── docs/
+    ├── SUPABASE_STORAGE_SETUP.md           # 🆕 配置文档
+    ├── UPLOAD_API_REFACTOR.md              # 🆕 重构说明
+    └── PERFORMANCE_ANALYSIS_REPORT.md      # 🆕 性能分析
+```
+
+**API 返回变化**:
+```typescript
+// 上传成功返回
+{
+  photo: {
+    ...photo,
+    signedUrl  // 🆕 签名 URL（1小时有效）
+  },
+  compressedImage  // 🆕 压缩后 base64（供 AI 分析）
+}
+```
+
+**待手动操作**:
+- [ ] 在 Supabase Dashboard 创建 `fashion-thumbnails` Bucket（Private）
+- [ ] 运行 `009_fashion_storage_bucket.sql` 迁移
+
+**Git 提交**:
+- `839260a` - fix: 直接从源文件导入，修复 Vercel minify 问题
+- `92e7cb0` - refactor: 迁移到 Supabase Storage
+- `4a78ec0` - security: 改为私有 Storage，使用签名 URL
+- `8ba6814` - feat: 添加管理员 Storage RLS 策略
+
+### 📋 下一步
+- 讨论文件夹结构设计
+- 在 Supabase Dashboard 创建 Bucket 并测试
+
+---
+
+## 历史状态 (2025-12-08 - React2Shell安全检查) 🔒
+
+### ✅ 今日完成：安全漏洞评估 + 版本统一
+
+**背景**: Vercel发布安全公告 React2Shell (CVE-2025-55182)，严重远程代码执行漏洞。
+
+**漏洞影响范围**:
+- Next.js 15.0.0 - 16.0.6
+- Next.js 14.3.0-canary.76+ (canary版本)
+- React 19 + React Server Components
+
+**WizPulseAI站点检查结果**:
+
+| 站点 | Next.js | React | 状态 |
+|------|---------|-------|------|
+| wizPulseAI-com | 14.2.33 ✨ | 18.x | ✅ 安全 |
+| auth-wizpulseai-com | 14.2.33 | 18.3.1 | ✅ 安全 |
+| db-wizPulseAI-com | 14.2.33 | 18.3.1 | ✅ 安全 |
+| fashion-wizpulseai-com | 14.2.33 | 18.3.1 | ✅ 安全 |
+
+**执行操作**:
+- ✅ 检查4个站点 Next.js/React 版本
+- ✅ 确认全部不受漏洞影响（使用14.2.x稳定版）
+- ✅ 统一 main站点 Next.js 14.2.28 → 14.2.33
+- ✅ 清理45个旧patch文件
+
+**结论**: 所有站点安全，无需紧急对策。未来升级到15+时注意选择已修复版本。
+
+### ✅ Fashion站点 Gemini API 升级到 2.5 系列 🚀
+
+**背景**:
+1. 图片分析报错 `models/gemini-pro-vision is not found`（已废弃）
+2. Google 发布了 Gemini 2.5 和 3.0 系列新模型
+
+**升级方案**:
+- **照片分析**: `gemini-2.5-flash`（快速、1M上下文）
+- **图片生成**: `gemini-2.5-flash-image`（文生图、图片编辑）
+
+**修改文件**:
+| 文件 | 变更 |
+|------|------|
+| `extensions/ai/providers/google.ts` | 默认模型 → 2.5-flash |
+| `extensions/ai/types/index.ts` | 添加 Gemini 2.5/3.0 常量 |
+| `services/pentagon-analysis.service.ts` | fallback → 2.5-flash |
+| `services/vision.service.ts` | fallback → 2.5-flash |
+| `config/ai-config.ts` | 添加 gemini-image 配置 |
+| `.env.example` | 更新配置说明 |
+
+**新增模型常量**:
+```typescript
+GEMINI_2_5_FLASH: 'gemini-2.5-flash'           // 分析/文本
+GEMINI_2_5_FLASH_LITE: 'gemini-2.5-flash-lite' // 超快
+GEMINI_2_5_PRO: 'gemini-2.5-pro'               // 复杂推理
+GEMINI_2_5_FLASH_IMAGE: 'gemini-2.5-flash-image' // 图片生成
+GEMINI_3_PRO: 'gemini-3-pro-preview'           // 最智能
+```
+
+**参考文档**:
+- https://ai.google.dev/gemini-api/docs/models
+- https://ai.google.dev/gemini-api/docs/image-generation
+
+---
+
+## 历史记录 (2025-12-07 - Fashion社区功能规划完成) 📋
+
+### ✅ 今日完成：社区功能完整规划文档
+
+**背景**: 用户想为Fashion站点(マジコーデ)添加社区功能，让用户分享穿搭、互相交流。
+
+**4位专家Agent并行分析**:
+- `business-analyst` - 商业分析与冷启动策略
+- `architecture-guardian` - 技术架构设计
+- `101-database-expert` - 数据库Schema设计
+- `security-auditor` - 安全策略与内容审核
+
+**产出文档** (保存在 `fashion-wizpulseai-com/docs/community/`):
+
+| 文档 | 大小 | 内容 |
+|------|------|------|
+| README.md | 3KB | 文档索引 |
+| 00-ROADMAP.md | 7KB | 开发路线图 |
+| 01-PRD-COMMUNITY.md | 4KB | 产品需求 |
+| 02-ARCHITECTURE.md | 12KB | 技术架构 |
+| 03-DATABASE-DESIGN.md | 12KB | 数据库设计 |
+| 04-SECURITY-POLICY.md | 60KB | 安全策略(最详细) |
+| 05-LEGAL-COMPLIANCE.md | 12KB | 法律合规 |
+
+**核心决策**:
+- 架构选择: 放在Fashion站点内 `/community`（2周可上线）
+- 内容审核: NSFW.js(客户端免费) + Google Vision(服务端付费)
+- 冷启动: AI生成80条初始内容 + 35个种子用户
+- 成本: MVP阶段$0/月，全用免费服务
+
+**用户决定**: 先保留这个计划，等Fashion核心功能上线后再检讨实施。
+
+**技术知识点**:
+- NSFW.js: 基于TensorFlow.js的客户端图片检测，5MB模型，准确率93%，免费
+
+---
+
+## 历史状态 (2025-12-05 - 矩阵网站UI清理完成) 🎉⭐⭐⭐⭐⭐
 
 ### ✅ 今日完成：全站点UI清理 (9/9项 = 100%)
 
