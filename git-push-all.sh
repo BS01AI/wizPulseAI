@@ -22,6 +22,7 @@ REPOS=(
   "auth-wizpulseai-com"
   "db-wizPulseAI-com"
   "wizPulseAI-com"
+  "fashion-wizpulseai-com"
 )
 
 # 主仓库名称
@@ -152,6 +153,19 @@ commit_all() {
     commit_and_push "$ROOT_DIR/$repo" "$repo" "$commit_msg"
   done
 
+  # 自动更新 submodule 引用
+  cd "$ROOT_DIR"
+  local submodule_changes=$(git status --porcelain | grep "^.M.*new commits" || true)
+  if [ -n "$submodule_changes" ]; then
+    echo -e "${BLUE}📦 检测到 submodule 更新，自动同步引用...${NC}"
+    for repo in "${REPOS[@]}"; do
+      if git status --porcelain "$repo" 2>/dev/null | grep -q "new commits"; then
+        git add "$repo"
+        echo -e "${GREEN}  ✅ 已更新 $repo 引用${NC}"
+      fi
+    done
+  fi
+
   # 主仓库
   commit_and_push "$ROOT_DIR" "$MAIN_REPO" "$commit_msg"
 
@@ -184,7 +198,8 @@ ${GREEN}管理的仓库：${NC}
   • auth-wizpulseai-com (Auth站点)
   • db-wizPulseAI-com (Dashboard站点)
   • wizPulseAI-com (Main站点)
-  • 主仓库 (脚本和文档)
+  • fashion-wizpulseai-com (Fashion站点)
+  • 主仓库 (脚本和文档) + 自动同步submodule引用
 
 ${YELLOW}⚠️  注意：${NC}
   • commit命令会提交所有有改动的仓库
