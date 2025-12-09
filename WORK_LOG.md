@@ -12,88 +12,118 @@
 
 ---
 
-## 最新状态 (2025-12-09 - 配置统一化) 🔒
+## 最新状态 (2025-12-09 - Fashion Storage 架构完成) ✅
 
-### ✅ 今日完成：图片处理配置统一化
+### 📦 Fashion Storage 架构设计（完整版）
 
-**背景**: Storage 架构重构后，统一管理图片处理常量（可调原则）
+#### 架构决策
+| 决策 | 选择 | 原因 |
+|------|------|------|
+| 存储服务 | Supabase Storage | 已有账号，零配置，与数据库统一 |
+| 访问模式 | 私有 + 签名 URL | 用户隐私保护 |
+| 原图存储 | ❌ 不存储 | 分析完即丢弃，节省 87% 存储 |
+| 缩略图存储 | ✅ 200×200 WebP | 约 3-15KB/张，用于历史展示 |
 
-**完成的工作**:
+#### 数据流
+```
+用户上传原图 (1-10MB)
+    ↓
+服务端压缩为 800px (AI 分析用，~25KB)
+    ↓ 同时
+服务端生成 200px 缩略图 (~4KB)
+    ↓
+缩略图上传到 Supabase Storage (私有)
+    ↓
+数据库存储路径 (不存 URL)
+    ↓
+前端获取签名 URL (1小时有效)
+```
 
-#### 1. 创建统一配置文件 `config/image.ts`
+#### 文件夹结构
+```
+fashion-thumbnails/              # Supabase Storage Bucket (私有)
+└── {user_id}/
+    └── {photo_id}.webp          # 200×200 缩略图
+```
+
+#### 配置文件 `config/image.ts`
 ```typescript
-AI_IMAGE = { maxSize: 800, quality: 0.85 }  // AI 分析用图
-THUMBNAIL = { size: 200, quality: 0.7 }     // 存储缩略图
+AI_IMAGE = { maxSize: 800, quality: 0.85 }    // AI 分析用图
+THUMBNAIL = { size: 200, quality: 0.7 }       // 存储缩略图
 STORAGE = { bucket: 'fashion-thumbnails', signedUrlExpiry: 3600 }
 UPLOAD_LIMITS = { maxFileSizeMB: 10, allowedMimeTypes: [...] }
 ```
 
-#### 2. 更新代码使用配置常量
-- `storage.ts` - 使用 AI_IMAGE, THUMBNAIL, STORAGE
-- `upload/route.ts` - 使用 UPLOAD_LIMITS, isAllowedMimeType
-- `fashion.constants.ts` - 标记旧常量为 @deprecated
+#### RLS 安全策略
+- 普通用户：只能访问自己的文件 (`auth.uid() = user_id`)
+- 管理员：可查看/删除所有用户文件 (`is_admin()`)
+- 路径遍历防护：禁止 `../` 等危险路径
 
-#### 3. 创建 Dashboard SQL
-- `010_fashion_storage_bucket_dashboard.sql` - 可直接在 SQL Editor 执行
+#### 性能数据
+| 步骤 | 耗时 |
+|------|------|
+| 图片压缩 (800px) | ~80ms |
+| 缩略图生成 (200px) | ~15ms |
+| Storage 上传 | ~1s |
+| 数据库操作 | ~3s（瓶颈） |
+| **总计** | **~7s**（热启动） |
 
-**Git 提交**:
-- `020fefd` - refactor: 统一图片处理配置到 config/image.ts
-- `83629d3` - feat: 添加 Dashboard 可执行的 Storage SQL
+### ✅ 今日完成
 
-### 📋 待手动操作
-- [ ] 在 Supabase Dashboard 执行 SQL 创建 Bucket
-- [ ] 测试上传流程
+1. **Storage 架构重构**
+   - 从 R2 迁移到 Supabase Storage
+   - 私有 bucket + 签名 URL
+   - RLS 安全策略
 
----
+2. **配置统一化**
+   - 创建 `config/image.ts`
+   - 常量可调原则
 
-## 历史状态 (2025-12-09 - Storage 架构重构)
+3. **Bug 修复**
+   - `899ff3e` - analyze API 兼容路径格式（storageUrl 是路径而非 URL）
 
-### ✅ 完成：Fashion Storage 架构重构
+4. **Supabase Bucket 创建** ✅
+   - 已在 Dashboard 执行 SQL
+   - 测试通过
 
-**完成的工作**:
-- ❌ 去掉 Cloudflare R2
-- ✅ 改用 Supabase Storage（私有 bucket + 签名 URL）
-- ✅ 原图不存储，只存缩略图（200x200，约 15KB）
-- ✅ RLS 安全策略（用户隔离 + 管理员权限）
+### Git 提交记录
+```
+899ff3e fix: analyze API 兼容新的 Storage 路径格式
+83629d3 feat: 添加 Dashboard 可执行的 Storage SQL
+020fefd refactor: 统一图片处理配置到 config/image.ts
+8ba6814 feat: 添加管理员 Storage RLS 策略
+4a78ec0 security: 改为私有 Storage，使用签名 URL
+92e7cb0 refactor: 迁移到 Supabase Storage
+```
 
-**新增文件**:
+### 🚀 扩展计划
+
+#### Phase 2: 生成图存储（待实现）
+```
+generated-outfits/               # 未来的 AI 生成穿搭图
+└── {user_id}/
+    └── {outfit_id}.webp         # DALL-E 生成的效果图
+```
+
+#### Phase 3: 客户端压缩（性能优化）
+- 在浏览器端压缩图片后再上传
+- 减少服务端处理时间
+- 减少网络传输量
+
+#### Phase 4: CDN 加速（规模化）
+- Supabase Storage 自带 CDN
+- 签名 URL 也支持 CDN 缓存
+
+### 📁 相关文件
 ```
 fashion-wizpulseai-com/
-├── src/config/image.ts                     # 🆕 图片处理配置
-├── src/infrastructure/supabase/storage.ts  # ✏️ Storage 工具函数
-├── src/app/api/fashion/upload/route.ts     # ✏️ 改用 Supabase Storage
-├── supabase/migrations/009_fashion_storage_bucket.sql  # 🆕 Bucket + RLS
-└── supabase/migrations/010_fashion_storage_bucket_dashboard.sql  # 🆕 Dashboard SQL
-    ├── SUPABASE_STORAGE_SETUP.md           # 🆕 配置文档
-    ├── UPLOAD_API_REFACTOR.md              # 🆕 重构说明
-    └── PERFORMANCE_ANALYSIS_REPORT.md      # 🆕 性能分析
+├── src/config/image.ts                     # 图片处理配置
+├── src/infrastructure/supabase/storage.ts  # Storage 工具函数
+├── src/app/api/fashion/upload/route.ts     # 上传 API
+├── src/app/api/fashion/analyze/route.ts    # 分析 API（已修复）
+├── supabase/migrations/009_fashion_storage_bucket.sql
+└── supabase/migrations/010_fashion_storage_bucket_dashboard.sql
 ```
-
-**API 返回变化**:
-```typescript
-// 上传成功返回
-{
-  photo: {
-    ...photo,
-    signedUrl  // 🆕 签名 URL（1小时有效）
-  },
-  compressedImage  // 🆕 压缩后 base64（供 AI 分析）
-}
-```
-
-**待手动操作**:
-- [ ] 在 Supabase Dashboard 创建 `fashion-thumbnails` Bucket（Private）
-- [ ] 运行 `009_fashion_storage_bucket.sql` 迁移
-
-**Git 提交**:
-- `839260a` - fix: 直接从源文件导入，修复 Vercel minify 问题
-- `92e7cb0` - refactor: 迁移到 Supabase Storage
-- `4a78ec0` - security: 改为私有 Storage，使用签名 URL
-- `8ba6814` - feat: 添加管理员 Storage RLS 策略
-
-### 📋 下一步
-- 讨论文件夹结构设计
-- 在 Supabase Dashboard 创建 Bucket 并测试
 
 ---
 
