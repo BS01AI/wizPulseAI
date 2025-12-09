@@ -12,42 +12,58 @@
 
 ---
 
-## 最新状态 (2025-12-09 - Storage 架构重构) 🔒
+## 最新状态 (2025-12-09 - 配置统一化) 🔒
 
-### ✅ 今日完成：Fashion Storage 架构重构
+### ✅ 今日完成：图片处理配置统一化
 
-**背景**:
-1. 上传照片流程太慢（需要几十秒）
-2. R2 存储配置复杂，且不确定是否配置正确
-3. 用户隐私保护需求
+**背景**: Storage 架构重构后，统一管理图片处理常量（可调原则）
 
 **完成的工作**:
 
-#### 1. Storage 架构简化
+#### 1. 创建统一配置文件 `config/image.ts`
+```typescript
+AI_IMAGE = { maxSize: 800, quality: 0.85 }  // AI 分析用图
+THUMBNAIL = { size: 200, quality: 0.7 }     // 存储缩略图
+STORAGE = { bucket: 'fashion-thumbnails', signedUrlExpiry: 3600 }
+UPLOAD_LIMITS = { maxFileSizeMB: 10, allowedMimeTypes: [...] }
+```
+
+#### 2. 更新代码使用配置常量
+- `storage.ts` - 使用 AI_IMAGE, THUMBNAIL, STORAGE
+- `upload/route.ts` - 使用 UPLOAD_LIMITS, isAllowedMimeType
+- `fashion.constants.ts` - 标记旧常量为 @deprecated
+
+#### 3. 创建 Dashboard SQL
+- `010_fashion_storage_bucket_dashboard.sql` - 可直接在 SQL Editor 执行
+
+**Git 提交**:
+- `020fefd` - refactor: 统一图片处理配置到 config/image.ts
+- `83629d3` - feat: 添加 Dashboard 可执行的 Storage SQL
+
+### 📋 待手动操作
+- [ ] 在 Supabase Dashboard 执行 SQL 创建 Bucket
+- [ ] 测试上传流程
+
+---
+
+## 历史状态 (2025-12-09 - Storage 架构重构)
+
+### ✅ 完成：Fashion Storage 架构重构
+
+**完成的工作**:
 - ❌ 去掉 Cloudflare R2
-- ✅ 改用 Supabase Storage（已有账号，零配置）
-- ✅ 原图不存储（分析完即丢弃，节省 87% 存储）
-- ✅ 只存缩略图（200x200，约 15KB/张）
+- ✅ 改用 Supabase Storage（私有 bucket + 签名 URL）
+- ✅ 原图不存储，只存缩略图（200x200，约 15KB）
+- ✅ RLS 安全策略（用户隔离 + 管理员权限）
 
-#### 2. 私有存储 + 签名 URL
-- Bucket 设为私有（`public: false`）
-- 使用签名 URL 访问（1小时有效期）
-- 数据库存储路径，不存 URL
-- 前端通过 API 获取签名 URL
-
-#### 3. RLS 安全策略
-- 普通用户：只能访问自己的文件
-- 管理员：可以查看/删除所有用户的文件（使用 `is_admin()` 函数）
-- 路径遍历防护
-
-**新增/修改的文件**:
+**新增文件**:
 ```
 fashion-wizpulseai-com/
-├── src/infrastructure/supabase/storage.ts  # 🆕 Storage 工具函数
+├── src/config/image.ts                     # 🆕 图片处理配置
+├── src/infrastructure/supabase/storage.ts  # ✏️ Storage 工具函数
 ├── src/app/api/fashion/upload/route.ts     # ✏️ 改用 Supabase Storage
-├── src/lib/storage/r2.ts                   # ⚠️ 标记为废弃
 ├── supabase/migrations/009_fashion_storage_bucket.sql  # 🆕 Bucket + RLS
-└── docs/
+└── supabase/migrations/010_fashion_storage_bucket_dashboard.sql  # 🆕 Dashboard SQL
     ├── SUPABASE_STORAGE_SETUP.md           # 🆕 配置文档
     ├── UPLOAD_API_REFACTOR.md              # 🆕 重构说明
     └── PERFORMANCE_ANALYSIS_REPORT.md      # 🆕 性能分析
