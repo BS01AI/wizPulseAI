@@ -148,6 +148,42 @@ import { CreditsService } from '@/core/payment/credits'
 
 **架构文档**: `/fashion-wizpulseai-com/ARCHITECTURE.md`
 
+### Fashion Storage 架构 (2025-12-09) 🆕
+
+#### 架构决策
+| 决策 | 选择 | 原因 |
+|------|------|------|
+| 存储服务 | Supabase Storage | 已有账号，零配置 |
+| 访问模式 | 私有 + 签名 URL | 用户隐私保护 |
+| 原图存储 | ❌ 不存储 | 分析完即丢弃，节省 87% |
+| 缩略图 | ✅ 200×200 WebP | ~3-15KB/张 |
+
+#### 数据流
+```
+用户上传 → 压缩800px(AI用) + 生成200px缩略图 → 上传Storage → 存路径到DB → 签名URL访问
+```
+
+#### 配置文件
+- **位置**: `fashion-wizpulseai-com/src/config/image.ts`
+- **AI_IMAGE**: `{ maxSize: 800, quality: 0.85 }` - 可调
+- **THUMBNAIL**: `{ size: 200, quality: 0.7 }` - 可调
+- **STORAGE**: `{ bucket: 'fashion-thumbnails', signedUrlExpiry: 3600 }`
+
+#### 关键文件
+```
+fashion-wizpulseai-com/
+├── src/config/image.ts                     # 图片处理配置
+├── src/infrastructure/supabase/storage.ts  # Storage 工具函数
+├── src/app/api/fashion/upload/route.ts     # 上传 API
+├── src/app/api/fashion/analyze/route.ts    # 分析 API
+└── supabase/migrations/010_fashion_storage_bucket_dashboard.sql
+```
+
+#### 扩展计划
+- Phase 2: `generated-outfits/` bucket（AI 生成穿搭图）
+- Phase 3: 客户端压缩（性能优化）
+- Phase 4: CDN 加速
+
 ### 用户流程 (优化中)
 ```
 首页 → ProductEcosystem → WizLife页面 → マジコーデ站点
