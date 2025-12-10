@@ -4,12 +4,22 @@
 
 ---
 
-## 当前 Sprint: Fashion 功能修复 (2025-12-08)
+## 当前 Sprint: Fashion AI 分析优化 (2025-12-10)
 
 ### 🔄 进行中
-- [ ] **Fashion 照片分析功能** - 等待验证 `gemini-pro-vision` 模型
+- [ ] **结果页面 UI 优化** - 适配新的 tieredFeedback 数据结构
+- [ ] **Pentagon 五维雷达图** - 新的评分可视化组件
 
-### 🟢 今日已完成 (2025-12-08)
+### 🟢 今日已完成 (2025-12-10)
+- [x] Fashion: AI 分析结果页面调通 ✅
+- [x] Fashion: 修复 `/auth/login` 重定向到外部 Auth URL
+- [x] Fashion: 开发模式 `getDevUser()` 支持
+- [x] Fashion: 数据库查询改用 `fashion` schema
+- [x] Fashion: Storage 签名 URL 支持
+- [x] Fashion: next.config.js 添加 Supabase 域名
+- [x] Fashion: 保存 mock 分析结果数据
+
+### 🟢 历史已完成 (2025-12-08)
 - [x] Fashion: RLS INSERT/UPDATE/DELETE 策略 (analyses表)
 - [x] Fashion: RLS UPDATE 策略 (photos表)
 - [x] Fashion: 添加缺失字段 (app_source, advisor_persona_used, tone_used)

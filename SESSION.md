@@ -4,7 +4,160 @@
 
 ---
 
-## 2025-12-08 (当前会话)
+## 2025-12-10 (当前会话)
+
+**任务**: Fashion AI 分析结果页面调通
+
+### ✅ 已完成
+
+1. **修复结果页面 404 `/auth/login`**
+   - 原因: Fashion 站点没有登录页，用了站内路径
+   - 解决: 改为外部 Auth URL `${process.env.NEXT_PUBLIC_AUTH_URL}/auth`
+   - 修改: 5个文件的 `/auth/login` → 外部 URL
+
+2. **修复开发模式无法获取用户**
+   - 原因: Admin Client 没有 session，`getUser()` 返回 null
+   - 解决: 使用 `isDevMode()` + `getDevUser()` 获取模拟用户
+   - 修改: `analyze/[id]/page.tsx`
+
+3. **修复查不到分析数据**
+   - 原因: 查的是 `public.style_analyses`，实际是 `fashion.analyses`
+   - 解决: 改为 `.schema('fashion').from('analyses')`
+   - 修改: `analyze/[id]/page.tsx`
+
+4. **修复图片路径报错**
+   - 原因: 数据库存的是相对路径，不是完整 URL
+   - 解决: `createSignedUrl()` 获取 1 小时有效的签名 URL
+   - 修改: `analyze/[id]/page.tsx`
+
+5. **修复 Next/Image 域名报错**
+   - 原因: Supabase 域名不在 remotePatterns 白名单
+   - 解决: 添加 `**.supabase.co` 到 next.config.js
+   - 修改: `next.config.js`
+
+6. **保存 Mock 数据**
+   - 位置: `src/test/mock-analysis-result.json`
+   - 用途: 本地调试前端 UI，无需每次调用 AI
+
+### 📁 修改的文件 (15个)
+
+```
+fashion-wizpulseai-com/
+├── next.config.js                          # Supabase 图片域名
+├── src/app/fashion/analyze/[id]/page.tsx   # 核心：签名URL+开发模式
+├── src/app/fashion/history/page.tsx        # 认证重定向
+├── src/infrastructure/auth/server.ts       # requireAuth()
+├── src/infrastructure/supabase/middleware.ts # 中间件
+├── src/lib/auth/server.ts                  # 认证工具
+└── src/test/mock-analysis-result.json      # Mock 数据
+```
+
+### 📌 关键知识点
+
+**Fashion 站点数据库 schema**:
+```typescript
+// ✅ 正确
+supabase.schema('fashion').from('analyses')
+
+// ❌ 错误（默认 public schema）
+supabase.from('style_analyses')
+```
+
+**开发模式认证**:
+```typescript
+if (isDevMode()) {
+  userId = getDevUser()?.id
+} else {
+  userId = (await supabase.auth.getUser()).data.user?.id
+}
+```
+
+**私有 Storage 签名 URL**:
+```typescript
+const { data } = await supabase.storage
+  .from('fashion-thumbnails')
+  .createSignedUrl(relativePath, 3600)
+```
+
+### 🔒 生产环境安全性
+
+**确认: 代码修改不影响 Vercel 生产环境**
+
+| 检查项 | 状态 | 说明 |
+|--------|------|------|
+| DEV_MODE 控制 | ✅ 安全 | 由 `NEXT_PUBLIC_DEV_MODE === 'true'` 控制 |
+| Vercel 默认 | ✅ 安全 | 生产环境不设置此变量，默认 false |
+| 模拟用户 | ✅ 安全 | 只在 DEV_MODE 启用时使用 |
+| Auth URL | ✅ 安全 | 生产环境用 `https://auth.wizpulseai.com` |
+
+### Git 提交
+
+- `894f24f` - feat: 完善 AI 分析结果页面和开发模式支持
+- `703667a` - chore: update fashion-wizpulseai-com submodule
+- `314d886` - docs: 更新工作日志
+
+### 🔄 下一步
+
+- [ ] 优化结果页面 UI（适配 tieredFeedback）
+- [ ] Pentagon 五维雷达图组件
+- [ ] Tiered Feedback 分层展示
+
+---
+
+## 2025-12-09 (历史会话)
+
+**任务**: Git Submodule 管理优化
+
+### ✅ 已完成
+
+1. **解决 fashion-wizpulseai-com submodule 引用问题**
+   - 症状: 主仓库显示 `modified: fashion-wizpulseai-com (new commits)`
+   - 原因: 子仓库有新提交，但主仓库记录的 commit ID 未更新
+   - 解决: `git add fashion-wizpulseai-com && git commit && git push`
+
+2. **更新 git-push-all.sh 脚本**
+   - 添加 `fashion-wizpulseai-com` 到仓库列表（共5个仓库）
+   - 新增自动同步 submodule 引用功能
+   - 子仓库推送后自动检测并更新主仓库指针
+
+3. **Prompt 管理文档整理**
+   - 创建 `fashion-wizpulseai-com/docs/PROMPT_MANAGEMENT.md`
+   - 整理 Basic v1.0 + Pentagon v2.0 两套 Prompt
+   - 记录个性化参数（5人格 × 7场景 × 4季节）
+   - 梳理实际调用流程：autoSelectPrompt → getPrompt
+
+4. **发现并记录 Prompt 优化项**
+   - 🔥 P0: System Instruction 分离（利用 Gemini 隐式缓存）
+   - P1: 删除中文版 Prompt，只保留日文版
+   - 参考：https://ai.google.dev/gemini-api/docs/caching
+
+5. **更新 105-prompt-designer Agent**
+   - 加入 Gemini API 最佳实践
+   - 加入 Token 优化原则
+   - 加入参考文档链接
+
+6. **🔥 P0 完成：System Instruction 分离**
+   - 修改 `google.ts`：generateText + analyzeImage 使用 `systemInstruction` 参数
+   - 修改 `types/index.ts`：AnalyzeImageParams 添加 systemPrompt 参数
+   - 修改 `vision.service.ts`：分离 systemPrompt 和 prompt
+   - 效果：Gemini 2.5 自动隐式缓存，减少重复 token 费用
+
+### 📁 创建/修改的文件
+- `git-push-all.sh` - 添加 fashion 仓库 + 自动 submodule 同步
+- `fashion-wizpulseai-com/docs/PROMPT_MANAGEMENT.md` - Prompt 管理文档（新建）
+- `.claude/agents/105-prompt-designer.md` - 更新 API 最佳实践
+- `fashion-wizpulseai-com/src/extensions/ai/providers/google.ts` - systemInstruction 分离
+- `fashion-wizpulseai-com/src/extensions/ai/types/index.ts` - 添加 systemPrompt 参数
+- `fashion-wizpulseai-com/src/domains/fashion-advisor/services/vision.service.ts` - 分离 prompt
+
+### 📌 待实施
+- [x] ~~🔥 P0: 修改 google.ts，使用 systemInstruction 参数~~ ✅ 已完成
+- [ ] P1: 精简 Prompt，删除中文版
+- [ ] 本地测试验证
+
+---
+
+## 2025-12-08
 
 **任务**: Fashion 照片分析功能 PGRST116 错误修复
 
