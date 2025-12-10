@@ -12,7 +12,72 @@
 
 ---
 
-## 最新状态 (2025-12-09 - Fashion Storage 架构完成) ✅
+## 最新状态 (2025-12-10 - AI 分析结果页面调通) ✅
+
+### 🎯 今日完成：Fashion AI 分析全流程调通
+
+#### 修复的问题
+
+| 问题 | 原因 | 解决方案 |
+|------|------|----------|
+| 结果页面 404 `/auth/login` | Fashion 站点没有登录页 | 改为外部 Auth URL |
+| 开发模式无法获取用户 | Admin Client 没有 session | 使用 `getDevUser()` 模拟用户 |
+| 查不到分析数据 | schema 不对 | `.schema('fashion').from('analyses')` |
+| 图片路径报错 | 存的相对路径 | `createSignedUrl()` 签名 URL |
+| Next/Image 域名报错 | Supabase 域名未配置 | 添加 `**.supabase.co` |
+
+#### 关键知识点
+
+**1. Fashion 站点数据库 schema**
+```typescript
+// ✅ 正确：使用 fashion schema
+supabase.schema('fashion').from('analyses')
+supabase.schema('fashion').from('photos')
+
+// ❌ 错误：默认是 public schema
+supabase.from('style_analyses')  // 表不存在
+```
+
+**2. 开发模式认证处理**
+```typescript
+// 开发模式用模拟用户，生产模式从 session 获取
+if (isDevMode()) {
+  userId = getDevUser()?.id || null
+} else {
+  const { data } = await supabase.auth.getUser()
+  userId = data.user?.id || null
+}
+```
+
+**3. 私有 Storage 签名 URL**
+```typescript
+const { data } = await supabase.storage
+  .from('fashion-thumbnails')
+  .createSignedUrl(relativePath, 3600)  // 1小时有效
+```
+
+**4. Next/Image 域名配置**
+```javascript
+// next.config.js
+images: {
+  remotePatterns: [
+    { protocol: 'https', hostname: '**.supabase.co' },
+  ],
+}
+```
+
+#### Git 提交
+- **fashion-wizpulseai-com**: `894f24f` - AI分析结果页面完善
+- **wizPulseAI (主仓库)**: `703667a` - submodule 更新
+
+#### 下一步
+- [ ] 优化结果页面 UI 展示
+- [ ] 实现新的 Pentagon 五维雷达图
+- [ ] 添加 Tiered Feedback 分层展示
+
+---
+
+## 历史记录 (2025-12-09 - Fashion Storage 架构完成) ✅
 
 ### 📦 Fashion Storage 架构设计（完整版）
 
