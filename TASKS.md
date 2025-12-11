@@ -1,227 +1,215 @@
 # 活跃任务清单
 
-> 当前 Sprint 和待办任务
+> 当前 Sprint: 矩阵网站发布前大扫除
 
 ---
 
-## 当前 Sprint: 矩阵网站功能完善 (2025-12-11)
+## Sprint 概览
 
-### 任务架构（两个层级）
+**目标**: Dashboard 和 Main 站点达到发布标准
 
-```
-Layer 1: Fashion App 内部功能完善
-├── P0-1: localStorage 设定统一
-├── P0-2: 设定变更流程（警告→清理→重发）
-├── P1-1: 历史页面 i18n
-├── P1-2: 积分显示完善
-├── P2-1: PWA 图标
-└── P2-2: 登录保持（1个月）
-
-Layer 2: 矩阵网站整体协调
-├── P1-3: Dashboard Fashion 统计集成
-├── P2-3: 登录跳转实验
-└── P3-1: 矩阵网站内容优化删减
-```
+**发现的问题总数**: 25+ 个
+**预计总工时**: 40-50h
 
 ---
 
-## Layer 1: Fashion App 内部 (magicoord.wizpulseai.com)
+## Phase 1: Dashboard 紧急清理 (P0) - 本周
 
-### P0 - 关键任务 (Day 1)
-
-#### P0-1: localStorage 设定统一 🔧
-- **状态**: [x] ✅ 已完成
+### P0-1: 删除/隐藏无用页面 🗑️
+- **状态**: [x] ✅ 已完成 (2025-12-11)
 - **负责**: `multi-site-coder`
-- **工时**: 2-3h
-- **问题**: 两个不一致的 key
-  - `useFashionSettings.ts` 用 `fashion_advisor_settings`
-  - `settings/page.tsx` 用 `fashion-settings`
-- **修复**:
-  - [ ] 统一为 `fashion_advisor_settings`
-  - [ ] settings/page.tsx 改用 useFashionSettings hook
-  - [ ] onboarding/page.tsx 添加 localStorage 保存
-  - [ ] 添加旧 key 迁移代码
-
-#### P0-2: 设定变更流程 ⚠️
-- **状态**: [x] ✅ 已完成
-- **负责**: `multi-site-coder`
-- **工时**: 3-4h
-- **需求**: 用户改变设定后，需要先警告，然后清理，再重新分析
-- **设计**:
-  ```
-  用户改变 advisor/scene/season
-      ↓
-  检查是否有 analysisResult
-      ↓ (有)
-  弹窗: "設定が変更されました。再分析しますか？"
-      ↓
-  用户确认 → setAnalysisResult(null) → 自动触发分析
-  ```
-- **文件**:
-  - [ ] 新建 `SettingsChangeModal.tsx`
-  - [ ] 修改 `fashion/page.tsx`
-
-### P1 - 重要任务 (Day 2)
-
-#### P1-1: 历史页面 i18n 🌐
-- **状态**: [x] ✅ 已完成
-- **负责**: `translation-manager`
-- **工时**: 2h
-- **问题**: 当前显示中文（"我的时尚档案"）
-- **修复**:
-  - [ ] 中文 → 日语翻译
-  - [ ] 添加空状态图片
-  - [ ] 添加加载骨架屏
-  - [ ] 50+ 记录分页
-
-#### P1-2: 积分显示完善 💰
-- **状态**: [x] ✅ 已完成
-- **负责**: `multi-site-coder`
-- **工时**: 1-2h
-- **现状**: 主页面已显示积分余额 ✅
-- **待做**:
-  - [ ] 设置页面添加积分显示（当前显示"--"）
-  - [ ] 添加交易历史链接
-
-### P2 - 增强任务 (Day 3)
-
-#### P2-1: PWA 图标设置 📱
-- **状态**: [x] ✅ 已完成
-- **工时**: 1h
+- **实际工时**: 1h
 - **完成内容**:
-  - [x] 从 original-ja.jpg (1024×1024) 生成 9 种尺寸图标
-  - [x] 日文版：72, 96, 128, 144, 152, 180, 192, 384, 512
-  - [x] 英文版备用：192, 512
-  - [x] apple-touch-icon.png (180×180)
-  - [x] manifest.json 已有完整 icons 数组配置
+  - [x] 删除 `/theme-demo` 页面
+  - [x] 删除 `/dashboard/admin/credits` 页面
+  - [x] 从 Admin 首页隐藏"功能管理"卡片
+  - [x] 从 Admin 首页隐藏"产品管理"卡片
+  - [x] 从 Admin 首页隐藏"产品功能关联"卡片
+  - [x] 从侧边栏隐藏"产品"菜单项
 
-#### P2-2: 登录保持 1 个月 🔐
-- **状态**: [ ] 待开始
-- **负责**: `database-expert`
-- **工时**: 2-3h
-- **方案**: Supabase refresh_token_lifetime 设为 2592000 秒 (30天)
-- **步骤**:
-  - [ ] Supabase Dashboard → Authentication → Settings
-  - [ ] 设置 Refresh Token Rotation: 2592000
-  - [ ] 测试 Session 持久化
+### P0-2: 清理 console.log (136处→0) 🧹
+- **状态**: [x] 已完成 (2025-12-11)
+- **负责**: `multi-site-coder`
+- **实际工时**: 2h
+- **清理结果**:
+  - [x] 清理 136+ console.log/debug 到 0
+  - [x] 保留 219 console.error（关键错误）
+  - [x] 保留 22 console.warn（警告信息）
+  - [x] 修改 47 个文件
+  - [x] TypeScript 编译通过
+  - [x] Next.js 构建成功
+- **清理范围**:
+  - API 路由 (14个文件)
+  - Dashboard 页面 (11个文件)
+  - 核心库 (8个文件，language-context.tsx 最多)
+  - 认证模块 (3个文件)
+- **详细报告**: `CONSOLE_LOG_CLEANUP_REPORT.md`
 
----
+### P0-3: 修复硬编码 URL 🔗
+- **状态**: [x] 已完成 (2025-12-11)
+- **负责**: `multi-site-coder`
+- **实际工时**: 0.5h
+- **修复内容**:
+  - [x] `src/lib/utils/redirect.ts` - DEV_ALLOWED_DOMAINS 改为从环境变量获取
+  - [x] `src/components/layout/orbital-layout.tsx` - 移除三元运算符，直接用环境变量
+  - [x] `src/app/dashboard/layout.tsx` - 移除三元运算符，直接用环境变量
+  - [x] `src/lib/email-utils.ts` - localhost:3000 → localhost:3012
+  - [x] `.env.example` - 添加完整的环境变量说明（包含示例）
+- **环境变量**: NEXT_PUBLIC_MAIN_URL, NEXT_PUBLIC_APP_URL, NEXT_PUBLIC_AUTH_URL
 
-## Layer 2: 矩阵网站整体
-
-### P1 - 重要任务
-
-#### P1-3: Dashboard Fashion 统计集成 📊
-- **状态**: [x] ✅ 已完成
-- **负责**: `database-expert` + `multi-site-coder`
-- **工时**: 4-6h
-- **现状**: Dashboard 只显示通用数据，没有 Fashion 专属统计
-- **方案**: 同一 Supabase 项目，跨 schema 查询
-- **步骤**:
-  - [ ] 新建 API: `db-wizPulseAI-com/src/app/api/fashion/stats/route.ts`
-  - [ ] 新建组件: `fashion-stats-card.tsx`
-  - [ ] 集成到 `orbital-dashboard.tsx`
-- **数据**:
-  ```typescript
-  {
-    totalAnalyses: number,    // 总分析次数
-    creditsUsed: number,      // 消耗积分
-    lastAnalysisDate: Date,   // 最近分析时间
-    topStyles: string[]       // 常用风格
-  }
-  ```
-
-### P2 - 增强任务
-
-#### P2-3: 登录跳转实验 🔄
+### P0-4: 统一错误处理 ⚠️
 - **状态**: [ ] 待开始
 - **负责**: `multi-site-coder`
-- **工时**: 1-2h
-- **现状**: 未认证用户可访问 `/fashion`（开放页面）
-- **验证**: 保持当前懒认证模式 - 只在执行操作时要求登录
+- **工时**: 3h
+- **问题**: 有的页面有 toast，有的只 console.error
+- **方案**: 所有 API 调用都需要 toast 提示用户
 
-### P3 - 低优先级
+---
 
-#### P3-1: 矩阵网站内容优化删减 📝
-- **状态**: [ ] 待规划
-- **负责**: `content-writer`
-- **工时**: 4-8h
+## Phase 2: Dashboard UI 统一 (P1) - 下周
+
+### P1-1: 国际化硬编码文本 🌐
+- **状态**: [ ] 待开始
+- **负责**: `translation-manager`
+- **工时**: 4h
 - **范围**:
-  - [ ] Main 站点营销文案审核
-  - [ ] 删除冗余/矛盾内容
-  - [ ] 统一品牌语调
-  - [ ] 准备正式运营
+  - `/dashboard/admin/features` - 硬编码中文
+  - `/dashboard/admin/products` - 硬编码中文
+  - `/dashboard/admin/ai-products` - 混合语言
+- **方案**: 统一使用 i18n 翻译函数
+
+### P1-2: 统一组件样式系统 🎨
+- **状态**: [ ] 待开始
+- **负责**: `multi-site-coder`
+- **工时**: 4h
+- **问题**:
+  - Orbital 系统 vs 传统 UI 混用
+  - AI Products 页面硬编码颜色 `#1E2A3A`
+  - FashionStatsCard 与 KPICard 风格不一致
+- **方案**: 统一使用 Orbital CSS 变量
+
+### P1-3: 拆分 AI Products 页面 📦
+- **状态**: [ ] 待开始
+- **负责**: `multi-site-coder`
+- **工时**: 3h
+- **问题**: 1200行单文件，重复代码~500行
+- **方案**:
+  - 提取 `AIProductForm` 组件
+  - 合并创建/编辑 Modal
+  - 使用统一样式变量
+
+### P1-4: 移动端适配修复 📱
+- **状态**: [ ] 待开始
+- **负责**: `multi-site-coder`
+- **工时**: 2h
+- **问题**:
+  - Modal 在移动设备超出屏幕
+  - 网格布局不响应
+- **方案**: 添加响应式断点
 
 ---
 
-## 执行计划
+## Phase 3: Main 站点内容清理 (P0-P1) - 第3周
 
-### Day 1 (P0 关键)
-| 时间 | 任务 | Agent |
-|------|------|-------|
-| AM | P0-1 localStorage 统一 | multi-site-coder |
-| PM | P0-2 设定变更流程 | multi-site-coder |
+### P0-5: 重写 WizLife/WizBiz 页面 📝
+- **状态**: [ ] 待开始
+- **负责**: `content-writer`
+- **工时**: 4h
+- **问题**: 看起来像已上线，实际是 Coming Soon
+- **方案**:
+  - 明确标记"Coming Soon"
+  - 移除虚假统计数据
+  - 添加订阅等待列表
 
-### Day 2 (P1 重要)
-| 时间 | 任务 | Agent |
-|------|------|-------|
-| AM | P1-1 历史页面 i18n | translation-manager |
-| AM | P1-2 积分显示完善 | multi-site-coder |
-| PM | P1-3 Dashboard 集成（开始） | database-expert |
+### P1-5: 统一产品描述和定价 💰
+- **状态**: [ ] 待开始
+- **负责**: `content-writer`
+- **工时**: 3h
+- **问题**: 各页面描述不一致
+- **方案**: 创建统一的产品信息源
 
-### Day 3 (P2 增强)
-| 时间 | 任务 | Agent |
-|------|------|-------|
-| AM | P1-3 Dashboard 集成（完成） | multi-site-coder |
-| AM | P2-1 PWA 图标 | 直接实现 |
-| PM | P2-2 登录保持 | database-expert |
-| PM | P2-3 登录跳转实验 | multi-site-coder |
+### P1-6: 精简 About 页面 ✂️
+- **状态**: [ ] 待开始
+- **负责**: `content-writer`
+- **工时**: 2h
+- **问题**: 1000+行，信息过载
+- **方案**: 保留核心内容，删除冗余
 
-### Week 2 (P3)
-| 任务 | Agent |
-|------|-------|
-| P3-1 内容优化 | content-writer |
-
----
-
-## 今日已完成 (2025-12-11)
-
-- [x] **CreditsService schema 修复** - 6处 public → fashion
-- [x] **五边形雷达图修复** - 从横条改为真正的 PentagonRadar 组件
-- [x] **场景选择功能修复** - 传递 userConfig 参数到 VisionService
-- [x] **积分余额前端显示** - 新建 useCredits Hook + 页面顶部集成
-- [x] **五边形UI优化** - 去掉emoji图标 + 尺寸280px
-- [x] **功能完善规划会议** - Plan Agent 完整分析，制定作战计划
+### P1-7: 完善 SEO metadata 🔍
+- **状态**: [ ] 待开始
+- **负责**: `seo-expert`
+- **工时**: 4h
+- **问题**:
+  - WizLife/WizBiz 无 metadata
+  - OG Image 路径不存在
+  - Schema.org 标记不完整
 
 ---
 
-## 历史 Sprint
+## Phase 4: 代码质量 (P2) - 第4周
 
-### 安全加固 Sprint (2025-12-05) ✅
-- 安全评分: 79 → 91/100
-- P0 全部修复（积分原子性、幂等性、SQL注入、依赖漏洞）
-- P1 部分完成（审计日志、Webhook防护）
+### P2-1: 添加 TypeScript 类型定义 📝
+- **状态**: [ ] 待开始
+- **工时**: 4h
+- **问题**: 64处使用 `any`
+- **方案**: 创建 `types/dashboard.ts`
 
-### Fashion AI 优化 Sprint (2025-12-10) ✅
-- v3.0 人话版 Prompt 重构
-- AI 分析结果页面调通
-- 五边形雷达图实现
+### P2-2: 删除注释代码和调试痕迹 🧽
+- **状态**: [ ] 待开始
+- **工时**: 2h
+- **范围**: MFA 页面、layout.tsx
+
+### P2-3: 统一 API 响应格式 📋
+- **状态**: [ ] 待开始
+- **工时**: 4h
+- **问题**: 错误响应格式不统一
 
 ---
 
-## Backlog（待规划）
+## 执行进度
 
-### 中优先级
-- [ ] Dashboard 用户统计页面
-- [ ] API 密钥管理界面
-- [ ] 知识中心文章权限
-- [ ] QuickSlide 产品站点
+### 本周目标 (Phase 1)
+| 任务 | 状态 | 负责 |
+|------|------|------|
+| P0-1 删除无用页面 | ✅ 完成 | multi-site-coder |
+| P0-2 清理 console.log | ✅ 完成 | multi-site-coder |
+| P0-3 修复硬编码 URL | ✅ 完成 | multi-site-coder |
+| P0-4 统一错误处理 | ⏳ 待开始 | multi-site-coder |
 
-### 低优先级
-- [ ] 团队协作功能
-- [ ] 邮件模板多语言
-- [ ] 性能监控面板
-- [ ] Fashion 社区功能
+---
+
+## Dashboard 发布前清单
+
+### 必须完成 ✅
+- [x] 删除 theme-demo 页面 ✅ (2025-12-11)
+- [x] 删除 admin/credits 页面 ✅ (2025-12-11)
+- [x] 隐藏开发者工具（features/products/plan-features）✅ (2025-12-11)
+- [x] 清理所有 console.log ✅ (2025-12-11)
+- [x] 修复硬编码 URL ✅ (2025-12-11)
+- [ ] 统一错误提示
+
+### 建议完成 ⚠️
+- [ ] 国际化硬编码文本
+- [ ] 统一组件样式
+- [ ] 移动端适配
+
+### 可以后续 📅
+- [ ] TypeScript 类型完善
+- [ ] API 文档
+- [ ] 测试覆盖率
+
+---
+
+## 历史完成
+
+### Fashion App Sprint (2025-12-11) ✅
+- [x] P0-1 localStorage 设定统一
+- [x] P0-2 设定变更流程
+- [x] P1-1 历史页面 i18n
+- [x] P1-2 积分显示完善
+- [x] P1-3 Dashboard Fashion 统计
+- [x] P2-1 PWA 图标
+- [x] P2-3 登录跳转实验
 
 ---
 
