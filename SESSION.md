@@ -6,9 +6,174 @@
 
 ## 2025-12-11 (当前会话)
 
-**任务**: Fashion 前端 Bug 修复 + UI 优化
+**任务**: Fashion 功能完善 + 矩阵网站规划 + AI 模型文档整理
 
-### ✅ 已完成
+---
+
+### 📚 晚上: Gemini 3 文档整理
+
+**用户需求**: 记录 Gemini 3 模型的 Prompt 设计要点
+
+**完成内容**:
+
+| 文件 | 内容 | 行数 |
+|------|------|------|
+| `AI_MODELS/GEMINI_3_PROMPT_DESIGN.md` | ⭐ 完整 Prompt 设计指南 | 600+ |
+| `AI_MODELS/GEMINI_3_ANALYSIS.md` | 添加文档交叉引用 | 更新 |
+| `AI_MODELS/README.md` | 文档索引 + 快速参考 | 230 |
+| `CLAUDE.md` | 添加 AI 模型知识库记录 | 更新 |
+
+**核心内容**:
+
+**1. Prompt 设计核心理念**:
+- ❌ 传统方法: 详细步骤 + Chain-of-Thought + Few-shot
+- ✅ Gemini 3: 简化提示 + thinking_level 参数
+
+**2. thinking_level 参数**:
+```python
+config = {
+    "thinking_level": "high",  # low | medium | high
+    "temperature": 1.0         # 必须保持默认值
+}
+```
+
+**3. 温度设置**:
+- ⚠️ 重要: Gemini 3 在 `temperature=1.0` 时性能最佳
+- ❌ 不要降低温度 - 会影响质量
+
+**4. 超长上下文应用** (1M tokens):
+- 代码仓库分析（500K+）
+- 长文档问答（无需 RAG）
+- 会话历史分析（800K+）
+- 多文件代码生成（100K+）
+
+**5. 与竞品对比**:
+
+| 模型 | 上下文 | 输入价格 | 输出价格 | 图像生成 |
+|------|--------|---------|---------|---------|
+| Gemini 3 | 1M | $2-4 | $12-18 | ✅ 原生 |
+| Claude Opus 4.5 | 200K | $15 | $75 | ❌ |
+| GPT-4 Turbo | 128K | $10 | $30 | DALL-E |
+
+**6. 实战案例**:
+- 代码审查: Prompt 缩短 92%，质量相当
+- 多语言翻译: 简化到 1 句话
+- 复杂业务逻辑: 无需逐步引导
+
+**7. 成本优化**:
+- 合理选择 thinking_level（简单任务用 low）
+- 批量处理（充分利用上下文）
+- 限制输出长度（默认 64K 很贵）
+
+**8. 最佳实践**:
+- ✅ DO: 简化 Prompt、信任推理、充分利用 1M 上下文
+- ❌ DON'T: 过度指导、降低温度、滥用 high thinking_level
+
+**文档价值**:
+- 为内容创作团队提供 Prompt 设计参考
+- 为成本控制提供优化策略
+- 为技术选型提供对比数据
+
+**Git 状态**: 3 个新文件待提交
+
+---
+
+### 📋 下午: 功能完善规划会议
+
+**用户需求清单**:
+1. 用户设定选项 localStorage 存储
+2. 用户设定内容发送流程（警告→清理→重发）
+3. 用户历史记录
+4. 用户点数显示
+5. Dashboard 显示问题
+6. PWA 相关（图标、登录保持、跳转实验）
+7. 矩阵网站内容优化删减
+
+**Plan Agent 分析结论**:
+
+| 功能 | 当前状态 | 发现 |
+|------|----------|------|
+| localStorage | ⚠️ 部分实现 | 两个 key 不一致 |
+| Credits | ✅ 完整 | 主页面已显示余额 |
+| 历史记录 | ✅ 已实现 | 需要 i18n（显示中文） |
+| Dashboard集成 | ❌ 空白 | 无 Fashion 专属统计 |
+| PWA | ⚠️ 部分 | manifest.json 缺 icons |
+
+**两层级任务架构**:
+```
+Layer 1: Fashion App 内部
+├── P0-1: localStorage 统一 (2-3h)
+├── P0-2: 设定变更流程 (3-4h)
+├── P1-1: 历史 i18n (2h)
+├── P1-2: 积分完善 (1-2h)
+├── P2-1: PWA 图标 (1h)
+└── P2-2: 登录保持 (2-3h)
+
+Layer 2: 矩阵网站整体
+├── P1-3: Dashboard 集成 (4-6h)
+├── P2-3: 登录跳转实验 (1-2h)
+└── P3-1: 内容优化 (4-8h)
+```
+
+**预估总工时**: 19-29 小时（3-4天）
+
+**Agent 分工**:
+- `multi-site-coder`: P0-1, P0-2, P1-2, P2-3
+- `translation-manager`: P1-1
+- `database-expert`: P1-3, P2-2
+- `content-writer`: P3-1
+
+**记忆文件已更新**:
+- [x] TASKS.md - 两层级任务清单
+- [x] SESSION.md - 规划会议记录
+- [x] PROGRESS.md - 进度同步
+
+---
+
+### 🔧 P0任务执行 (multi-site-coder + architecture-guardian 结伴作业)
+
+#### ✅ P0-1: localStorage 统一
+- **修改文件**: `useFashionSettings.ts`, `settings/page.tsx`, `onboarding/page.tsx`
+- **功能**:
+  - 统一key为 `fashion_advisor_settings`
+  - 旧key `fashion-settings` 自动迁移
+  - settings页面改用hook
+  - onboarding双重保存（API+localStorage）
+- **Review结果**: 通过 ✅
+
+#### ✅ P0-2: 设定变更流程
+- **修改文件**: `fashion/page.tsx`
+- **功能**:
+  - 弹窗确认："設定が変更されました。再分析しますか？"
+  - 分析中禁止修改设定
+  - 无图片时只应用设定
+- **Review发现并修复**:
+  - 🔴 分析中状态检查 → 已修复
+  - 🔴 无图片边界处理 → 已修复
+
+#### ✅ P1-1: 历史页面 i18n (translation-manager)
+- **修改文件**: `history/page.tsx`
+- **内容**: 11处中文→日语翻译
+- **Review结果**: 通过 ✅
+
+#### ✅ P1-2: 积分显示完善 (multi-site-coder)
+- **修改文件**: `settings/page.tsx`
+- **内容**: 导入useCredits，显示真实积分余额
+- **Review结果**: 通过 ✅
+
+#### ✅ P1-3: Dashboard Fashion 统计 (database-expert + multi-site-coder)
+- **新建文件**:
+  - `db-wizPulseAI-com/src/app/api/fashion/stats/route.ts` - API路由
+  - `db-wizPulseAI-com/src/components/dashboard/FashionStatsCard.tsx` - UI组件
+- **修改文件**: `orbital-dashboard.tsx` - 集成卡片
+- **Review发现并修复**:
+  - 🔴 删除CORS头（同站点API不需要）
+  - 🔴 删除@ts-nocheck，添加类型定义+断言
+  - ✅ 添加RLS安全说明注释
+
+---
+
+### ✅ 上午已完成
 
 #### 1️⃣ CreditsService schema 修复
 - **问题**: 积分服务使用了 `public` schema，实际数据在 `fashion` schema

@@ -4,156 +4,225 @@
 
 ---
 
-## 当前 Sprint: Fashion AI 分析优化 (2025-12-11)
+## 当前 Sprint: 矩阵网站功能完善 (2025-12-11)
 
-### 🔄 进行中
-- [ ] 等待用户测试反馈
+### 任务架构（两个层级）
 
-### 🟢 今日已完成 (2025-12-11)
+```
+Layer 1: Fashion App 内部功能完善
+├── P0-1: localStorage 设定统一
+├── P0-2: 设定变更流程（警告→清理→重发）
+├── P1-1: 历史页面 i18n
+├── P1-2: 积分显示完善
+├── P2-1: PWA 图标
+└── P2-2: 登录保持（1个月）
+
+Layer 2: 矩阵网站整体协调
+├── P1-3: Dashboard Fashion 统计集成
+├── P2-3: 登录跳转实验
+└── P3-1: 矩阵网站内容优化删减
+```
+
+---
+
+## Layer 1: Fashion App 内部 (magicoord.wizpulseai.com)
+
+### P0 - 关键任务 (Day 1)
+
+#### P0-1: localStorage 设定统一 🔧
+- **状态**: [x] ✅ 已完成
+- **负责**: `multi-site-coder`
+- **工时**: 2-3h
+- **问题**: 两个不一致的 key
+  - `useFashionSettings.ts` 用 `fashion_advisor_settings`
+  - `settings/page.tsx` 用 `fashion-settings`
+- **修复**:
+  - [ ] 统一为 `fashion_advisor_settings`
+  - [ ] settings/page.tsx 改用 useFashionSettings hook
+  - [ ] onboarding/page.tsx 添加 localStorage 保存
+  - [ ] 添加旧 key 迁移代码
+
+#### P0-2: 设定变更流程 ⚠️
+- **状态**: [x] ✅ 已完成
+- **负责**: `multi-site-coder`
+- **工时**: 3-4h
+- **需求**: 用户改变设定后，需要先警告，然后清理，再重新分析
+- **设计**:
+  ```
+  用户改变 advisor/scene/season
+      ↓
+  检查是否有 analysisResult
+      ↓ (有)
+  弹窗: "設定が変更されました。再分析しますか？"
+      ↓
+  用户确认 → setAnalysisResult(null) → 自动触发分析
+  ```
+- **文件**:
+  - [ ] 新建 `SettingsChangeModal.tsx`
+  - [ ] 修改 `fashion/page.tsx`
+
+### P1 - 重要任务 (Day 2)
+
+#### P1-1: 历史页面 i18n 🌐
+- **状态**: [x] ✅ 已完成
+- **负责**: `translation-manager`
+- **工时**: 2h
+- **问题**: 当前显示中文（"我的时尚档案"）
+- **修复**:
+  - [ ] 中文 → 日语翻译
+  - [ ] 添加空状态图片
+  - [ ] 添加加载骨架屏
+  - [ ] 50+ 记录分页
+
+#### P1-2: 积分显示完善 💰
+- **状态**: [x] ✅ 已完成
+- **负责**: `multi-site-coder`
+- **工时**: 1-2h
+- **现状**: 主页面已显示积分余额 ✅
+- **待做**:
+  - [ ] 设置页面添加积分显示（当前显示"--"）
+  - [ ] 添加交易历史链接
+
+### P2 - 增强任务 (Day 3)
+
+#### P2-1: PWA 图标设置 📱
+- **状态**: [x] ✅ 已完成
+- **工时**: 1h
+- **完成内容**:
+  - [x] 从 original-ja.jpg (1024×1024) 生成 9 种尺寸图标
+  - [x] 日文版：72, 96, 128, 144, 152, 180, 192, 384, 512
+  - [x] 英文版备用：192, 512
+  - [x] apple-touch-icon.png (180×180)
+  - [x] manifest.json 已有完整 icons 数组配置
+
+#### P2-2: 登录保持 1 个月 🔐
+- **状态**: [ ] 待开始
+- **负责**: `database-expert`
+- **工时**: 2-3h
+- **方案**: Supabase refresh_token_lifetime 设为 2592000 秒 (30天)
+- **步骤**:
+  - [ ] Supabase Dashboard → Authentication → Settings
+  - [ ] 设置 Refresh Token Rotation: 2592000
+  - [ ] 测试 Session 持久化
+
+---
+
+## Layer 2: 矩阵网站整体
+
+### P1 - 重要任务
+
+#### P1-3: Dashboard Fashion 统计集成 📊
+- **状态**: [x] ✅ 已完成
+- **负责**: `database-expert` + `multi-site-coder`
+- **工时**: 4-6h
+- **现状**: Dashboard 只显示通用数据，没有 Fashion 专属统计
+- **方案**: 同一 Supabase 项目，跨 schema 查询
+- **步骤**:
+  - [ ] 新建 API: `db-wizPulseAI-com/src/app/api/fashion/stats/route.ts`
+  - [ ] 新建组件: `fashion-stats-card.tsx`
+  - [ ] 集成到 `orbital-dashboard.tsx`
+- **数据**:
+  ```typescript
+  {
+    totalAnalyses: number,    // 总分析次数
+    creditsUsed: number,      // 消耗积分
+    lastAnalysisDate: Date,   // 最近分析时间
+    topStyles: string[]       // 常用风格
+  }
+  ```
+
+### P2 - 增强任务
+
+#### P2-3: 登录跳转实验 🔄
+- **状态**: [ ] 待开始
+- **负责**: `multi-site-coder`
+- **工时**: 1-2h
+- **现状**: 未认证用户可访问 `/fashion`（开放页面）
+- **验证**: 保持当前懒认证模式 - 只在执行操作时要求登录
+
+### P3 - 低优先级
+
+#### P3-1: 矩阵网站内容优化删减 📝
+- **状态**: [ ] 待规划
+- **负责**: `content-writer`
+- **工时**: 4-8h
+- **范围**:
+  - [ ] Main 站点营销文案审核
+  - [ ] 删除冗余/矛盾内容
+  - [ ] 统一品牌语调
+  - [ ] 准备正式运营
+
+---
+
+## 执行计划
+
+### Day 1 (P0 关键)
+| 时间 | 任务 | Agent |
+|------|------|-------|
+| AM | P0-1 localStorage 统一 | multi-site-coder |
+| PM | P0-2 设定变更流程 | multi-site-coder |
+
+### Day 2 (P1 重要)
+| 时间 | 任务 | Agent |
+|------|------|-------|
+| AM | P1-1 历史页面 i18n | translation-manager |
+| AM | P1-2 积分显示完善 | multi-site-coder |
+| PM | P1-3 Dashboard 集成（开始） | database-expert |
+
+### Day 3 (P2 增强)
+| 时间 | 任务 | Agent |
+|------|------|-------|
+| AM | P1-3 Dashboard 集成（完成） | multi-site-coder |
+| AM | P2-1 PWA 图标 | 直接实现 |
+| PM | P2-2 登录保持 | database-expert |
+| PM | P2-3 登录跳转实验 | multi-site-coder |
+
+### Week 2 (P3)
+| 任务 | Agent |
+|------|-------|
+| P3-1 内容优化 | content-writer |
+
+---
+
+## 今日已完成 (2025-12-11)
+
 - [x] **CreditsService schema 修复** - 6处 public → fashion
 - [x] **五边形雷达图修复** - 从横条改为真正的 PentagonRadar 组件
 - [x] **场景选择功能修复** - 传递 userConfig 参数到 VisionService
 - [x] **积分余额前端显示** - 新建 useCredits Hook + 页面顶部集成
 - [x] **五边形UI优化** - 去掉emoji图标 + 尺寸280px
-
-### 🟢 历史已完成 (2025-12-10)
-- [x] **🔥 v3.0 人话版 Prompt 重构** ✅
-  - 重写 `pentagon.prompt.ts`（100字总评 + 五维具体点评 + 150字建议）
-  - 更新 `VisionService` 适配新格式
-  - 简化 API 返回结构（删除 6 个重复对象）
-  - 更新前端 `fashion/page.tsx` 展示组件
-- [x] Fashion: AI 分析结果页面调通 ✅
-- [x] Fashion: 修复 `/auth/login` 重定向到外部 Auth URL
-- [x] Fashion: 开发模式 `getDevUser()` 支持
-- [x] Fashion: 数据库查询改用 `fashion` schema
-- [x] Fashion: Storage 签名 URL 支持
-- [x] Fashion: next.config.js 添加 Supabase 域名
-- [x] Fashion: 保存 mock 分析结果数据
-
-### 🟢 历史已完成 (2025-12-08)
-- [x] Fashion: RLS INSERT/UPDATE/DELETE 策略 (analyses表)
-- [x] Fashion: RLS UPDATE 策略 (photos表)
-- [x] Fashion: 添加缺失字段 (app_source, advisor_persona_used, tone_used)
-- [x] Fashion: AI Provider 切换到 Google (Gemini)
-- [x] Fashion: 模型名称修复 (gemini-1.5-flash → gemini-pro-vision)
-- [x] Fashion: 添加详细调试日志
-
-### 🟢 历史已完成 (2025-12-05)
-- [x] Fashion: 删除_template目录(12文件)
-- [x] Fashion: 移除测试卡号4242
-- [x] Fashion: 品牌名已统一为マジコーデ
-- [x] Auth: 删除旧API文件(2个)
-- [x] Auth: 升级Supabase到2.81.1
-- [x] Main: 修复断链href=#(8处)
-
-### 📋 待办
-- [ ] Dashboard: AI产品Modal实现 (3h)
-- [ ] Main: 日文翻译补齐(88行)
-- [ ] 架构: Tailwind配置统一
+- [x] **功能完善规划会议** - Plan Agent 完整分析，制定作战计划
 
 ---
 
-## 历史 Sprint: 安全加固 (2025-12-05)
+## 历史 Sprint
 
-### 🟢 P0 - 全部修复完成（评分79→88→91/100）
+### 安全加固 Sprint (2025-12-05) ✅
+- 安全评分: 79 → 91/100
+- P0 全部修复（积分原子性、幂等性、SQL注入、依赖漏洞）
+- P1 部分完成（审计日志、Webhook防护）
 
-| # | 问题 | 风险 | 修复方案 | 负责Agent |
-|---|------|------|----------|-----------|
-| P0-1 | 积分扣除无原子性 | 竞态条件可刷积分 | 数据库事务+约束 | database-expert |
-| P0-2 | 积分充值幂等性缺失 | Webhook可重复充值 | 去重机制+payment_intent_id | database-expert |
-| P0-3 | SQL注入风险 | admin/users搜索数据泄露 | 参数化查询 | multi-site-coder |
-| P0-4 | 依赖漏洞 | form-data/axios CVE | npm audit fix | 直接执行 |
-
-- [x] **P0-1**: 积分扣除原子性保护 ✅ 已有`FOR UPDATE`行锁
-- [x] **P0-2**: 积分充值幂等性 ✅ 已添加唯一索引+幂等检查
-- [x] **P0-3**: SQL注入修复 ✅ 已添加输入验证Schema
-- [x] **P0-4**: 依赖漏洞修复 ✅ 两站点0 vulnerabilities
-
-### 🟡 P1 - 本周修复
-
-- [ ] **P1-1**: CORS配置收紧（暂缓 - 低优先级）
-- [ ] **P1-2**: Rate Limiting全局保护（暂缓 - 用户量少）
-- [x] **P1-3**: 审计日志触发器完善 ✅ 4表自动审计
-- [x] **P1-4**: Webhook重放攻击防护 ✅ 多Agent设计+实施完成
-- [x] **P1-5**: 服务端价格验证 ✅ 已实现（Security审计确认）
-
-### 进行中
-
-#### 🎯 矩阵网站上线准备 (2-3周)
-
-**第1周 P0修复**:
-- [ ] Auth站点清理（删除冗余组件、统一翻译）
-- [ ] Main站点真实化（删除虚假数据、修复断链）
-- [ ] Dashboard/Fashion P0修复
-
-**第2周 P1优化**:
-- [ ] 多语言补全（4站点）
-- [ ] 翻译术语统一
-- [ ] Main产品描述修正
-
-**第3周 架构统一**:
-- [ ] Tailwind配置统一
-- [ ] Supabase版本升级
-- [ ] shared组件同步
-
-**详细报告**: [SITE_REVIEW_REPORT.md](./SITE_REVIEW_REPORT.md)
-
----
-
-- [ ] Fashion 站点功能完善
-- [ ] Dashboard 功能扩展
-- [ ] 知识中心内容填充
-
-### 已完成 (2025-12-05)
-
-- [x] **性能WARN修复** ✅ webhook_events RLS优化（6→0 WARN）
-- [x] **P1-4 Webhook重放攻击防护** ✅ (3 Agent并行设计)
-  - Security审计：三层防御架构
-  - Architecture设计：共享逻辑+source_site字段
-  - Database实现：原子幂等函数+RLS
-  - Dashboard集成：完成
-  - Fashion：无需修改（代理到Dashboard）
-- [x] **P0安全漏洞全部修复** ✅ (多Agent并行)
-  - P0-1: 积分扣除原子性 - 已有FOR UPDATE行锁+CHECK约束
-  - P0-2: 积分充值幂等性 - 添加唯一索引+幂等检查函数
-  - P0-3: SQL注入 - 添加UserSearchSchema输入验证
-  - P0-4: 依赖漏洞 - npm audit fix (0 vulnerabilities)
-- [x] SSO Cookie修复 ✅
-  - Cookie域统一为.wizpulseai.com
-  - maxAge从365天改为7天
-  - Fashion站点添加Cookie处理
-  - 白名单添加fashion.wizpulseai.com
-- [x] 全面安全审计 ✅
-  - 4个Agent并行诊断
-  - 综合评分79/100 → 88/100
-  - 识别4个P0问题 + 6个P1问题
-
-### 已完成 (历史)
-
-- [x] AI 团队架构重构 (2025-12-04) ✅
-- [x] 数据库安全警告修复 (2025-12-04)
-- [x] 数据库性能优化 (2025-12-04)
-- [x] Fashion 站点多语言 (2025-12-03)
-- [x] Header 设计统一 (2025-12-03)
+### Fashion AI 优化 Sprint (2025-12-10) ✅
+- v3.0 人话版 Prompt 重构
+- AI 分析结果页面调通
+- 五边形雷达图实现
 
 ---
 
 ## Backlog（待规划）
 
-### P2 - 中优先级
-
+### 中优先级
 - [ ] Dashboard 用户统计页面
 - [ ] API 密钥管理界面
 - [ ] 知识中心文章权限
 - [ ] QuickSlide 产品站点
 
-### P3 - 低优先级
-
+### 低优先级
 - [ ] 团队协作功能
-- [ ] 使用统计展示
 - [ ] 邮件模板多语言
 - [ ] 性能监控面板
+- [ ] Fashion 社区功能
 
 ---
 
-**最后更新**: 2025-12-08
+**最后更新**: 2025-12-11

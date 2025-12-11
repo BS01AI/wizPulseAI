@@ -288,6 +288,11 @@ Header导航              产品生态区域      返回导航
 - `/wizPulseAI-docs/WEBSITE_ARCHITECTURE.md` - 网站架构与用户引导策略
 - `/wizPulseAI-docs/TEAM_WORK_PLAN.md` - 🆕 团队工作计划（Agent分工+任务状态）
 
+### AI 模型知识库 🆕 (2025-12-11)
+- `/wizPulseAI-docs/AI_MODELS/README.md` - 📚 AI 模型文档索引
+- `/wizPulseAI-docs/AI_MODELS/GEMINI_3_ANALYSIS.md` - Gemini 3 技术概览
+- `/wizPulseAI-docs/AI_MODELS/GEMINI_3_PROMPT_DESIGN.md` - ⭐ Gemini 3 Prompt 设计指南
+
 ### AI 记忆 (已整合到此文件)
 - 原 auth-site-CLAUDE.md
 - 原 dashboard-site-CLAUDE.md
