@@ -4,11 +4,119 @@
 
 ---
 
-## 2025-12-10 (当前会话)
+## 2025-12-11 (当前会话)
 
-**任务**: Fashion AI 分析结果页面调通
+**任务**: Fashion 前端 Bug 修复 + UI 优化
 
 ### ✅ 已完成
+
+#### 1️⃣ CreditsService schema 修复
+- **问题**: 积分服务使用了 `public` schema，实际数据在 `fashion` schema
+- **修复**: 6处 `.schema('fashion')` 添加
+- **文件**: `src/domains/credits/services/credits.service.ts`
+
+#### 2️⃣ 五边形雷达图修复
+- **问题**: 用户看到的是 5 个横条，不是五边形
+- **原因**: `fashion/page.tsx` 内联写了横条代码，没用 `PentagonRadar` 组件
+- **修复**: 导入并使用 `PentagonRadar` 组件
+- **文件**: `src/app/fashion/page.tsx`
+
+#### 3️⃣ 场景选择功能修复
+- **问题**: 选择不同场景后重新分析，结果没变化
+- **原因**: API 收到了参数但没传给 `VisionService`，导致 AI 一直用默认的 `casual`
+- **修复**: 传递 `userConfig.outfitContext/advisorPersona/season` 到 VisionService
+- **文件**: `src/app/api/fashion/analyze/route.ts`
+
+#### 4️⃣ 积分余额前端显示
+- **问题**: 用户看不到自己的积分余额
+- **原因**: 后端 API 完整，但前端没有调用和显示
+- **修复**:
+  - 新建 `useCredits` Hook
+  - 页面顶部添加积分余额卡片
+  - 分析完成后自动刷新余额
+- **文件**:
+  - `src/hooks/useCredits.ts` (新建)
+  - `src/app/fashion/page.tsx`
+
+#### 5️⃣ 五边形 UI 优化
+- **问题**: 周围的 emoji 图标不够可爱
+- **修复**:
+  - 去掉 emoji，只保留维度名称和分数
+  - 尺寸从 220px 放大到 280px
+- **文件**: `src/components/fashion/PentagonResultCard/PentagonRadar.tsx`
+
+### 📁 修改的文件 (5个)
+
+```
+fashion-wizpulseai-com/
+├── src/domains/credits/services/credits.service.ts  # schema 修复
+├── src/app/api/fashion/analyze/route.ts             # 场景参数传递
+├── src/app/fashion/page.tsx                         # 五边形+积分显示
+├── src/hooks/useCredits.ts                          # 新建积分Hook
+└── src/components/fashion/PentagonResultCard/PentagonRadar.tsx  # UI优化
+```
+
+### Git 提交
+- `256dbe0` - fix: 修复4个关键问题
+- (待提交) - style: 五边形UI优化
+
+---
+
+## 2025-12-10 (历史会话)
+
+**任务**: Fashion AI 分析 v3.0 人话版重构
+
+### ✅ 已完成
+
+#### 🔥 v3.0 人话版 Prompt 重构（核心！）
+
+**用户反馈**: "AI返回的内容又长、又没有重点、完全不知所云"
+
+**问题诊断**:
+- 返回了 6 个重复对象（tieredFeedback/aiResponse/analysis/pentagonResult/tieredResult/adviceResult）
+- 调试信息暴露给前端（aiPrompt, processingTimeMs）
+- scores 的 comment 只有"◎"，不是具体点评
+- 缺少"一句话总结"让用户快速了解结果
+
+**解决方案**: v3.0 人话版
+
+| 改动文件 | 内容 |
+|----------|------|
+| `pentagon.prompt.ts` | 重写，要求 AI 输出：100字总评 + 具体点评 + 150字建议 |
+| `vision.service.ts` | 更新类型定义，支持 v3 格式解析 |
+| `route.ts` | 简化返回结构，删除重复字段 |
+| `page.tsx` | 更新前端展示组件 |
+
+**新的 AI 输出格式**:
+```json
+{
+  "totalScore": 75,
+  "rank": "B",
+  "overallComment": "このオールブラックコーデ、ビジネスシーンにはバッチリだね！✨...",
+  "scores": {
+    "color": { "score": 7, "comment": "オールブラックで統一感◎ ただ、差し色がないから..." },
+    "fit": { "score": 5, "comment": "ジャケットのサイズ感は良い感じ！..." }
+  },
+  "improvementAdvice": "このコーデをもっと素敵にするなら、まずインナーを変えてみて！..."
+}
+```
+
+**新的前端展示**:
+```
+┌────────────────────────────────────┐
+│ 💬 コーデちゃんのコメント            │ ← overallComment (100字)
+├────────────────────────────────────┤
+│ 📊 5つの評価ポイント                │ ← scores + 具体点评
+│   🎨 配色 ████████░░ 7              │
+│   オールブラックで統一感◎ ただ...   │
+├────────────────────────────────────┤
+│ 💡 もっと素敵になるアドバイス        │ ← improvementAdvice (150字)
+└────────────────────────────────────┘
+```
+
+---
+
+#### 早些时候完成
 
 1. **修复结果页面 404 `/auth/login`**
    - 原因: Fashion 站点没有登录页，用了站内路径

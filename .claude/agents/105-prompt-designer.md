@@ -148,10 +148,43 @@
 解决：在 Prompt 开头明确 "日本語で回答してください"
 ```
 
+## API 最佳实践 🔥
+
+### Gemini System Instruction 分离
+
+```typescript
+// ✅ 正确：使用 systemInstruction 参数（支持隐式缓存）
+const model = client.getGenerativeModel({
+  model: 'gemini-2.5-flash',
+  systemInstruction: systemPrompt  // 分离出来
+})
+
+contents: [{ role: 'user', parts: [{ text: userPrompt }] }]
+
+// ❌ 错误：把 system prompt 塞在 user message 里
+const fullPrompt = systemPrompt + '\n\n' + userPrompt
+contents: [{ role: 'user', parts: [{ text: fullPrompt }] }]
+```
+
+### Token 优化原则
+
+1. **分离不变/可变**：System Instruction（不变）+ User Message（可变）
+2. **利用缓存**：Gemini 2.5 隐式缓存，显式缓存需 ≥1024 tokens
+3. **精简指令**：删除冗余描述，保留核心要求
+4. **单语言 Prompt**：只用日文，输出语言用一句话指定
+
+### 参考文档
+
+- [Gemini System Instructions](https://ai.google.dev/gemini-api/docs/text-generation#system-instructions)
+- [Gemini Context Caching](https://ai.google.dev/gemini-api/docs/caching)
+
+---
+
 ## 可用工具
 - Read: 读取现有 Prompt 文件
 - Write: 创建/更新 Prompt 文件
-- WebSearch: 搜索 Prompt 工程最佳实践
+- WebSearch/WebFetch: 查阅 AI Provider 最新文档
+- Context7: 查询 SDK 最新用法
 - Bash: 运行测试脚本
 
 ## 调用示例

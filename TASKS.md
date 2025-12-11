@@ -4,13 +4,24 @@
 
 ---
 
-## 当前 Sprint: Fashion AI 分析优化 (2025-12-10)
+## 当前 Sprint: Fashion AI 分析优化 (2025-12-11)
 
 ### 🔄 进行中
-- [ ] **结果页面 UI 优化** - 适配新的 tieredFeedback 数据结构
-- [ ] **Pentagon 五维雷达图** - 新的评分可视化组件
+- [ ] 等待用户测试反馈
 
-### 🟢 今日已完成 (2025-12-10)
+### 🟢 今日已完成 (2025-12-11)
+- [x] **CreditsService schema 修复** - 6处 public → fashion
+- [x] **五边形雷达图修复** - 从横条改为真正的 PentagonRadar 组件
+- [x] **场景选择功能修复** - 传递 userConfig 参数到 VisionService
+- [x] **积分余额前端显示** - 新建 useCredits Hook + 页面顶部集成
+- [x] **五边形UI优化** - 去掉emoji图标 + 尺寸280px
+
+### 🟢 历史已完成 (2025-12-10)
+- [x] **🔥 v3.0 人话版 Prompt 重构** ✅
+  - 重写 `pentagon.prompt.ts`（100字总评 + 五维具体点评 + 150字建议）
+  - 更新 `VisionService` 适配新格式
+  - 简化 API 返回结构（删除 6 个重复对象）
+  - 更新前端 `fashion/page.tsx` 展示组件
 - [x] Fashion: AI 分析结果页面调通 ✅
 - [x] Fashion: 修复 `/auth/login` 重定向到外部 Auth URL
 - [x] Fashion: 开发模式 `getDevUser()` 支持
