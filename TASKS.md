@@ -269,10 +269,14 @@
 - **方案**: 统一使用 i18n 翻译函数
 
 ### P1-2: 统一组件样式系统 🎨
-- **状态**: [ ] 待开始
+- **状态**: [x] ✅ 已完成 (2025-12-12)
 - **负责**: `multi-site-coder`
-- **工时**: 4h
-- **问题**:
+- **实际工时**: 0.5h
+- **完成内容**:
+  - [x] ai-products/page.tsx: 68处硬编码颜色→CSS变量
+  - [x] 颜色映射: #1E2A3A→var(--bg-orbital-gray), #2A3F5F→var(--bg-container), 等
+  - [x] Build验证通过
+- **原问题**:
   - Orbital 系统 vs 传统 UI 混用
   - AI Products 页面硬编码颜色 `#1E2A3A`
   - FashionStatsCard 与 KPICard 风格不一致
@@ -302,11 +306,15 @@
 ## Phase 3: Main 站点内容清理 (P0-P1) - 第3周
 
 ### P0-5: 重写 WizLife/WizBiz 页面 📝
-- **状态**: [ ] 待开始
-- **负责**: `content-writer`
-- **工时**: 4h
-- **问题**: 看起来像已上线，实际是 Coming Soon
-- **方案**:
+- **状态**: [x] ✅ 已完成 (2025-12-12)
+- **负责**: `multi-site-coder`
+- **实际工时**: 0.3h
+- **完成内容**:
+  - [x] 删除 BizPage 虚假统计数据（10x/99%/24/7/500+）
+  - [x] LifePage 无需修改（Magicoord已上线，其他已有Coming Soon徽章）
+  - [x] Build验证通过
+- **原问题**: 看起来像已上线，实际是 Coming Soon
+- **原方案**:
   - 明确标记"Coming Soon"
   - 移除虚假统计数据
   - 添加订阅等待列表
