@@ -6,7 +6,65 @@
 
 ## 2025-12-12 (当前会话)
 
-**任务**: Dashboard Light/Dark 主题修复 + UI/UX 设计分析 + 主题系统集成
+**任务**: Dashboard Light/Dark 主题修复 + UI/UX 设计分析 + 主题系统集成 + 生产环境问题修复 + **Phase 5 主题统一**
+
+---
+
+### 🎨 深夜: Phase 5 主题统一 (B-1 + B-2 完成) ✅
+
+**目标**: Dashboard 完全采用 `themes.css` 定义的新主题系统 (Indigo/Rose)
+
+#### B-1: 扫描硬编码颜色 ✅
+| 类型 | 数量 | 说明 |
+|------|------|------|
+| HEX 硬编码 | 6 | ColorThemeSwitcher, ai-products |
+| Tailwind 硬编码 | 68 | bg-blue-*, text-gray-* 等 |
+| Orbital 遗留变量 | 86+ | text-orbital-*, bg-orbital-* |
+| **总计** | **160+** | - |
+
+#### B-2: 替换硬编码颜色 ✅
+| 文件 | 修改数量 | 说明 |
+|------|----------|------|
+| products/page.tsx | 4 处 | shadcn 组件已管理 |
+| features/page.tsx | 0 处 | 已符合规范 |
+| page.tsx (首页) | 11 处 | 品牌渐变替换 |
+| credits/page.tsx | 19 处 | 完整替换 |
+| ai-products/page.tsx | 60+ 处 | orbital 变量清除 |
+| **总计** | **94+ 处** | Build 通过 ✅ |
+
+**Build 验证**: ✅ 40 页面全部生成
+
+**下一步**: C-1~C-3 UI 布局优化 (Raycast 风格)
+
+---
+
+### 🔧 晚上: 生产环境问题修复
+
+**用户报告问题**:
+1. CSP 阻止 ThemeScript 执行
+2. 侧边栏显示中文（应该是日语）
+3. usage_records 404 错误
+4. subscriptions 400 错误
+
+**修复内容**:
+
+| 问题 | 原因 | 修复 |
+|------|------|------|
+| CSP阻止ThemeScript | CSP有nonce时忽略`unsafe-inline` | 移除nonce |
+| 侧边栏中文 | 硬编码中文文本 | 改用i18n翻译 |
+| usage_records 404 | 表已被删除 | 移除查询 |
+| subscriptions 400 | 表名错误 | `prices`→`stripe_prices` |
+
+**修改文件** (8个):
+- `middleware.ts` - CSP修复
+- `orbital-layout.tsx` - 国际化
+- `translations.ts` - 新增翻译键
+- `orbital-dashboard.tsx`, `modern.tsx`, `page.tsx`, `billing/page.tsx` - DB查询修复
+- `sw.js` - 自动更新
+
+**Git**: `51c1db3` → 已推送
+
+---
 
 ---
 

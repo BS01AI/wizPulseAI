@@ -364,6 +364,90 @@
 
 ---
 
+## Phase 5: 主题统一 + UI 布局优化 (P0-Theme) - 当前 🔥
+
+> **参考风格**: Raycast（亮色变体）
+> **目标**: Dashboard 完全采用 themes.css 定义的主题系统
+
+### 🎨 已定义的主题系统 (`shared/styles/themes.css`)
+
+| 主题 ID | 名称 | 主色 | 模式 |
+|---------|------|------|------|
+| 1 | Indigo Light | `#3F51B5` 靛蓝 | 亮色 |
+| 2 | Rose Light | `#bb2649` 玫瑰 | 亮色 |
+| 3 | Indigo Dark | `#757de8` 浅靛蓝 | 暗色 |
+| 4 | Rose Dark | `#f35d74` 浅玫瑰 | 暗色 |
+
+**CSS 变量系统**:
+- `--brand-primary/light/dark/subtle` - 品牌色
+- `--bg-base/subtle/muted/elevated` - 背景色
+- `--text-primary/secondary/muted` - 文字色
+- `--shadow-sm/md/lg/brand` - 阴影
+- `.card`, `.btn-brand`, `.input` - 工具类
+
+### B: 主题颜色调整 🎨
+- **状态**: [x] ✅ 已完成 (2025-12-12)
+- **负责**: `multi-site-coder`
+- **实际工时**: 1.5h
+
+#### B-1: 扫描 Dashboard 硬编码颜色 ✅
+- **状态**: [x] 已完成 (2025-12-12)
+- **内容**: 找出所有未使用 CSS 变量的硬编码颜色
+- **范围**: `db-wizPulseAI-com/src/`
+- **扫描结果**:
+  | 类型 | 数量 | 严重度 |
+  |------|------|--------|
+  | HEX 硬编码 | 6 | 🟢 低 |
+  | Tailwind 硬编码类 | 68 | 🔴 高 |
+  | 遗留 Orbital 变量 | 86+ | 🔴 高 |
+  | **总计** | **160+** | - |
+- **P0 优先修复文件**:
+  - `products/page.tsx` (40处)
+  - `ai-products/page.tsx` (34+处)
+  - `features/page.tsx` (30处)
+  - `page.tsx` 首页 (10处)
+  - `credits/page.tsx` (9处)
+
+#### B-2: 替换硬编码颜色为 CSS 变量 ✅
+- **状态**: [x] 已完成 (2025-12-12)
+- **修改统计**:
+  | 文件 | 修改数量 | 说明 |
+  |------|----------|------|
+  | products/page.tsx | 4 处 | shadcn 组件已管理 |
+  | features/page.tsx | 0 处 | 已符合规范 |
+  | page.tsx (首页) | 11 处 | 品牌渐变替换 |
+  | credits/page.tsx | 19 处 | 完整替换 |
+  | ai-products/page.tsx | 60+ 处 | orbital 变量清除 |
+  | **总计** | **94+ 处** | Build 通过 ✅ |
+
+### C: UI 布局优化 (Raycast 风格) 🖼️
+- **状态**: [ ] 待开始
+- **负责**: `multi-site-coder`
+- **预计工时**: 5h
+
+#### C-1: 卡片 Raycast 风格优化
+- **状态**: [ ] 待开始
+- **内容**:
+  - 使用 `var(--shadow-md)` 多层柔和阴影
+  - hover 时 `var(--shadow-lg)` + `translateY(-2px)`
+  - 统一 `border-radius: var(--radius-xl)`
+
+#### C-2: 按钮/输入框风格统一
+- **状态**: [ ] 待开始
+- **内容**:
+  - 按钮使用 `linear-gradient` + `var(--shadow-brand)` 光晕
+  - 输入框 focus 时 `box-shadow: 0 0 0 3px var(--brand-primary-subtle)`
+  - 统一 padding/圆角
+
+#### C-3: 间距/圆角统一检查
+- **状态**: [ ] 待开始
+- **内容**:
+  - 使用 `var(--space-*)` 间距变量
+  - 使用 `var(--radius-*)` 圆角变量
+  - 检查 8px 栅格一致性
+
+---
+
 ## 执行进度
 
 ### 本周目标 (Phase 1)
