@@ -421,30 +421,21 @@
   | **总计** | **94+ 处** | Build 通过 ✅ |
 
 ### C: UI 布局优化 (Raycast 风格) 🖼️
-- **状态**: [ ] 待开始
+- **状态**: [x] ✅ 已完成 (2025-12-12)
 - **负责**: `multi-site-coder`
-- **预计工时**: 5h
+- **实际工时**: 1h
 
-#### C-1: 卡片 Raycast 风格优化
-- **状态**: [ ] 待开始
-- **内容**:
-  - 使用 `var(--shadow-md)` 多层柔和阴影
-  - hover 时 `var(--shadow-lg)` + `translateY(-2px)`
-  - 统一 `border-radius: var(--radius-xl)`
+#### C-1: 卡片 Raycast 风格优化 ✅
+- **状态**: [x] 已完成
+- **内容**: card.tsx 双层柔和阴影 + hover 动画，orbital-dashboard 7处统一
 
-#### C-2: 按钮/输入框风格统一
-- **状态**: [ ] 待开始
-- **内容**:
-  - 按钮使用 `linear-gradient` + `var(--shadow-brand)` 光晕
-  - 输入框 focus 时 `box-shadow: 0 0 0 3px var(--brand-primary-subtle)`
-  - 统一 padding/圆角
+#### C-2: 按钮/输入框风格统一 ✅
+- **状态**: [x] 已完成
+- **内容**: button.tsx 渐变+品牌阴影，input.tsx focus光晕效果
 
-#### C-3: 间距/圆角统一检查
-- **状态**: [ ] 待开始
-- **内容**:
-  - 使用 `var(--space-*)` 间距变量
-  - 使用 `var(--radius-*)` 圆角变量
-  - 检查 8px 栅格一致性
+#### C-3: 间距/圆角统一检查 ✅
+- **状态**: [x] 已完成
+- **内容**: 4处非标准间距修复，合规率 100%
 
 ---
 
