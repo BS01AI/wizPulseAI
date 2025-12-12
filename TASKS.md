@@ -57,12 +57,16 @@
   - [x] `.env.example` - 添加完整的环境变量说明（包含示例）
 - **环境变量**: NEXT_PUBLIC_MAIN_URL, NEXT_PUBLIC_APP_URL, NEXT_PUBLIC_AUTH_URL
 
-### P0-4: 统一错误处理 ⚠️
-- **状态**: [ ] 待开始
+### P0-4: 统一错误处理 ✅
+- **状态**: [x] 已完成 (2025-12-12)
 - **负责**: `multi-site-coder`
-- **工时**: 3h
-- **问题**: 有的页面有 toast，有的只 console.error
-- **方案**: 所有 API 调用都需要 toast 提示用户
+- **实际工时**: 0.5h
+- **修复内容**:
+  - [x] credits/page.tsx: alert() → toast
+  - [x] credits/success/page.tsx: 添加 toast
+  - [x] MagicoordStatsCard.tsx: 添加 toast
+  - [x] admin-redirect.tsx: 添加 toast
+- **Git**: `9cf5480`
 
 ---
 
@@ -360,7 +364,7 @@
 | P0-1 删除无用页面 | ✅ 完成 | multi-site-coder |
 | P0-2 清理 console.log | ✅ 完成 | multi-site-coder |
 | P0-3 修复硬编码 URL | ✅ 完成 | multi-site-coder |
-| P0-4 统一错误处理 | ⏳ 待开始 | multi-site-coder |
+| P0-4 统一错误处理 | ✅ 完成 | multi-site-coder |
 
 ---
 
@@ -372,7 +376,7 @@
 - [x] 隐藏开发者工具（features/products/plan-features）✅ (2025-12-11)
 - [x] 清理所有 console.log ✅ (2025-12-11)
 - [x] 修复硬编码 URL ✅ (2025-12-11)
-- [ ] 统一错误提示
+- [x] 统一错误提示 ✅ (2025-12-12)
 
 ### 建议完成 ⚠️
 - [ ] 国际化硬编码文本

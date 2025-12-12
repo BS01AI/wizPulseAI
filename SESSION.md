@@ -87,6 +87,23 @@
 
 ---
 
+### ✅ 傍晚: P0-4 统一错误处理
+
+**修复内容** (4个文件):
+
+| 文件 | 问题 | 修复 |
+|------|------|------|
+| credits/page.tsx | alert() 弹窗 | → toast（購入エラー）|
+| credits/success/page.tsx | 只有 console.error | + toast（残高取得エラー）|
+| MagicoordStatsCard.tsx | 只有 console.error | + toast（統計データ取得エラー）|
+| admin-redirect.tsx | 只有 console.error | + toast（権限更新エラー）|
+
+**Git**: `9cf5480` → 已推送
+
+**Phase 1 全部 P0 任务完成** ✅
+
+---
+
 ### 🎨 上午: Light模式主题修复
 
 **问题**: Settings页面在Light模式下显示深色背景
