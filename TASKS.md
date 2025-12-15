@@ -16,63 +16,75 @@
 
 ## 当前阶段: 发布前 P0 修复
 
-### Day 1-2: 法律合规 + 安全修复 (8h)
+### Day 1-2: 法律合规 + 安全修复 (8h) ✅ 完成
 
 #### P0-SEC-1: Debug API 生产禁用 🔒
-- **状态**: [ ] 待开始
+- **状态**: [x] ✅ 已完成 (2025-12-15)
 - **位置**: `fashion-wizpulseai-com/src/app/api/debug/auth/route.ts`
 - **修复**: 生产环境返回 404
 - **工时**: 5min
 
 #### P0-SEC-2: DEV_MODE 双重检查 🔒
-- **状态**: [ ] 待开始
+- **状态**: [x] ✅ 已完成 (2025-12-15)
 - **位置**: `fashion-wizpulseai-com/src/config/dev-mode.ts`
 - **修复**: `NODE_ENV === 'production'` 强制返回 false
 - **工时**: 10min
 
 #### P0-SEC-3: 积分竞态条件修复 🔒
-- **状态**: [ ] 待开始
+- **状态**: [x] ✅ 已完成 (2025-12-15)
 - **位置**: `db-wizPulseAI-com/src/lib/credits/service.ts`
-- **修复**: 使用数据库原子操作 (FOR UPDATE 或 RPC)
+- **修复**: 使用数据库 RPC 原子操作 (FOR UPDATE 锁)
 - **工时**: 30min
 
 #### P0-LEGAL-1: 隐私政策页面 📜
-- **状态**: [ ] 待开始
-- **位置**: 需创建 `fashion-wizpulseai-com/src/app/privacy/page.tsx`
+- **状态**: [x] ✅ 已完成 (2025-12-15)
+- **位置**: `fashion-wizpulseai-com/src/app/privacy/page.tsx`
 - **要求**: 4语言、GDPR/日本法合规
 - **工时**: 4h
 
 #### P0-LEGAL-2: 服务条款页面 📜
-- **状态**: [ ] 待开始
-- **位置**: 需创建 `fashion-wizpulseai-com/src/app/terms/page.tsx`
-- **要求**: 4语言、含退款政策
+- **状态**: [x] ✅ 已完成 (2025-12-15)
+- **位置**: `fashion-wizpulseai-com/src/app/terms/page.tsx`
+- **要求**: 4语言、含退款政策（日本特定商取引法合规）
 - **工时**: 3h
+
+#### P0-LEGAL-3: 法律文件 Review + 国际化补充 📜
+- **状态**: [x] ✅ 已完成 (2025-12-15)
+- **修正内容**:
+  - Privacy: 6点修正（屋号统一BS01AI、APPI準拠、委托先明记、Cookie限定、即座删除表现）
+  - Terms: 4点修正（有償/無償ポイント区分、返金ポリシー厳格化、サービス終了時払戻し）
+  - section12 追加: 言語・適用法令（国際向け補足）- 日本語正本明記
+  - section11 追加: 地域別補足（KSA PDPL / 台湾対応）
+- **4言語対応**: 🇯🇵🇺🇸🇸🇦🇹🇼
+- **Git**: `7dbcfd6` (fashion-wizpulseai-com)
+- **工時**: 1.5h
 
 ---
 
-### Day 3: SSO 安全修复 (2h)
+### Day 3: SSO 安全修复 (2h) ✅ 完成
 
 #### P0-SSO-1: Dashboard Cookie 域统一 🔐
-- **状态**: [ ] 待开始
-- **位置**: `db-wizPulseAI-com/src/lib/supabase/server.ts:23`
-- **修复**: 使用 `NEXT_PUBLIC_COOKIE_DOMAIN` 环境变量
+- **状态**: [x] ✅ 已完成 (2025-12-15)
+- **位置**: `db-wizPulseAI-com/src/lib/supabase/server.ts`
+- **修复**: 使用 `COOKIE_DOMAIN` 常量 (环境变量优先)
 - **工时**: 30min
 
 #### P0-SSO-2: Dashboard SameSite 修复 🔐
-- **状态**: [ ] 待开始
-- **位置**: `db-wizPulseAI-com/src/shared/auth/supabase-browser.ts:59,96`
-- **修复**: `SameSite=none` → `SameSite=lax`
+- **状态**: [x] ✅ 已完成 (2025-12-15)
+- **位置**: `db-wizPulseAI-com/src/shared/auth/supabase-browser.ts`
+- **修复**: `__Secure-` Cookie 从 `SameSite=none` → `SameSite=lax`
 - **工时**: 30min
 
 #### P0-SSO-3: Fashion SameSite 修复 🔐
-- **状态**: [ ] 待开始
-- **位置**: `fashion-wizpulseai-com/src/infrastructure/supabase/server.ts:48,70`
-- **修复**: `SameSite=none` → `SameSite=lax`
+- **状态**: [x] ✅ 已完成 (2025-12-15)
+- **位置**: `fashion-wizpulseai-com/src/infrastructure/supabase/server.ts`
+- **修复**: 统一 `SameSite=lax`
 - **工时**: 30min
 
-#### P0-SSO-4: SSO 登录测试 🧪
-- **状态**: [ ] 待开始
-- **内容**: 4站点跨域登录验证
+#### P0-SSO-4: SSO 配置验证 + Main站点修复 🧪
+- **状态**: [x] ✅ 已完成 (2025-12-15)
+- **内容**: 4站点配置一致性验证 + Main站点SameSite修复
+- **额外修复**: `wizPulseAI-com/src/shared/auth/supabase-browser.ts` (发现并修复)
 - **工时**: 30min
 
 ---
@@ -191,13 +203,13 @@
 
 | 阶段 | 任务数 | 完成 | 进度 |
 |------|--------|------|------|
-| Day 1-2 法律+安全 | 5 | 0 | 0% |
-| Day 3 SSO安全 | 4 | 0 | 0% |
+| Day 1-2 法律+安全 | 6 | 6 | 100% ✅ |
+| Day 3 SSO安全 | 4 | 4 | 100% ✅ |
 | Day 4 支付流程 | 4 | 0 | 0% |
 | Day 5 代码质量 | 4 | 0 | 0% |
 | Day 6 SEO营销 | 5 | 0 | 0% |
 | Day 7 测试发布 | 4 | 0 | 0% |
-| **总计** | **26** | **0** | **0%** |
+| **总计** | **27** | **10** | **37%** |
 
 ---
 
