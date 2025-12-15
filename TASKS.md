@@ -259,14 +259,24 @@
 ## Phase 4: Dashboard UI 改进 (P1) - 下周
 
 ### P1-1: 国际化硬编码文本 🌐
-- **状态**: [ ] 待开始
+- **状态**: [x] ✅ 已完成 (2025-12-13)
 - **负责**: `translation-manager`
-- **工时**: 4h
-- **范围**:
-  - `/dashboard/admin/features` - 硬编码中文
-  - `/dashboard/admin/products` - 硬编码中文
-  - `/dashboard/admin/ai-products` - 混合语言
-- **方案**: 统一使用 i18n 翻译函数
+- **实际工时**: 2h
+- **完成内容**:
+  - [x] `/dashboard/admin/features` - 23处 i18n 改造
+  - [x] `/dashboard/admin/products` - 包含在 features 中
+  - [x] `/dashboard/admin/ai-products` - 60+处 i18n 改造
+  - [x] `/dashboard/admin/config` - 17处 i18n 改造
+  - [x] `/dashboard/admin/subscriptions` - 28处 i18n 改造
+  - [x] `/dashboard/admin/users` - 14处 i18n 改造
+  - [x] `/dashboard/admin/plan-features` - 32处 i18n 改造
+  - [x] `/dashboard/admin/usage-records` - 30处 i18n 改造
+  - [x] translations.ts 添加 ~126 个翻译键 × 4 语言 = 504 条翻译
+- **总计**: 8个 Admin 页面，~144处代码改造 + 504条翻译
+- **Review 问题修复**:
+  - [x] Toast 提示硬编码 ✅ (2025-12-13) - 修复 19 处
+  - [x] 翻译键缺失 ✅ (2025-12-13) - 新增 22 个键
+  - [ ] Console 日志中文 (~26处) - 🟢 低优先级，可后续优化
 
 ### P1-2: 统一组件样式系统 🎨
 - **状态**: [x] ✅ 已完成 (2025-12-12)
@@ -462,8 +472,8 @@
 - [x] 统一错误提示 ✅ (2025-12-12)
 
 ### 建议完成 ⚠️
-- [ ] 国际化硬编码文本
-- [ ] 统一组件样式
+- [x] 国际化硬编码文本 ✅ (2025-12-13)
+- [x] 统一组件样式 ✅ (2025-12-12)
 - [ ] 移动端适配
 
 ### 可以后续 📅
