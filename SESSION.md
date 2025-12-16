@@ -6,6 +6,52 @@
 
 ## 2025-12-16 (当前会话)
 
+**任务**: Day 4 支付流程修复 + i18n 完善
+
+---
+
+### ✅ Day 4 支付流程完成
+
+#### P0-PAY-1: 积分不足返回 402
+- API: `analyze/route.ts` 返回 402 Payment Required
+- 前端: 积分不足弹窗 (i18n 4语言)
+- 文件: `fashion/page.tsx`
+
+#### P0-PAY-2: 支付失败/取消页面
+- 新建: `purchase/error/page.tsx`
+- 更新: `purchase/cancel/page.tsx`
+- 新建: `purchase-translations.json` (4语言)
+
+#### P0-PAY-3: CreditService 统一
+- 产出: 调查报告 + 实施计划
+- 发现: Fashion 站点存在竞态条件风险
+- 建议: 发布后实施统一
+
+#### P0-PAY-4: Stripe 价格配置
+- 创建 4 个 Stripe 产品和价格
+- 更新 `credit-packages.ts` (定价方案B)
+
+#### Stripe Price IDs
+| 产品 | 价格 | Price ID |
+|------|------|----------|
+| ライトパック | ¥500 | `price_1SepWe2VJW5tyB5GMr0clbVo` |
+| スタンダードパック | ¥1,000 | `price_1SepWh2VJW5tyB5GawleQgVt` |
+| バリューパック | ¥2,000 | `price_1SepZ72VJW5tyB5GwdTlbnVT` |
+| メガパック | ¥5,000 | `price_1SepZ92VJW5tyB5GAdOOFmAT` |
+
+#### 翻译文件修复
+- `about-translations.json`: footer 添加 contact
+- `privacy-translations.json`: footer 添加 about
+- `terms-translations.json`: footer 添加 about
+
+#### Git 提交
+- Commit: `09f8ccb`
+- 文件: 9个修改，+423/-91 行
+
+---
+
+### 📝 之前完成: P0-LEGAL-4 URL 重组
+
 **任务**: P0-LEGAL-4 URL 结构重组 + Footer 层级化
 
 ### ✅ 完成内容
