@@ -12,7 +12,54 @@
 
 ---
 
-## 最新状态 (2025-12-10 - v3.0 人话版 Prompt 重构) ✅
+## 最新状态 (2025-12-16 - Dashboard CSS主题统一 + UI修复) ✅
+
+### 🎯 完成的工作
+
+**问题**: Dashboard 使用焦橙色 (#CC5500)，与整体 Indigo 主题不一致；侧边栏两个菜单同时高亮
+
+**修复内容**:
+
+| 问题 | 原因 | 修复 |
+|------|------|------|
+| 焦橙色覆盖主题 | `intelligent-warmth.css` 覆盖 CSS 变量 | 删除该文件 |
+| 两个菜单同时高亮 | `startsWith('/dashboard/')` 匹配所有子路径 | `/dashboard` 精确匹配 |
+| CSS 冲突 | `global.css` 和 `globals.css` 分离 | 合并到 `globals.css` |
+
+**删除的文件**:
+- `src/styles/intelligent-warmth.css` (焦橙主题)
+- `src/styles/orbital-nexus.css` (旧科幻主题)
+- `src/styles/global.css` (合并到 globals.css)
+
+**修改的文件**:
+- `globals.css` - 统一 CSS 变量，使用 Tailwind primary
+- `collapsible-sidebar.tsx` - 精确匹配高亮逻辑
+- `orbital-layout.tsx` - 精确匹配高亮逻辑
+- `orbital-page-template.tsx` - 使用 Tailwind CSS 类
+
+**Git 提交**:
+- `c55a04a` - refactor: Dashboard CSS主题统一
+- `22b8506` - fix: 侧边栏高亮逻辑修复 + CSS颜色统一
+- `2a6c354` - fix: 修复侧边栏双高亮问题 (orbital-layout)
+
+### ⚠️ 待处理问题
+
+1. **多语言问题**: `zh-TW` 翻译实际是简体中文，需要修正
+2. **字体问题**: 用户反馈"加载中"字体奇怪
+3. **UI/UX 优化**: 继续优化 Dashboard 页面各组件
+
+### 🎨 当前主题系统
+
+| 编号 | 主题 | 颜色 |
+|------|------|------|
+| 1 | Indigo Light | #3F51B5 靛蓝 |
+| 2 | Rose Light | #bb2649 玫瑰 |
+| 3 | Indigo Dark | #757de8 浅靛蓝 |
+| 4 | Rose Dark | #f35d74 浅玫瑰 |
+
+---
+
+## 历史状态 (2025-12-10 - v3.0 人话版 Prompt 重构) ✅
 
 ### 🔥 核心改动：AI 输出从"程序员视角"改为"用户视角"
 
