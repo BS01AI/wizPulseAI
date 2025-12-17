@@ -12,11 +12,44 @@
 
 ---
 
-## 最新状态 (2025-12-17 - 数据库安全修复 + UI美化) ✅
+## 最新状态 (2025-12-17 晚 - Main站点UI修复) ✅
 
 ### 🎯 完成的工作
 
 **本次会话完成**：
+
+| 任务 | 状态 | 说明 |
+|------|------|------|
+| Dashboard Logo 链接修复 | ✅ | 点击跳转主站首页 |
+| Main 网站地图页面 | ✅ | `/sitemap` 用户可见页面 + 4语言翻译 |
+| 删除 XML sitemap 链接 | ✅ | 用户不需要看到 |
+| WizLife 产品卡片重设计 | ✅ | マジコーデ大卡片+竖向布局 |
+| 添加 magicoord 素材 | ✅ | icon + preview 图片 |
+
+### 📦 Git 提交
+
+| 仓库 | Commit | 说明 |
+|------|--------|------|
+| Dashboard | `505075b` | Logo点击跳转主站首页 |
+| Main | `97f9f53` | 添加网站地图页面 /sitemap |
+| Main | `c39f464` | 删除XML链接 |
+| Main | `eb641a7` | WizLife产品卡片重设计 |
+| Main | `1f99853` | マジコーデ竖向布局+预览图 |
+
+### ⚠️ 待解决
+
+- [ ] WizLife 图片加载问题（本地文件已存在，可能需重启服务器或等待 Vercel 部署）
+
+### ⏳ 下一步
+
+- [ ] 测试阶段：支付流程 / SSO / PWA
+- [ ] 正式发布 Fashion App
+
+---
+
+## 历史状态 (2025-12-17 - 数据库安全修复 + UI美化) ✅
+
+### 🎯 完成的工作
 
 | 任务 | 状态 | 说明 |
 |------|------|------|
@@ -27,21 +60,9 @@
 | check_storage_quota search_path | ✅ | 添加 SET search_path |
 | 清理23个未使用索引 | ✅ | 删除冗余索引 |
 | 删除pgjwt扩展 | ✅ | 为PG17升级做准备 |
-| Postgres 17升级 | ⏳ | 进行中（约1小时） |
+| Postgres 17升级 | ⏳ | 进行中 |
 
-**数据库安全警告**: 6个 → 1个 (仅剩 Leaked Password Protection 待手动启用)
-
-### 📦 Git 提交
-
-| 仓库 | Commit | 说明 |
-|------|--------|------|
-| Dashboard | `77aa638` | ColorThemeSwitcher UI美化 |
-| 主仓库 | `9fd19b9` | 共享组件同步 |
-
-### ⏳ 待完成
-
-- [ ] Postgres 17 升级完成后验证
-- [ ] 启用 Leaked Password Protection (Dashboard → Auth → Providers)
+**数据库安全警告**: 6个 → 1个
 
 ---
 
