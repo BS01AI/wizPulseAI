@@ -237,6 +237,79 @@
 
 ---
 
+### Day 8: 法律文档增强 (5.5h) 📜
+
+> 参考分析: [LEGAL_DOCS_ANALYSIS.md](./wizPulseAI-docs/LEGAL_DOCS_ANALYSIS.md)
+> 参考网站: https://www.medeo.app/legal/
+
+#### P0-LEGAL-5: 第三方API数据处理说明 📜
+- **状态**: [x] ✅ 已完成 (2025-12-18)
+- **位置**: `fashion-wizpulseai-com/src/app/[locale]/about/privacy/page.tsx`
+- **内容**:
+  - 明确我们**不收集**用户数据用于AI训练
+  - 说明使用 Google Gemini API，数据处理遵循 Google 政策
+  - 添加 Google AI Terms 链接
+- **工时**: 1h
+
+#### P0-LEGAL-6: OAuth/Google Login 条款 📜
+- **状态**: [ ] 待开始
+- **位置**: `fashion-wizpulseai-com/src/app/[locale]/about/terms/page.tsx`
+- **内容**:
+  - Google Login 集成说明（OAuth 2.0）
+  - 访问的信息范围（姓名、邮箱、头像）
+  - 不存储 Google 密码声明
+  - 撤销方法说明
+- **工时**: 1h
+
+#### P0-LEGAL-7: AI生成物使用制限 📜
+- **状态**: [ ] 待开始
+- **位置**: `fashion-wizpulseai-com/src/app/[locale]/about/terms/page.tsx`
+- **内容**:
+  - 禁止政治广告/选举活动使用
+  - 禁止色情/违法内容
+  - 禁止误导性使用（虚假推荐等）
+  - 禁止独立销售（NFT/stock/merchandise）
+- **工时**: 1h
+
+#### P0-LEGAL-8: 损害赔偿上限明确化 📜
+- **状态**: [ ] 待开始
+- **位置**: `fashion-wizpulseai-com/src/app/[locale]/about/terms/page.tsx`
+- **内容**: 上限 = 12个月费用 或 1万円（取高者）
+- **工时**: 0.5h
+
+#### P0-LEGAL-9: 特定商取引法表示 📜
+- **状态**: [ ] 待开始
+- **位置**: `fashion-wizpulseai-com/src/app/[locale]/about/tokushoho/page.tsx` (新建)
+- **内容**:
+  - 销售者名称/屋号
+  - 所在地/联系方式
+  - 支付方法/时期
+  - 商品交付时期
+  - 返品/退款政策
+  - 动作环境
+- **工时**: 2h
+
+---
+
+### P2: 主站法律页面 (5h) 🌐
+
+#### P2-LEGAL-1: 主站隐私政策
+- **状态**: [ ] 待开始
+- **位置**: `wizPulseAI-com/src/app/[locale]/legal/privacy/page.tsx` (新建)
+- **工时**: 2h
+
+#### P2-LEGAL-2: 主站使用条款
+- **状态**: [ ] 待开始
+- **位置**: `wizPulseAI-com/src/app/[locale]/legal/terms/page.tsx` (新建)
+- **工时**: 2h
+
+#### P2-LEGAL-3: 主站特商法
+- **状态**: [ ] 待开始
+- **位置**: `wizPulseAI-com/src/app/[locale]/legal/tokushoho/page.tsx` (新建)
+- **工时**: 1h
+
+---
+
 ## 执行进度
 
 | 阶段 | 任务数 | 完成 | 进度 |
@@ -248,7 +321,9 @@
 | Day 6 SEO营销 | 5 | 5 | 100% ✅ |
 | Day 7 UI重设计 | 7 | 7 | 100% ✅ |
 | Day 7 测试发布 | 4 | 0 | 0% |
-| **总计** | **36** | **32** | **89%** |
+| Day 8 法律增强 | 5 | 1 | 20% |
+| P2 主站法律 | 3 | 0 | 0% |
+| **总计** | **44** | **33** | **75%** |
 
 ---
 
@@ -292,4 +367,4 @@
 
 ---
 
-**最后更新**: 2025-12-17
+**最后更新**: 2025-12-18
