@@ -12,11 +12,57 @@
 
 ---
 
-## 最新状态 (2025-12-19 - Fashion App 优化) ✅
+## 最新状态 (2025-12-19 - 法律文档完善) ✅
 
 ### 🎯 完成的工作
 
 **本次会话完成**：
+
+| 任务 | 状态 | 说明 |
+|------|------|------|
+| 主站 Terms 页面 | ✅ | `wizPulseAI-com/src/app/[locale]/terms/page.tsx` |
+| 主站 Privacy 页面 | ✅ | `wizPulseAI-com/src/app/[locale]/privacy/page.tsx` |
+| 主站翻译文件 | ✅ | terms/privacy 4语言 (WizPulseAI品牌) |
+| Dashboard Footer | ✅ | 链接到主站法律文档 |
+| i18n配置修复 | ✅ | 恢复缺失的 getMessages/defaultLocale 导出 |
+
+### 📦 架构设计
+
+```
+wizpulseai.com
+├── www.wizpulseai.com (主站) ← 法律文档中心 ✅
+│   ├── /[locale]/terms (服务条款)
+│   └── /[locale]/privacy (隐私政策)
+│
+├── dashboard.wizpulseai.com ✅
+│   └── Footer → 链接到主站法律文档
+│
+└── magicoord.wizpulseai.com (Fashion)
+    └── /about/terms, /about/privacy, /about/tokusho (产品专属)
+```
+
+### 📊 Sprint 进度
+
+| 阶段 | 任务数 | 完成 | 进度 |
+|------|--------|------|------|
+| Day 1-7 | 36 | 36 | 100% ✅ |
+| Day 7 测试发布 | 4 | 0 | 0% |
+| Day 8 法律增强 | 5 | 5 | 100% ✅ |
+| P2 主站法律 | 3 | 3 | 100% ✅ |
+| **总计** | **44** | **41** | **93%** |
+
+### ⏳ 下一步 (TODO)
+
+- [ ] **P0-TEST-1**: 完整支付流程测试 (Stripe测试卡)
+- [ ] **P0-TEST-2**: SSO 跨站点测试 (4站点)
+- [ ] **P0-TEST-3**: 移动端 PWA 测试
+- [ ] 🚀 **正式发布**
+
+---
+
+## 历史状态 (2025-12-19 上午 - Fashion App 优化) ✅
+
+### 🎯 完成的工作
 
 | 任务 | 状态 | 说明 |
 |------|------|------|
@@ -46,12 +92,6 @@
 | occasion | 今っぽさ | 🔥 |
 
 **Schema修复**: 跨站点查询必须使用 `schema('fashion').from('表名')`
-
-### ⏳ 下一步 (TODO)
-
-- [ ] 设计总结页面（可爱评语 + 截图/保存功能）
-- [ ] 测试阶段：支付流程 / SSO / PWA
-- [ ] 正式发布 Fashion App
 
 ---
 

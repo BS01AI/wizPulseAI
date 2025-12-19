@@ -6,7 +6,7 @@
 
 ## 2025-12-19 (当前会话)
 
-**任务**: UI优化 + 进度同步
+**任务**: UI优化 + 法律文档 + 进度同步
 
 ---
 
@@ -29,6 +29,39 @@
 - 复制 `magicoord-icon.png` 到 `/public/apps/`
 - 修改 `orbital-dashboard.tsx` 使用 Image 组件
 - 替换 Sparkles 图标为实际 App icon (48x48)
+
+**TypeScript 验证**: ✅ 两站点编译通过
+
+### ✅ P2: 主站法律页面完成 (12-19)
+
+#### 新增文件
+| 站点 | 文件 | 说明 |
+|------|------|------|
+| Main | `src/app/[locale]/terms/page.tsx` | 服务条款页面 |
+| Main | `src/app/[locale]/privacy/page.tsx` | 隐私政策页面 |
+| Main | `src/messages/terms-translations.json` | 条款4语言翻译 |
+| Main | `src/messages/privacy-translations.json` | 隐私4语言翻译 |
+| Dashboard | `src/components/DashboardFooter.tsx` | Footer组件 |
+
+#### 修改文件
+| 站点 | 文件 | 说明 |
+|------|------|------|
+| Main | `src/i18n.ts` | 加载terms/privacy翻译 |
+| Dashboard | `src/app/layout.tsx` | 集成Footer组件 |
+
+#### 架构设计
+```
+wizpulseai.com
+├── www.wizpulseai.com (主站) ← 法律文档中心
+│   ├── /[locale]/terms (服务条款)
+│   └── /[locale]/privacy (隐私政策)
+│
+├── dashboard.wizpulseai.com
+│   └── Footer → 链接到主站法律文档
+│
+└── magicoord.wizpulseai.com (Fashion)
+    └── /about/terms, /about/privacy, /about/tokusho (产品专属)
+```
 
 **TypeScript 验证**: ✅ 两站点编译通过
 

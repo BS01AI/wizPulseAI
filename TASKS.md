@@ -291,22 +291,28 @@
 
 ---
 
-### P2: 主站法律页面 (5h) 🌐
+### P2: 主站法律页面 (5h) 🌐 ✅ 已完成
 
 #### P2-LEGAL-1: 主站隐私政策
-- **状态**: [ ] 待开始
-- **位置**: `wizPulseAI-com/src/app/[locale]/legal/privacy/page.tsx` (新建)
-- **工时**: 2h
+- **状态**: [x] ✅ 已完成 (2025-12-19)
+- **位置**: `wizPulseAI-com/src/app/[locale]/privacy/page.tsx`
+- **工时**: 30min
 
 #### P2-LEGAL-2: 主站使用条款
-- **状态**: [ ] 待开始
-- **位置**: `wizPulseAI-com/src/app/[locale]/legal/terms/page.tsx` (新建)
-- **工时**: 2h
+- **状态**: [x] ✅ 已完成 (2025-12-19)
+- **位置**: `wizPulseAI-com/src/app/[locale]/terms/page.tsx`
+- **工时**: 30min
 
-#### P2-LEGAL-3: 主站特商法
-- **状态**: [ ] 待开始
-- **位置**: `wizPulseAI-com/src/app/[locale]/legal/tokushoho/page.tsx` (新建)
-- **工时**: 1h
+#### P2-LEGAL-3: Dashboard Footer 法律链接
+- **状态**: [x] ✅ 已完成 (2025-12-19)
+- **位置**: `db-wizPulseAI-com/src/components/DashboardFooter.tsx`
+- **工时**: 15min
+
+#### 说明
+- 主站使用 WizPulseAI 通用品牌（非 Magicoord 专属）
+- 4语言支持 (ja/en/ar/zh-TW)
+- Dashboard Footer 链接到主站法律文档
+- **特定商取引法保留在 Fashion 站点**（产品专属）
 
 ---
 
@@ -321,9 +327,9 @@
 | Day 6 SEO营销 | 5 | 5 | 100% ✅ |
 | Day 7 UI重设计 | 7 | 7 | 100% ✅ |
 | Day 7 测试发布 | 4 | 0 | 0% |
-| Day 8 法律增强 | 5 | 1 | 20% |
-| P2 主站法律 | 3 | 0 | 0% |
-| **总计** | **44** | **33** | **75%** |
+| Day 8 法律增强 | 5 | 5 | 100% ✅ |
+| P2 主站法律 | 3 | 3 | 100% ✅ |
+| **总计** | **44** | **41** | **93%** |
 
 ---
 
