@@ -12,7 +12,139 @@
 
 ---
 
-## 最新状态 (2025-12-20 - Lottie动画 + UI优化) ✅
+## 最新状态 (2025-12-23 - AI P图功能优化 + UI重构) ✅
+
+### 🎯 完成的工作
+
+**本次会话完成**：
+
+| 任务 | 状态 | 说明 |
+|------|------|------|
+| P图功能优化 | ✅ | 温度0.2、画质92%、尺寸1024px |
+| 代码精简 | ✅ | 删除未使用的图片生成功能 (-730行) |
+| UI重构 | ✅ | SmartImageCompare 智能对比组件 |
+
+### ⭐ 新组件：SmartImageCompare
+
+**功能亮点**：
+- 原图 + P图 并排显示（节省一次原图显示）
+- 点击切换放大/缩小（flex 2:1 ↔ 1:2）
+- framer-motion 弹性动画
+- P图按钮集成到对比区域
+- 双击全屏预览
+
+**布局变化**：
+```
+旧布局：原图预览 → 分析结果 → AIスタイリング对比区
+新布局：原图+P图对比 → 分析结果（更简洁）
+```
+
+### 🔧 技术优化
+
+| 项目 | 修改前 | 修改后 |
+|------|--------|--------|
+| temperature | 0.4/0.8 | 0.2/0.4 |
+| AI_IMAGE.maxSize | 800px | 1024px |
+| AI_IMAGE.quality | 0.85 | 0.92 |
+| WebP保存质量 | 85 | 92 |
+| layout宽度 | max-w-2xl | max-w-4xl |
+| imagen.service.ts | 527行 | 209行 (-60%) |
+
+### 📦 今日提交记录
+
+| Commit | 内容 |
+|--------|------|
+| 84cd31d | feat: 优化P图功能 - 降温、增框、提画质 |
+| 608ef69 | refactor: 删除未使用的图片生成功能 |
+| a9afe84 | feat: 智能图片对比组件 - 点击切换放大动画 |
+
+---
+
+## 历史状态 (2025-12-22 - AI P图功能实现) ✅
+
+### 🎯 完成的工作
+
+| 任务 | 状态 | 说明 |
+|------|------|------|
+| AI P图后端实现 | ✅ | `editOutfit()` + API路由 + Storage bucket |
+| RLS 权限修复 | ✅ | CreditsService + Storage 使用 Admin Client |
+| 环境变量统一 | ✅ | Imagen 统一使用 `GOOGLE_AI_API_KEY` |
+
+### 📦 提交记录
+
+| Commit | 内容 |
+|--------|------|
+| 561869e | feat: 分析結果にAIスタイリング機能追加 |
+| 8298747 | fix: suggestions空フォールバック追加 |
+| d925cfd | fix: CreditsService使用AdminClient |
+| 740ed78 | fix: credit_transactions無updated_at |
+| 7b86595 | fix: Storage使用AdminClient |
+| 4a5c790 | fix: Imagen統一GOOGLE_AI_API_KEY |
+
+---
+
+## 历史状态 (2025-12-22 早期 - Bug修复 + AI图片生成设计) ✅
+
+### 🎯 完成的工作
+
+**早期会话完成**：
+
+| 任务 | 状态 | 说明 |
+|------|------|------|
+| 登录跳转Bug修复 | ✅ | 添加 `NEXT_PUBLIC_ALLOWED_REDIRECT_ORIGINS` 环境变量 |
+| 新用户送积分修复 | ✅ | 更新 `handle_new_auth_user` 函数，自动送30积分 |
+| AI图片生成功能设计 | ✅ | 完整架构设计，选型 Imagen 4.0 |
+
+### 🔧 Bug 修复详情
+
+**1. 登录后跳转问题**
+- **问题**: 从 magicoord 登录后跳转到主站
+- **原因**: Auth 站点 `validateRedirect()` 函数检查允许列表，magicoord 不在列表中
+- **修复**:
+  - 更新 `auth-wizpulseai-com/.env.example` 和 `.env.local`
+  - **需要在 Vercel 添加环境变量并重新部署**
+
+```env
+NEXT_PUBLIC_ALLOWED_REDIRECT_ORIGINS=https://www.wizpulseai.com,https://dashboard.wizpulseai.com,https://magicoord.wizpulseai.com
+NEXT_PUBLIC_DEFAULT_REDIRECT_URL=https://dashboard.wizpulseai.com
+```
+
+**2. 新用户注册没有积分**
+- **问题**: `handle_new_auth_user` 触发器没有初始化积分
+- **修复**: 更新数据库函数，新用户自动获得 30 积分 + 记录交易
+- **状态**: ✅ 数据库已更新
+
+### 📋 新功能设计: AI 推荐穿搭图片生成
+
+**设计文档**: `fashion-wizpulseai-com/docs/AI_OUTFIT_GENERATION_DESIGN.md`
+
+**核心决策**:
+| 决策点 | 选择 |
+|--------|------|
+| 模型 | Imagen 4.0 ($0.03/张) |
+| Prompt策略 | 只发文本，不发原图 |
+| 积分消耗 | 35pt (标准) / 55pt (4K) |
+| 存储 | Supabase `generated-outfits` bucket |
+
+**实施计划** (3天):
+- Phase 1: 核心功能 (API + Storage + 按钮) - 2天
+- Phase 2: UI完善 (动画 + 画廊) - 1天
+
+### ⏳ 下一步 (TODO)
+
+**立即需要做**:
+- [ ] 在 Vercel Auth 站点添加环境变量并重新部署
+- [ ] 测试新用户注册是否自动获得 30 积分
+
+**AI图片生成功能**:
+- [ ] P0-IMG-1: 升级 ImagenService
+- [ ] P0-IMG-2: 创建 API 路由
+- [ ] P0-IMG-3: 创建 Storage Bucket
+- [ ] P0-IMG-4: 添加生成按钮
+
+---
+
+## 历史状态 (2025-12-20 - Lottie动画 + UI优化) ✅
 
 ### 🎯 完成的工作
 

@@ -394,24 +394,83 @@
 
 ---
 
-### 待办: UI 增强 (Lottie动画)
+### 待办: UI 增强 (Lottie动画) ✅ 已完成
 
 #### P2-UI-1: Lottie 动画框架搭建 🎬
-- **状态**: [ ] 待开始
-- **内容**:
-  - 安装 lottie-react
-  - 创建 `LottieAnimation` 组件
-  - 创建 `public/animations/` 目录结构
-  - 使用示例 (loading/success/error)
-- **工时**: 30min
-
-#### P2-UI-2: 音效系统 (可选) 🔊
-- **状态**: [ ] 待开始
-- **内容**:
-  - 创建 `useSound` Hook
-  - 创建 `public/audio/effects/` 目录
+- **状态**: [x] ✅ 已完成 (2025-12-20)
+- **内容**: 安装 lottie-react, 创建动画组件
 - **工时**: 30min
 
 ---
 
-**最后更新**: 2025-12-19
+## 新功能: AI 推荐穿搭图片生成 🆕
+
+> 设计文档: [AI_OUTFIT_GENERATION_DESIGN.md](./fashion-wizpulseai-com/docs/AI_OUTFIT_GENERATION_DESIGN.md)
+> 预估工时: 3天
+
+### Phase 1: 核心功能 (P0 - 2天)
+
+#### P0-IMG-1: 集成 gemini-3-pro-image-preview 模型 🖼️
+- **状态**: [ ] 待开始
+- **位置**: `fashion-wizpulseai-com/src/lib/ai/gemini/`
+- **模型**: `gemini-3-pro-image-preview` (4K分辨率, $0.134/张)
+- **工时**: 2h
+
+#### P0-IMG-2: 创建 generate-outfit API 路由 🖼️
+- **状态**: [ ] 待开始
+- **位置**: `fashion-wizpulseai-com/src/app/api/fashion/generate-outfit/route.ts`
+- **内容**:
+  - 验证用户 + 检查积分 (55pt)
+  - 构建 Prompt + 调用 Gemini 3
+  - 上传 Storage + 返回 URL
+- **工时**: 3h
+
+#### P0-IMG-3: 创建 Storage Bucket + 迁移 🖼️
+- **状态**: [ ] 待开始
+- **位置**: `supabase/migrations/011_generated_outfits_bucket.sql`
+- **内容**: `generated-outfits` bucket + `generated_outfits` 表
+- **工时**: 30min
+
+#### P0-IMG-4: 添加生成按钮到结果页 🖼️
+- **状态**: [ ] 待开始
+- **位置**: `PentagonResultCard/index.tsx`
+- **内容**: "✨ AIおすすめコーデを生成 [55pt]" 按钮
+- **工时**: 1h
+
+### Phase 2: UI完善 (P1 - 1天)
+
+#### P1-IMG-1: 创建生成中动画组件 🎬
+- **状态**: [ ] 待开始
+- **位置**: `GeneratingOverlay.tsx`
+- **工时**: 30min
+
+#### P1-IMG-2: 创建图片画廊组件 🎬
+- **状态**: [ ] 待开始
+- **位置**: `GeneratedOutfitsGallery.tsx`
+- **工时**: 1h
+
+#### P1-IMG-3: 积分不足提示 + 购买引导 🎬
+- **状态**: [ ] 待开始
+- **工时**: 30min
+
+---
+
+## 今日修复 (2025-12-22)
+
+#### BUG-1: 登录后跳转问题 🔧
+- **状态**: [x] ✅ 已修复
+- **问题**: 从 magicoord 登录后跳转到主站而非 magicoord
+- **原因**: Auth 站点缺少 `NEXT_PUBLIC_ALLOWED_REDIRECT_ORIGINS` 环境变量
+- **修复**:
+  - 更新 `.env.example` 和 `.env.local`
+  - 需要在 Vercel 添加环境变量并重新部署
+
+#### BUG-2: 新用户注册送积分 🔧
+- **状态**: [x] ✅ 已修复
+- **问题**: 新用户注册后没有收到初始积分
+- **原因**: `handle_new_auth_user` 函数未包含积分初始化逻辑
+- **修复**: 更新数据库函数，新用户自动获得 30 积分
+
+---
+
+**最后更新**: 2025-12-22
