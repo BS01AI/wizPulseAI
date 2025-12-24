@@ -12,7 +12,42 @@
 
 ---
 
-## 最新状态 (2025-12-24 - 营销文案重构 + Marketing Agent) ✅
+## 最新状态 (2025-12-24 - P图修复 + 反馈系统) ✅
+
+### 🎯 完成的工作
+
+**本次会话完成**：
+
+| 任务 | 状态 | 说明 |
+|------|------|------|
+| Gemini SDK 调用修复 | ✅ | contents 格式改为扁平数组 |
+| 图片裁剪调试日志 | ✅ | 添加详细日志追踪比例问题 |
+| P图反馈系统 | ✅ | ❤️ 👍 👎 三按钮 + API |
+| 多 Agent 并行工作 | ✅ | 2个 Agent 同时创建组件和 API |
+
+### 📦 新增文件
+
+| 文件 | 说明 |
+|------|------|
+| `OutfitFeedbackButtons.tsx` | 反馈按钮组件（4语言） |
+| `outfit-feedback/route.ts` | 反馈 API（支持 liked/rating/comment） |
+| `SmartImageCompare.tsx` | 集成反馈按钮显示 |
+
+### ⚠️ 已知问题
+
+**Gemini 3 Pro Image 的 Bug**：
+- 图片编辑模式下 `aspectRatio` 和 `imageSize` 参数被忽略
+- 无论设置什么，输出始终为 2048×2048 正方形
+- 解决方案：后处理裁剪（代码已实现，需验证日志）
+
+### 🔄 待验证
+
+1. **P图比例**：查看 Vercel 日志确认裁剪是否执行
+2. **反馈按钮**：需要传递 `outfitId` 给 SmartImageCompare
+
+---
+
+## 历史记录 (2025-12-24 - 营销文案重构 + Marketing Agent) ✅
 
 ### 🎯 完成的工作
 
