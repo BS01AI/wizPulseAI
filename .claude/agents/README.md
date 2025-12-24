@@ -59,12 +59,13 @@
 |------|------|------|--------|
 | 401 | `401-git-manager.md` | Git提交、多仓库管理 | 提交、推送、Git |
 
-### 5xx - 商业类（2个）
+### 5xx - 商业类（3个）
 
 | 编号 | 文件 | 职责 | 触发词 |
 |------|------|------|--------|
 | 501 | `501-business-analyst.md` | 客户定位、留存、转化、埋点 | 客户、留存、转化、漏斗、埋点 |
 | 502 | `502-seo-expert.md` | SEO/GEO/AEO优化 | SEO、GEO、关键词、排名 |
+| 503 | `503-marketing-strategist.md` | 价值观营销、文案、A/B测试 | 营销、文案、宣传、口号、slogan |
 
 ---
 
@@ -131,7 +132,7 @@
 ├── 2xx-*.md                    # 测试类（4个）
 ├── 3xx-*.md                    # 内容类（5个）
 ├── 4xx-*.md                    # 管理类（1个）
-├── 5xx-*.md                    # 商业类（2个）
+├── 5xx-*.md                    # 商业类（3个）
 │
 └── knowledge/                  # 📚 专业知识库
     ├── _shared/                # 🔧 通用质量规范
@@ -142,10 +143,16 @@
     │   ├── STARTUP.md          # 启动必读
     │   └── tracking-guide.md   # 埋点规划
     │
-    └── 502-seo/                # SEO/AEO/GEO 知识
-        ├── STARTUP.md          # 启动必读
-        ├── seo-aeo-geo-guide.md # 完整指南
-        └── checklists.md       # 检查清单
+    ├── 502-seo/                # SEO/AEO/GEO 知识
+    │   ├── STARTUP.md          # 启动必读
+    │   ├── seo-aeo-geo-guide.md # 完整指南
+    │   └── checklists.md       # 检查清单
+    │
+    └── 503-marketing/          # 营销策略知识
+        ├── STARTUP.md          # 乔布斯营销哲学
+        ├── copywriting-guide.md # 文案创作指南
+        ├── ab-testing.md       # A/B测试设计
+        └── audience-jp-female.md # 日本女性洞察
 ```
 
 ## 知识库架构
@@ -234,6 +241,6 @@
 
 ---
 
-**最后更新**: 2025-12-04
-**Agent 数量**: 17个
-**架构版本**: v2.1（新增商业类）
+**最后更新**: 2025-12-23
+**Agent 数量**: 18个
+**架构版本**: v2.2（新增营销策略专家）
