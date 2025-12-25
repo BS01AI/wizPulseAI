@@ -12,7 +12,49 @@
 
 ---
 
-## 最新状态 (2025-12-25 - Fashion页面文案优化) ✅
+## 最新状态 (2025-12-25 - Dashboard修复) ✅
+
+### 🎯 今日完成
+
+**1. 头像上传后右上角不更新问题 ✅** (`cf4c298`)
+
+| 问题层 | 修复 |
+|--------|------|
+| API层 | 上传后同步更新 `auth.user_metadata` |
+| 客户端 | 上传成功后 `refreshSession()` + `router.refresh()` |
+| Layout | `appUser` 响应 `authUser.avatar_url` 变化 |
+
+**2. 主题系统编码不一致问题 ✅** (`73f640f`)
+
+| 问题 | 修复 |
+|------|------|
+| CSS选择器编号不匹配 | `[data-theme="3"]` → `[data-theme="11"]` |
+| Rose主题无效 | globals.css 添加4种主题的Tailwind变量 |
+
+**主题编码方案 v2.0**：
+```
+1  = Indigo Light   11 = Indigo Dark
+2  = Rose Light     12 = Rose Dark
+```
+
+**3. 硬编码颜色修复 ✅** (`93f0ad2`)
+
+| 组件 | 修复前 | 修复后 |
+|------|--------|--------|
+| DashboardFooter | `dark:bg-slate-900` | `bg-background` |
+| collapsible-sidebar | `dark:bg-gray-900` | `bg-background` |
+| pagination | `dark:bg-gray-800` | `bg-card` |
+| page.tsx | `bg-slate-900` | `bg-background` |
+| admin/users | `dark:bg-gray-800` | `bg-card` |
+| MagicoordAppTab | `dark:bg-gray-800/50` | `dark:bg-pink-950/30` |
+
+### 📋 待处理（P2）
+
+- [ ] globals.css 中的 @apply 类仍使用硬编码颜色（设计系统核心，需谨慎重构）
+
+---
+
+## 历史记录 (2025-12-25 - Fashion页面文案优化) ✅
 
 ### 🎯 专家分析结果
 
