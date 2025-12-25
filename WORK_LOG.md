@@ -12,7 +12,51 @@
 
 ---
 
-## 最新状态 (2025-12-24 - P图修复 + 反馈系统) ✅
+## 最新状态 (2025-12-25 - Stripe Webhook 积分充值修复) ✅
+
+### 🎯 完成的工作
+
+**本次会话完成**：
+
+| 任务 | 状态 | 说明 |
+|------|------|------|
+| Stripe Webhook 调试 | ✅ | 发现 API Key 模式不匹配问题 |
+| `deduct_credits` 函数创建 | ✅ | 数据库 RPC 原子扣款函数 |
+| 积分充值测试 | ✅ | Webhook 自动充值成功 |
+| 手动积分补充 | ✅ | 补充之前 Webhook 失败的积分 |
+
+### 🔧 问题根因
+
+**Stripe Webhook 不触发的原因**：
+- `STRIPE_SECRET_KEY` 和 Webhook 不在同一模式（测试/生产混用）
+- `STRIPE_WEBHOOK_SECRET` 需要从 Webhook 详情页获取，不是 API 密钥页
+
+### ✅ 解决方案
+
+1. 统一使用沙盒（测试）模式：
+   - `STRIPE_SECRET_KEY` = `sk_test_...`
+   - `STRIPE_WEBHOOK_SECRET` = `whsec_...`（沙盒 Webhook）
+2. Vercel 环境变量配置后 **Redeploy**
+3. 测试卡号：`4242 4242 4242 4242`
+
+### 📊 积分系统现状
+
+| 用户 | 余额 |
+|------|------|
+| a456f7df... | 2540 pt |
+
+**交易记录正常**：purchase（Webhook自动充值）+ usage（AI扣款）
+
+### ⚠️ 上线前注意
+
+正式上线需要：
+1. 切换到生产 API Key (`sk_live_`, `pk_live_`)
+2. 创建生产 Webhook，获取新 `whsec_`
+3. 更新 Vercel 环境变量并 Redeploy
+
+---
+
+## 历史记录 (2025-12-24 - P图修复 + 反馈系统) ✅
 
 ### 🎯 完成的工作
 

@@ -133,6 +133,25 @@
 - **Price IDs**: 已配置到 credit-packages.ts
 - **工时**: 30min
 
+#### P0-PAY-5: Stripe Webhook 积分充值修复 💳
+- **状态**: [x] ✅ 已完成 (2025-12-25)
+- **问题**: Webhook 不触发，积分不到账
+- **根因**: API Key 测试/生产模式混用 + Webhook Secret 来源错误
+- **修复**:
+  - 统一使用沙盒模式 (`sk_test_`, `whsec_`)
+  - `whsec_` 需从 Webhook 详情页获取
+  - 创建 `deduct_credits` 数据库 RPC 函数
+- **验证**: 测试支付成功，积分自动到账 ✅
+- **工时**: 2h
+
+#### P0-PAY-6: 生产环境 Stripe 配置 💳 (待上线)
+- **状态**: [ ] 待完成
+- **内容**:
+  - 切换到生产 API Key (`sk_live_`, `pk_live_`)
+  - 创建生产 Webhook，获取新 `whsec_`
+  - 更新 Vercel 环境变量并 Redeploy
+- **工时**: 30min
+
 ---
 
 ### Day 5: 代码质量修复 (4h) ✅ 完成
