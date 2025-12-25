@@ -37,20 +37,17 @@
 2  = Rose Light     12 = Rose Dark
 ```
 
-**3. 硬编码颜色修复 ✅** (`93f0ad2`)
+**3. 硬编码颜色修复 ✅**
 
-| 组件 | 修复前 | 修复后 |
-|------|--------|--------|
-| DashboardFooter | `dark:bg-slate-900` | `bg-background` |
-| collapsible-sidebar | `dark:bg-gray-900` | `bg-background` |
-| pagination | `dark:bg-gray-800` | `bg-card` |
-| page.tsx | `bg-slate-900` | `bg-background` |
-| admin/users | `dark:bg-gray-800` | `bg-card` |
-| MagicoordAppTab | `dark:bg-gray-800/50` | `dark:bg-pink-950/30` |
+| Commit | 修复内容 |
+|--------|----------|
+| `93f0ad2` | 6个组件：Footer/Sidebar/Pagination/Page/Admin/Magicoord |
+| `f89785a` | Dashboard布局：layout/sidebar/content/header/nav-item |
+| `4210107` | 样式类：glass/btn-secondary/heading-xl/lg/md |
 
-### 📋 待处理（P2）
+### 📋 待处理（P3）
 
-- [ ] globals.css 中的 @apply 类仍使用硬编码颜色（设计系统核心，需谨慎重构）
+- [ ] `.dashboard-card` 卡片样式（可选）
 
 ---
 
