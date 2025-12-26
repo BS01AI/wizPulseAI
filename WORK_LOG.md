@@ -12,9 +12,202 @@
 
 ---
 
-## 最新状态 (2025-12-26 - Fashion缩略图优化) ✅
+## 最新状态 (2025-12-26 - 分享API速率限制) ✅
 
 ### 🎯 今日完成
+
+**1. 分享 API 速率限制保护 ✅**
+
+**问题**：
+- `/api/share/create` - 创建分享链接，可能被恶意刷积分
+- `/api/share/[code]` - 公开访问，可能被 DDoS 攻击
+- 无任何速率限制保护
+
+**解决方案**：
+- 创建 IP 速率限制器 (`ip-rate-limiter.ts`) - 用于公开 API
+- 扩展用户速率限制器 - 添加 `share-create` 功能类型
+- 创建数据库表 `ip_rate_limit_usage` - 持久化 IP 访问记录
+
+**限制策略**：
+```typescript
+// 用户级限制（需登录）
+'share-create': {
+  perHour: 10,   // 每小时 10 次
+  perDay: 30,    // 每天 30 次
+  perWeek: 100,
+  perMonth: 200, // 防止恶意刷积分
+}
+
+// IP 级限制（公开访问）
+'share-view': {
+  perMinute: 30,  // 每分钟 30 次
+  perHour: 500,   // 每小时 500 次
+  perDay: 2000,   // 每天 2000 次（防 DDoS）
+}
+```
+
+**修改文件**：
+- ✅ `src/lib/security/ip-rate-limiter.ts` - 新建 IP 速率限制器（200行）
+- ✅ `src/lib/security/rate-limiter.ts` - 添加 `share-create` 类型
+- ✅ `src/config/ai-config.ts` - 添加速率限制配置
+- ✅ `src/app/api/share/create/route.ts` - 添加用户级速率检查
+- ✅ `src/app/api/share/[code]/route.ts` - 添加 IP 级速率检查
+- ✅ `supabase/migrations/014_ip_rate_limiter.sql` - 数据库迁移文件
+
+**新功能特性**：
+1. **智能 IP 获取** - 支持 X-Forwarded-For / X-Real-IP / Vercel 头
+2. **多时间窗口** - 分钟/小时/天三级限流
+3. **自动清理** - 7 天后自动删除过期记录
+4. **429 响应** - 返回 `Retry-After` 头，告知客户端重试时间
+5. **RLS 安全** - IP 表禁止用户直接访问
+
+**API 响应示例**：
+```json
+// 超限时返回 429
+{
+  "error": "Too many requests",
+  "retryAfter": 45  // 秒数
+}
+```
+
+**数据库表**：
+```sql
+CREATE TABLE ip_rate_limit_usage (
+  ip_address TEXT,
+  endpoint TEXT,
+  minute_count INT,
+  hour_count INT,
+  day_count INT,
+  minute_reset TIMESTAMPTZ,
+  hour_reset TIMESTAMPTZ,
+  day_reset TIMESTAMPTZ,
+  ...
+);
+```
+
+**下一步**：
+- [ ] 运行迁移文件 `014_ip_rate_limiter.sql`
+- [ ] 测试创建分享速率限制（10次/小时）
+- [ ] 测试访问分享速率限制（30次/分钟）
+- [ ] 监控速率限制日志
+
+---
+
+## 历史状态 (2025-12-26 - 分享积分发放BUG修复) ✅
+
+### 🎯 今日完成
+
+**1. 分享积分首次访问发放逻辑修复 ✅**
+
+**问题**：
+- `/api/share/[code]/route.ts` 有积分发放逻辑，但从未被调用
+- `/s/[code]/page.tsx` 直接渲染页面，没有调用 API
+- 结果：积分永远不会发放
+
+**解决方案**：
+- 将积分发放逻辑移到服务端组件 `/app/s/[code]/page.tsx` 中
+- 使用 `give_share_reward(p_share_id)` RPC 函数（原子操作）
+- 首次访问时发放 5 积分，并标记 `share_reward_given = true`
+- 添加完整错误处理和日志记录
+
+**修改文件**：
+- ✅ `/app/s/[code]/page.tsx` - 添加首次访问奖励逻辑
+- ✅ 添加 TypeScript 类型断言（`as any`）解决 Supabase 类型推断问题
+
+**工作流程**：
+```
+首次访问: 检查 → 调用 RPC → 发放积分 → 标记已发放 → 增加浏览次数
+非首次访问: 仅增加浏览次数
+```
+
+**相关文档**：`SHARE_REWARD_FIX_SUMMARY.md`
+
+---
+
+## 历史状态 (2025-12-26 - 积分模式系统) ✅
+
+### 🎯 完成
+
+**1. 积分模式系统 - Phase 1~5 全部完成 ✅**
+
+用户可以选择 Standard 或 Premium 模式进行分析：
+
+| 功能 | ✨ Standard | 👑 Premium (×2.5) |
+|------|------------|------------------|
+| 写真分析 | 9 pt | 23 pt |
+| 穿搭生成 | 29 pt | 73 pt |
+
+**完成内容**：
+- ✅ 数据库迁移 `013_analysis_mode.sql`
+- ✅ 积分配置 `credit-packages.ts`
+- ✅ 模式选择组件 `AnalysisModeSelector.tsx`
+- ✅ API更新 (接收mode参数)
+- ✅ 历史记录显示模式标签 (✨/👑)
+
+**修改文件** (7个)：
+- `supabase/migrations/013_analysis_mode.sql`
+- `src/config/credit-packages.ts`
+- `src/components/fashion/AnalysisModeSelector.tsx`
+- `src/app/[locale]/fashion/page.tsx`
+- `src/app/api/fashion/analyze/route.ts`
+- `src/app/[locale]/fashion/history/page.tsx`
+- `src/app/[locale]/fashion/history/[id]/page.tsx`
+
+**设计文档**: `fashion-wizpulseai-com/docs/CREDIT_MODE_SYSTEM_DESIGN.md`
+
+---
+
+## 历史状态 (2025-12-26 - 分享穿搭获积分系统) ✅
+
+### 🎯 完成
+
+**1. 昵称默认值修复 ✅**
+
+| 问题 | 修复 |
+|------|------|
+| 新用户默认昵称为完整邮箱 | 改为邮箱@前缀 |
+| 触发器 `handle_new_auth_user` | `split_part(email, '@', 1)` |
+| 触发器 `handle_auth_user_updated` | 同上 |
+
+**2. 分享穿搭获积分系统 - 数据库完成 ✅**
+
+4个专业 Agent 协作设计完成：
+- `business-analyst`: 商业分析、转化漏斗
+- `marketing-strategist`: 文案设计、病毒传播
+- `database-expert`: Schema设计
+- `multi-site-coder`: 技术架构
+
+**积分策略（简化版）**：
+| 行为 | 奖励 | 说明 |
+|------|------|------|
+| 分享穿搭 | +5 | 有AI生成穿搭照片才能分享 |
+| 邀请新用户注册 | +100 | 真正的新用户 |
+| 邀请用户首次充值 | +200 | Stripe确认成功 |
+
+**已创建数据库**：
+- `share_records` - 分享记录
+- `referral_records` - 邀请关系
+- `share_reward_config` - 奖励配置（可调整）
+- 函数: `generate_share_code()`, `give_share_reward()`, `give_signup_reward()`, `give_purchase_reward()`
+
+**文档**：`fashion-wizpulseai-com/docs/SHARE_REWARD_SYSTEM.md`
+
+### 📋 下一步
+
+**分享功能前端开发**（约1周）：
+- [ ] P0: 分享API (`/api/share/create`, `/api/share/[code]`)
+- [ ] P0: 分享页面 (`/s/[code]`)
+- [ ] P0: ShareButton 组件
+- [ ] P0: LINE 分享集成
+- [ ] P0: 注册时处理 share_code 参数
+- [ ] P1: Instagram/Twitter 分享
+- [ ] P1: 分享统计页面
+
+---
+
+## 历史状态 (2025-12-26 - Fashion缩略图优化) ✅
+
+### 🎯 完成
 
 **历史列表页性能优化 - Base64内联存储方案 ✅**
 

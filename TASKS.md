@@ -474,6 +474,103 @@
 
 ---
 
+## 新功能: 分享穿搭获积分 🆕
+
+> 设计文档: [SHARE_REWARD_SYSTEM.md](./fashion-wizpulseai-com/docs/SHARE_REWARD_SYSTEM.md)
+> 数据库: ✅ 已完成 (2025-12-26)
+> 前端代码: ✅ 已完成 (2025-12-26)
+> 翻译文件: ✅ 4语言已完成 (2025-12-26)
+
+### Phase 1: 核心功能 (P0) ✅ 90%完成
+
+#### P0-SHARE-1: 分享API创建 📤
+- **状态**: [x] ✅ 已完成 (2025-12-26)
+- **位置**: `fashion-wizpulseai-com/src/app/api/share/`
+- **内容**:
+  - `POST /api/share/create` - 创建分享链接 ✅
+  - `GET /api/share/[code]` - 获取分享内容 ✅
+- **代码**: 200行
+
+#### P0-SHARE-2: 分享页面 📤
+- **状态**: [x] ✅ 已完成 (2025-12-26)
+- **位置**: `fashion-wizpulseai-com/src/app/s/[code]/page.tsx`
+- **内容**: 公开访问的分享内容展示页 + SEO优化
+- **代码**: 188行
+
+#### P0-SHARE-3: ShareButton 组件 📤
+- **状态**: [x] ✅ 已完成 (2025-12-26)
+- **位置**: `fashion-wizpulseai-com/src/shared/ui/share/`
+- **内容**: ShareButton.tsx + ShareModal.tsx (4渠道分享)
+- **代码**: 324行
+
+#### P0-SHARE-4: LINE/Instagram/Twitter 分享集成 📤
+- **状态**: [x] ✅ 已完成 (2025-12-26)
+- **内容**: LINE Share API + Instagram下载 + Twitter Web Intent + 复制链接
+- **代码**: 已集成到 ShareModal.tsx
+
+#### P0-SHARE-5: 注册时邀请关联 📤
+- **状态**: [ ] 待开始
+- **位置**: `auth-wizpulseai-com`
+- **内容**: 注册时识别 share_code，调用 `create_referral()` 创建邀请关系
+- **工时**: 2h
+
+### Phase 1.5: 紧急修复 (P0 - 2025-12-26 Review发现) 🔴
+
+#### P0-SHARE-BUG-1: 积分重复发放 🔴
+- **状态**: [x] ✅ 已修复 (2025-12-26)
+- **严重级别**: 🔴 严重
+- **问题**: API (`/api/share/[code]/route.ts`) 和页面 (`/s/[code]/page.tsx`) 都在发放首次点击奖励 (+5积分)
+- **修复**: 删除 API 中的积分发放逻辑（-55行代码），只保留页面 SSR 中的 `give_share_reward` RPC
+- **负责 Agent**: multi-site-coder ✅
+
+#### P0-SHARE-BUG-2: 数据库函数缺少事务锁 🔴
+- **状态**: [x] ✅ 已修复 (2025-12-26)
+- **严重级别**: 🔴 严重
+- **问题**: `give_share_reward` 函数没有使用 `FOR UPDATE` 行级锁，存在竞态条件
+- **修复**: 迁移 `015_share_reward_fixes.sql` 添加 `FOR UPDATE` 行级锁
+- **负责 Agent**: 101-database-expert ✅
+
+#### P0-SHARE-BUG-3: _debug 信息泄露 🟡
+- **状态**: [x] ✅ 已修复 (2025-12-26)
+- **严重级别**: 🟡 一般
+- **问题**: API 返回 `_debug` 字段，生产环境不应暴露
+- **修复**: 删除 `_debug` 返回字段
+- **负责 Agent**: multi-site-coder ✅
+
+#### P1-SHARE-BUG-4: 缺少速率限制 🟡
+- **状态**: [x] ✅ 已修复 (2025-12-26)
+- **严重级别**: 🟡 一般
+- **问题**: 分享 API 没有速率限制
+- **修复**:
+  - 新建 `ip-rate-limiter.ts` IP 速率限制器
+  - 迁移 `014_ip_rate_limiter.sql` 创建限流表
+  - 创建分享：每小时10次/每天30次
+  - 访问分享：每分钟30次/每小时500次
+- **负责 Agent**: multi-site-coder ✅
+
+#### P3-SHARE-BUG-5: share_create 配置缺失 🟢
+- **状态**: [x] ✅ 已修复 (2025-12-26)
+- **严重级别**: 🟢 低
+- **问题**: 数据库缺少 `share_create` 奖励类型
+- **修复**: 迁移 `015_share_reward_fixes.sql` 添加配置（+2积分）
+- **负责 Agent**: 101-database-expert ✅
+
+---
+
+### Phase 2: 完善功能 (P1)
+
+#### P1-SHARE-1: 分享统计页面
+- **状态**: [ ] 待开始
+- **位置**: `db-wizPulseAI-com/src/app/dashboard/referrals/`
+- **工时**: 3h
+
+#### P1-SHARE-2: 充值奖励触发
+- **状态**: [ ] 待开始
+- **内容**: Stripe Webhook 调用 `give_purchase_reward()`
+- **工时**: 1h
+
+---
+
 ## 今日修复 (2025-12-22)
 
 #### BUG-1: 登录后跳转问题 🔧
@@ -492,4 +589,33 @@
 
 ---
 
-**最后更新**: 2025-12-22
+## 新功能: 积分模式系统 ✅ 已完成
+
+> 设计文档: [CREDIT_MODE_SYSTEM_DESIGN.md](./fashion-wizpulseai-com/docs/CREDIT_MODE_SYSTEM_DESIGN.md)
+> 完成日期: 2025-12-26
+
+### 功能说明
+
+用户可以选择 Standard 或 Premium 模式进行分析：
+
+| 功能 | ✨ Standard | 👑 Premium (×2.5) |
+|------|------------|------------------|
+| 写真分析 | 9 pt | 23 pt |
+| 穿搭生成 | 29 pt | 73 pt |
+
+### Phase 完成状态
+
+- [x] Phase 1: 数据库迁移 (`analysis_mode` 字段)
+- [x] Phase 2: 积分配置 (`CREDIT_COSTS` 分模式)
+- [x] Phase 3: 前端UI (`AnalysisModeSelector` 组件)
+- [x] Phase 4: API更新 (接收mode参数，动态计算积分)
+- [x] Phase 5: 历史记录显示模式标签 (✨/👑)
+
+### Phase 6: 后续优化 (待定)
+
+- [ ] 模型/Prompt差异化（Standard vs Premium）
+- [ ] 成本优化策略实施
+
+---
+
+**最后更新**: 2025-12-26
