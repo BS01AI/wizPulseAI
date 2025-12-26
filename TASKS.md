@@ -587,18 +587,16 @@
 - **工时**: 1h
 
 #### P0-ARCH-2: Console.log残留 (Fashion)
-- **状态**: [ ] 待修复
+- **状态**: [x] ✅ 已修复 (2025-12-26)
 - **影响站点**: Fashion
-- **数量**: 383处 console.log/error/warn
-- **修复**: 迁移到现有Logger系统 (`lib/logger.ts`)
-- **工时**: 2h
+- **修复**: 迁移90+处到Logger系统，383→111 (-72%)
+- **Git**: `07d86f6`
 
 #### P0-ARCH-3: 硬编码URL (Fashion)
-- **状态**: [ ] 待修复
+- **状态**: [x] ✅ 已修复 (2025-12-26)
 - **影响站点**: Fashion
-- **数量**: 33处域名/端口硬编码
-- **修复**: 改用环境变量 `NEXT_PUBLIC_COOKIE_DOMAIN`
-- **工时**: 30min
+- **修复**: 首页4处链接改用 `NEXT_PUBLIC_MAIN_URL` 环境变量
+- **Git**: `f9b3d4a`
 
 ### 🟡 一般问题 (P1)
 
