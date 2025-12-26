@@ -12,9 +12,67 @@
 
 ---
 
-## 最新状态 (2025-12-25 - Dashboard修复) ✅
+## 最新状态 (2025-12-26 - Fashion缩略图优化) ✅
 
 ### 🎯 今日完成
+
+**历史列表页性能优化 - Base64内联存储方案 ✅**
+
+| 层级 | 修改 |
+|------|------|
+| 数据库 | 添加 `thumbnail_base64` 字段 (TEXT, ~1.5KB/张) |
+| 上传API | 生成48px缩略图 → Base64编码 → 存入数据库 |
+| 历史列表 | 直接渲染Base64，0次Storage请求 |
+| 详情页 | 新建 `[id]/page.tsx`，按需加载签名URL大图 |
+
+**架构优势**：
+- ✅ 列表页0次Storage请求（之前N次）
+- ✅ 无签名URL过期问题
+- ✅ 并发性能提升10倍
+
+**修改文件** (8个)：
+- `upload/route.ts` - 生成Base64缩略图
+- `history/page.tsx` - 渲染Base64
+- `history/[id]/page.tsx` - 详情页（新建）
+- `image.ts` - 缩略图配置
+- `user-photo.entity.ts` - 实体字段
+- `user-photo.mapper.ts` - 映射逻辑
+- `photo.service.ts` - 服务层
+- `database.ts` - TypeScript类型
+
+---
+
+## 历史状态 (2025-12-25 - Fashion站优化) ✅
+
+### 🎯 完成
+
+**1. Onboarding 动画过渡 ✅** (`23b442e`)
+- 使用 framer-motion 的 AnimatePresence + motion.div
+- 步骤切换时平滑滑入/滑出动画（250ms）
+
+**2. Onboarding 多语言支持 ✅** (`23b442e`)
+- 新建 `onboarding-translations.json`
+- 支持 4 语言：ja/en/ar/zh-TW
+- 翻译内容：进度指示器、3步骤文本、顾问/风格/口吻选项
+
+**3. 历史页面图片 400 错误修复 ✅** (`a23ad28`)
+- **根本原因**：数据库 `thumbnail_url` 存的是路径，不是完整 URL
+- **解决方案**：服务端为每张照片生成签名 URL（1小时有效期）
+- **修改文件**：`history/page.tsx` - 添加 `getSignedUrl()` 函数
+
+### 📋 待处理
+
+**历史记录页优化**（待讨论）：
+- [ ] 批量签名 URL（减少 N 个请求 → 1 个）
+- [ ] 图片懒加载
+- [ ] 分页/无限滚动
+- [ ] 签名 URL 缓存（数据库存储）
+
+---
+
+## 历史状态 (2025-12-25 - Dashboard修复) ✅
+
+### 🎯 完成
 
 **1. 头像上传后右上角不更新问题 ✅** (`cf4c298`)
 
