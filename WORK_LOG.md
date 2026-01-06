@@ -12,7 +12,183 @@
 
 ---
 
-## 最新状态 (2025-12-26 - 分享积分安全修复) ✅
+## 最新状态 (2025-01-06 - Main站Stripe认证页面) ✅
+
+### 🎯 今日完成
+
+**Main站点 Stripe 认证所需页面 ✅**
+
+| 页面 | URL | 状态 |
+|------|-----|------|
+| 定价页 | `/[locale]/pricing` | ✅ |
+| 退款政策 | `/[locale]/refund` | ✅ |
+| 取消政策 | `/[locale]/cancellation` | ✅ |
+| 特定商取引法 | `/[locale]/tokusho` | ✅ |
+| Footer更新 | 添加政策链接 | ✅ |
+
+**4语言支持**: ja / en / ar / zh-TW
+**翻译**: 1872行新增
+**Git**: `ca61a58` (wizPulseAI-com main分支)
+
+**Review结果**: 7/10
+- P0问题: 缺SEO Metadata、硬编码URL、RTL未验证
+- 建议: Stripe认证通过后再优化
+
+**等待**: Stripe审查结果
+
+---
+
+## 历史状态 (2025-01-06 - Fashion站点AI顾问素材集成) ✅
+
+### 🎯 当日完成
+
+**1. AI顾问头像系统 ✅**
+
+| 内容 | 状态 |
+|------|------|
+| 31张图片素材上传 | ✅ avatars(25) + posters(5) + hero(1) |
+| Onboarding页面头像替换 | ✅ emoji → 自定义圆形头像 |
+| 日文名称修正 | ✅ 闘蜜→親友, 毒舌闘蜜→辛口親友 等 |
+| 设置页面头像选择 | ✅ 已有完整功能 |
+| 首页AI顾问介绍区 | ✅ 团队海报 + 5张单人海报卡片 |
+
+**图片目录结构**:
+```
+fashion-wizpulseai-com/public/images/advisors/
+├── avatars/     # 25张小头像 (5角色 x 5变体)
+├── posters/     # 5张单人海报
+└── hero/        # 1张团队海报
+```
+
+---
+
+**2. Onboarding死循环修复 ✅**
+
+| 问题 | 原因 | 修复 |
+|------|------|------|
+| 用户每次都被重定向到onboarding | API返回默认`onboarding_completed: false` | 添加localStorage缓存检查 |
+
+**修复位置**: `fashion-wizpulseai-com/src/app/[locale]/fashion/page.tsx`
+
+---
+
+**3. TypeScript类型修复 ✅**
+
+| 问题 | 修复 |
+|------|------|
+| `thumbnail_base64` 不存在于类型 | 添加到 `StyleAnalysisDB` 类型定义 |
+| `teamPosterAlt` 翻译属性不存在 | 改用静态字符串 |
+
+---
+
+### 📦 Git提交记录
+
+| Commit | 内容 |
+|--------|------|
+| 805ebe9 | 头像图片 + 日文名称修正 |
+| 4644cee | onboarding死循环修复 |
+| af77713 | TypeScript类型修复 |
+| 66b61f0 | 首页AI顾问介绍区 |
+| d1567a0 | 移除不存在的翻译属性 |
+
+---
+
+### 🎯 下次继续
+
+- [ ] 验证Vercel部署效果
+- [ ] 测试Onboarding完整流程
+- [ ] 考虑添加AI顾问详情页（展示更多海报）
+
+---
+
+## 历史状态 (2025-12-27 - 架构审查 + Agent并行执行) ✅
+
+### 🎯 今日完成
+
+**1. 历史记录页面修复 ✅**
+
+| 问题 | 修复内容 |
+|------|----------|
+| 页面代码引用不存在的字段 | `total_score`, `overall_comment`, `rank` 移除 |
+| `photos` 关联查询错误 | 改为从 `analyses.photo_id` 单独查询 |
+| `thumbnail_base64` 获取错误 | 直接从 `analyses` 表获取 |
+
+**修改文件**:
+- `fashion-wizpulseai-com/src/app/[locale]/fashion/history/page.tsx`
+- `fashion-wizpulseai-com/src/app/[locale]/fashion/history/[id]/page.tsx`
+
+---
+
+**2. 4个 Agent 并行执行架构审查 ✅**
+
+| Agent | 任务 | 产出 |
+|-------|------|------|
+| `multi-site-coder` | P0-SHARE-5: 注册时邀请关联 | 4个文件 + 详细文档 |
+| `architecture-guardian` | P1-ARCH-2: TODO注释清理 | 50处分析报告 |
+| `architecture-guardian` | P1-ARCH-3: 依赖版本统一 | 版本对比表 |
+| `architecture-guardian` | P1-ARCH-1: TypeScript类型断言 | 104处分析报告 |
+
+---
+
+**3. P0-SHARE-5: 注册时邀请关联实现 ✅**
+
+**新增文件**:
+- `auth-wizpulseai-com/src/lib/referral-utils.ts` - 客户端工具
+- `auth-wizpulseai-com/src/lib/referral-utils-server.ts` - 服务端工具
+- `auth-wizpulseai-com/REFERRAL_INTEGRATION_GUIDE.md` - 集成文档
+
+**修改文件**:
+- `auth/page.tsx` - 邮箱注册后调用 `handlePostSignupReferral()`
+- `callback/route.ts` - OAuth 回调后调用 `handleOAuthReferral()`
+
+**实现流程**:
+```
+Fashion 分享 → 设置 Cookie (fashion_share_code)
+   ↓
+Auth 注册 → 读取 Cookie → 调用 create_referral RPC
+   ↓
+数据库创建邀请关系 + 发放奖励
+```
+
+---
+
+**4. 架构问题发现汇总**
+
+**🔴 依赖版本问题**:
+| 站点 | 问题 | 建议 |
+|------|------|------|
+| Fashion | Supabase 2.39.0 | 升级到 2.81.1 |
+| Auth | Next.js 14.2.3 | 升级到 14.2.33 |
+| 全部 | Lucide 版本差 250+ | 统一到 0.555.0 |
+
+**🟡 TODO注释统计**: 50处
+- 主站: 37处 (知识中心内容填充)
+- Fashion: 13处 (AI功能扩展)
+- 可删除: 4处
+- 转Issue: 43处
+
+**🟡 TypeScript类型断言**: 104处
+- Supabase相关: 62处 (59.6%)
+- 根因: Supabase 类型生成不完整
+- 建议: 重新生成类型定义
+
+---
+
+### 📋 下一步任务
+
+**立即执行**:
+- [ ] Auth 站点构建测试邀请功能
+- [ ] 升级 Fashion Supabase 版本 (2.39.0 → 2.81.1)
+- [ ] 升级 Auth Next.js 版本 (14.2.3 → 14.2.33)
+
+**待办**:
+- [ ] P1-SHARE-1: 分享统计页面
+- [ ] P1-SHARE-2: 充值奖励触发
+- [ ] 删除 4 处已完成的 TODO 注释
+
+---
+
+## 历史状态 (2025-12-26 - 分享积分安全修复) ✅
 
 ### 🎯 今日完成
 
