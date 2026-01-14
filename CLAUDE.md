@@ -184,6 +184,36 @@ fashion-wizpulseai-com/
 - Phase 3: 客户端压缩（性能优化）
 - Phase 4: CDN 加速
 
+### Fashion PWA 安装引导 (2025-01-14) 🆕
+
+#### 功能说明
+引导用户将 Web App 安装到手机主屏幕，提升用户留存。
+
+| 场景 | 显示内容 | 延迟 |
+|------|----------|------|
+| 手机 + 未安装 | 底部安装 Banner | 3秒 |
+| iOS 手机 | 手动安装步骤引导 | - |
+| Android 手机 | 原生安装提示 | - |
+| 电脑 | 右下角"推荐手机"+ QR | 5秒 |
+| 已安装 | 不显示 | - |
+
+#### 关键文件
+```
+fashion-wizpulseai-com/src/
+├── shared/hooks/usePWAInstall.ts      # 核心Hook（设备检测+状态管理）
+├── shared/ui/pwa/
+│   ├── index.ts                       # 导出
+│   ├── PWAPrompt.tsx                  # 整合组件（一行引入）
+│   ├── PWAInstallBanner.tsx           # 手机安装Banner
+│   └── DesktopMobileTip.tsx           # 电脑QR提示
+└── app/[locale]/fashion/layout.tsx    # 集成点
+```
+
+#### 记忆机制
+- 用户点"あとで" → localStorage 记录，7天内不再显示
+- 用户关闭电脑提示 → 30天内不再显示
+- `display-mode: standalone` 检测已安装状态
+
 ### 用户流程 (优化中)
 ```
 首页 → ProductEcosystem → WizLife页面 → マジコーデ站点
