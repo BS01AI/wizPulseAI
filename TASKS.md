@@ -5,6 +5,42 @@
 
 ---
 
+## 最新完成 (2025-01-14) ✅
+
+### PWA 安装引导功能
+
+| 任务 | 状态 | 说明 |
+|------|------|------|
+| usePWAInstall Hook | ✅ | 设备/平台检测、安装状态管理 |
+| PWAInstallBanner | ✅ | 手机用户安装引导 + iOS手动步骤 |
+| DesktopMobileTip | ✅ | 电脑用户QR Code + URL复制 |
+| PWAPrompt 整合组件 | ✅ | 一行代码引入 |
+| Fashion Layout 集成 | ✅ | 手机3秒/电脑5秒延迟显示 |
+| 4语言翻译 | ✅ | ja/en/ar/zh-TW |
+| Review P0修复 | ✅ | useState→useEffect, QR错误处理, canInstall逻辑 |
+
+**Git Commit**: `fa8ac7c` (fashion-wizpulseai-com)
+**Review评分**: Architecture 8.5/10, Security 86/100, Build ✅
+
+---
+
+## 历史完成 (2025-01-06) ✅
+
+### AI顾问素材集成
+
+| 任务 | 状态 | 说明 |
+|------|------|------|
+| 31张图片素材上传 | ✅ | avatars(25) + posters(5) + hero(1) |
+| Onboarding头像替换 | ✅ | emoji → 自定义圆形头像 |
+| 日文名称修正 | ✅ | 闘蜜→親友, 毒舌闘蜜→辛口親友 等 |
+| 首页AI顾问介绍区 | ✅ | 团队海报 + 5张单人海报卡片 |
+| Onboarding死循环修复 | ✅ | 添加localStorage缓存检查 |
+| TypeScript类型修复 | ✅ | thumbnail_base64, teamPosterAlt |
+
+**Git Commits**: 805ebe9, 4644cee, af77713, 66b61f0, d1567a0
+
+---
+
 ## Sprint 概览
 
 **目标**: Fashion App (マジコーデ) 一周内发布
@@ -349,7 +385,9 @@
 | Day 8 法律增强 | 5 | 5 | 100% ✅ |
 | Day 9 设定页增强 | 2 | 2 | 100% ✅ |
 | P2 主站法律 | 3 | 3 | 100% ✅ |
-| **总计** | **46** | **43** | **93%** |
+| 分享功能 | 5 | 5 | 100% ✅ |
+| 架构审查 | 6 | 5 | 83% ✅ |
+| **总计** | **57** | **52** | **91%** |
 
 ---
 
@@ -509,9 +547,14 @@
 - **代码**: 已集成到 ShareModal.tsx
 
 #### P0-SHARE-5: 注册时邀请关联 📤
-- **状态**: [ ] 待开始
+- **状态**: [x] ✅ 已完成 (2025-12-27)
 - **位置**: `auth-wizpulseai-com`
 - **内容**: 注册时识别 share_code，调用 `create_referral()` 创建邀请关系
+- **产出**:
+  - `src/lib/referral-utils.ts` - 客户端工具
+  - `src/lib/referral-utils-server.ts` - 服务端工具
+  - `REFERRAL_INTEGRATION_GUIDE.md` - 集成文档
+  - `auth/page.tsx` + `callback/route.ts` - 集成修改
 - **工时**: 2h
 
 ### Phase 1.5: 紧急修复 (P0 - 2025-12-26 Review发现) 🔴
@@ -585,6 +628,7 @@
 - **风险**: 运行时错误、生产环境配置遗漏
 - **修复**: 复制Fashion的`env.ts`模式到其他站点
 - **工时**: 1h
+- **调查完成**: 2025-12-27 (architecture-guardian)
 
 #### P0-ARCH-2: Console.log残留 (Fashion)
 - **状态**: [x] ✅ 已修复 (2025-12-26)
@@ -601,22 +645,39 @@
 ### 🟡 一般问题 (P1)
 
 #### P1-ARCH-1: TypeScript类型断言
-- **状态**: [ ] 待处理
-- **数量**: 106处 `as any`/`@ts-ignore`
-- **原因**: Supabase类型推断问题（已知问题）
-- **处理**: 添加注释说明原因
+- **状态**: [x] ✅ 调查完成 (2025-12-27)
+- **数量**: 104处 `as any`/`as unknown` (Fashion站点)
+- **分类**:
+  - Supabase相关: 62处 (59.6%) - 类型生成不完整
+  - JSON字段: 8处
+  - 枚举赋值: 12处
+  - 其他: 22处
+- **根因**: Supabase 类型生成不完整
+- **建议**: 重新运行 `npx supabase gen types typescript` 可消除 62 处
 - **工时**: 1h
 
 #### P1-ARCH-2: TODO注释未清理
-- **状态**: [ ] 待处理
-- **数量**: 11处 TODO/FIXME/HACK
-- **处理**: 转为GitHub Issues追踪
+- **状态**: [x] ✅ 调查完成 (2025-12-27)
+- **实际数量**: 50处 (主站37 + Fashion13)
+- **分类**:
+  - ✅ 可删除: 4处
+  - 🔄 转Issue: 43处 (知识中心内容填充)
+  - ⏳ 保留: 3处 (有明确计划)
+- **处理**: 创建 3 个 GitHub Issue 追踪
 - **工时**: 30min
 
 #### P1-ARCH-3: 依赖版本不统一
-- **状态**: [ ] 待处理
-- **问题**: Next.js 14.2.3~14.2.33 混用
-- **处理**: 统一到 Next.js 14.2.33 + React 18.3.1
+- **状态**: [x] ✅ 调查完成 (2025-12-27)
+- **严重问题**:
+  - Fashion Supabase **2.39.0** → 应升级到 **2.81.1**
+  - Auth Next.js **14.2.3** → 应升级到 **14.2.33**
+  - Lucide-react 版本差 **250+版本**
+- **建议统一版本**:
+  - next: ^14.2.33
+  - react: ^18.3.1
+  - @supabase/supabase-js: ^2.81.1
+  - tailwindcss: ^3.4.17
+  - lucide-react: ^0.555.0
 - **工时**: 1h
 
 ### 🟢 改善建议 (P2)
@@ -687,4 +748,4 @@
 
 ---
 
-**最后更新**: 2025-12-26
+**最后更新**: 2025-12-27

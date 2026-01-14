@@ -12,7 +12,79 @@
 
 ---
 
-## 最新状态 (2025-01-06 - Main站Stripe认证页面) ✅
+## 最新状态 (2025-01-14 - PWA安装引导功能) ✅
+
+### 🎯 今日完成
+
+**PWA 安装引导功能 ✅**
+
+| 组件 | 功能 | 状态 |
+|------|------|------|
+| `usePWAInstall` Hook | 设备/平台检测、安装状态管理 | ✅ |
+| `PWAInstallBanner` | 手机用户安装引导 + iOS手动步骤 | ✅ |
+| `DesktopMobileTip` | 电脑用户QR Code + URL复制 | ✅ |
+| `PWAPrompt` | 整合组件（一行代码引入） | ✅ |
+
+**功能逻辑**：
+- 手机 + 未安装 → 3秒后显示底部安装 Banner
+- 手机 + 已安装 → 不显示
+- iOS 手机 → 显示手动安装步骤引导
+- Android 手机 → 直接触发原生安装提示
+- 电脑 → 5秒后右下角显示"推荐手机"+ QR Code
+
+**记忆功能**：
+- 用户点"あとで" → 7天内不再显示
+- 用户关闭电脑提示 → 30天内不再显示
+- 已安装 → 永久不显示
+
+**4语言支持**: ja / en / ar / zh-TW
+
+---
+
+### 📋 Review 结果
+
+| Agent | 评分 | 说明 |
+|-------|------|------|
+| Architecture Guardian | 7.5→8.5/10 | P0问题已修复 |
+| Build 验证 | ✅ | 86路由成功 |
+| Security Audit | 86/100 | Good |
+
+**修复的P0问题**：
+1. `useState()` 误用 → `useEffect()`
+2. QR Code 无错误处理 → `onError` + 状态隐藏
+3. canInstall 逻辑不完整 → 用户拒绝后清除状态
+
+---
+
+### 📦 Git提交
+
+| 仓库 | Commit | 内容 |
+|------|--------|------|
+| fashion-wizpulseai-com | `fa8ac7c` | PWA安装引导功能 (+905行) |
+
+**文件结构**：
+```
+fashion-wizpulseai-com/src/
+├── shared/hooks/usePWAInstall.ts      # 核心Hook
+├── shared/ui/pwa/
+│   ├── index.ts
+│   ├── PWAPrompt.tsx                  # 整合组件
+│   ├── PWAInstallBanner.tsx           # 手机Banner
+│   └── DesktopMobileTip.tsx           # 电脑提示
+└── app/[locale]/fashion/layout.tsx    # 集成点
+```
+
+---
+
+### 🎯 下次继续
+
+- [ ] 音频文件功能设计（AI顾问语音？提示音？）
+- [ ] P0-TEST-1~3: 支付/SSO/PWA 测试
+- [ ] Day 8 法律文档增强
+
+---
+
+## 历史状态 (2025-01-06 - Main站Stripe认证页面) ✅
 
 ### 🎯 今日完成
 
