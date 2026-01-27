@@ -12,7 +12,61 @@
 
 ---
 
-## 最新状态 (2025-01-14 - PWA安装引导功能) ✅
+## 最新状态 (2025-01-27 - Stripe审查准备 + 支付风控文档) ✅
+
+### 🎯 今日完成
+
+**1. tokusho页面增强 ✅**
+
+| 新增内容 | 说明 |
+|----------|------|
+| 订阅规则 | 自动续费、解约方法、返金条件 |
+| 积分规则 | 定义、消费规则、有效期、退款说明 |
+| 返品送料 | 数字服务不适用 |
+
+Commit: `9ed7eae` (wizPulseAI-com main)
+
+**2. 客服支持页面 /support ✅**
+
+| 内容 | 说明 |
+|------|------|
+| 邮件支持 | support@wizpulseai.com |
+| FAQ入口 | 链接到常见问题 |
+| 客服时间 | 平日 10:00-18:00 (JST) |
+| 常见问题入口 | 退款/解约/计费/法律 快速链接 |
+
+Commit: `25d2980` (wizPulseAI-com main)
+
+**3. 支付欺诈防护文档 ✅**
+
+新建 `wizPulseAI-docs/risk-management/` 目录:
+- `PAYMENT_FRAUD_PREVENTION.md` - 测活攻击防护、Radar规则、3DS配置
+
+Commit: `77ff687` (主仓库 main)
+
+### 📋 Stripe审查所需URL一览
+
+| 字段 | URL |
+|------|-----|
+| 公司网站 | `https://www.wizpulseai.com` |
+| 客服支持 | `https://www.wizpulseai.com/ja/support` |
+| 退款政策 | `https://www.wizpulseai.com/ja/refund` |
+| 取消政策 | `https://www.wizpulseai.com/ja/cancellation` |
+| 服务条款 | `https://www.wizpulseai.com/ja/terms` |
+| 隐私政策 | `https://www.wizpulseai.com/ja/privacy` |
+| 特定商取引法 | `https://www.wizpulseai.com/ja/tokusho` |
+
+### 🎯 下一步
+
+- [ ] Stripe后台填写上述URL和公司信息
+- [ ] Zoho邮箱设置完成 (support@wizpulseai.com)
+- [ ] Stripe Radar 规则配置（参考防护文档）
+- [ ] 代码中开启 3D Secure
+- [ ] 提交Stripe审查
+
+---
+
+## 历史状态 (2025-01-14 - PWA安装引导功能) ✅
 
 ### 🎯 今日完成
 
