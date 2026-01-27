@@ -12,7 +12,7 @@
 
 ---
 
-## 最新状态 (2025-01-27 - Stripe审查准备 + 支付风控文档) ✅
+## 最新状态 (2025-01-27 - Stripe审查提交完成) 🔄审查中
 
 ### 🎯 今日完成
 
@@ -30,38 +30,63 @@ Commit: `9ed7eae` (wizPulseAI-com main)
 
 | 内容 | 说明 |
 |------|------|
-| 邮件支持 | support@wizpulseai.com |
+| 邮件支持 | support.wizpulseai@bs01ai.com |
 | FAQ入口 | 链接到常见问题 |
 | 客服时间 | 平日 10:00-18:00 (JST) |
 | 常见问题入口 | 退款/解约/计费/法律 快速链接 |
 
 Commit: `25d2980` (wizPulseAI-com main)
 
-**3. 支付欺诈防护文档 ✅**
+**3. 客服邮箱更新 ✅**
+
+全站12个文件统一更新: `support@wizpulseai.com` → `support.wizpulseai@bs01ai.com`
+
+Commit: `2a47498` (wizPulseAI-com main)
+
+**4. 支付欺诈防护文档 ✅**
 
 新建 `wizPulseAI-docs/risk-management/` 目录:
 - `PAYMENT_FRAUD_PREVENTION.md` - 测活攻击防护、Radar规则、3DS配置
 
 Commit: `77ff687` (主仓库 main)
 
+**5. Stripe后台设置 ✅**
+
+| 项目 | 状态 |
+|------|------|
+| 公司网站URL | ✅ 已填写 |
+| 客服电话 | ✅ +81 80 9206 2121 |
+| 客服邮箱 | ✅ support.wizpulseai@bs01ai.com |
+| tokusho URL | ✅ 已提交 |
+| 客户邮件（成功/退款） | ✅ 已开启 |
+| 默认语言 | ✅ 改为日语 |
+| Zoho邮箱 | ✅ 已建立 |
+| **审查状态** | 🔄 **审查中** |
+
 ### 📋 Stripe审查所需URL一览
 
-| 字段 | URL |
-|------|-----|
-| 公司网站 | `https://www.wizpulseai.com` |
-| 客服支持 | `https://www.wizpulseai.com/ja/support` |
-| 退款政策 | `https://www.wizpulseai.com/ja/refund` |
-| 取消政策 | `https://www.wizpulseai.com/ja/cancellation` |
-| 服务条款 | `https://www.wizpulseai.com/ja/terms` |
-| 隐私政策 | `https://www.wizpulseai.com/ja/privacy` |
-| 特定商取引法 | `https://www.wizpulseai.com/ja/tokusho` |
+| 字段 | URL | 状态 |
+|------|-----|------|
+| 公司网站 | `https://www.wizpulseai.com` | ✅ 已提交 |
+| 客服支持 | `https://www.wizpulseai.com/ja/support` | ✅ 已提交 |
+| 退款政策 | `https://www.wizpulseai.com/ja/refund` | ✅ 已提交 |
+| 取消政策 | `https://www.wizpulseai.com/ja/cancellation` | ✅ 已提交 |
+| 服务条款 | `https://www.wizpulseai.com/ja/terms` | ✅ 已提交 |
+| 隐私政策 | `https://www.wizpulseai.com/ja/privacy` | ✅ 已提交 |
+| 特定商取引法 | `https://www.wizpulseai.com/ja/tokusho` | ✅ 已提交 |
 
-### 🎯 下一步
+### 📝 个人信息保护说明
 
-- [ ] Stripe后台填写上述URL和公司信息
-- [ ] Zoho邮箱设置完成 (support@wizpulseai.com)
-- [ ] Stripe Radar 规则配置（参考防护文档）
+- 电话号码: 仅在Stripe后台填写，**不在网站代码中**
+- 住所: tokusho页面写"请求时开示"（符合特定商取引法）
+- 邮箱: `support.wizpulseai@bs01ai.com`（网站+Stripe统一）
+
+### 🎯 下一步（等Stripe审查结果）
+
+- [ ] 等待Stripe审查结果
+- [ ] Stripe Radar 规则配置（参考 `risk-management/PAYMENT_FRAUD_PREVENTION.md`）
 - [ ] 代码中开启 3D Secure
+- [ ] Konbini便利店支付测试（如果开启）
 - [ ] 提交Stripe审查
 
 ---
