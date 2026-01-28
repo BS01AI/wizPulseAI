@@ -39,12 +39,34 @@
 
 ---
 
-### 🎯 下一步：音频集成（代码）
+**3. 音频系统代码集成 ✅**
 
-- [ ] `useSound` Hook - 统一音频管理
-- [ ] 等待 Overlay 接入 BGM 自动播放
-- [ ] 迷你播放器 UI（选歌、开关、音量）
-- [ ] 各组件接入提示音
+| 完成项 | 说明 |
+|--------|------|
+| `useSound` Hook (209行) | 统一管理 SFX/BGM/音乐播放器，localStorage 持久化 |
+| Overlay BGM 自动播放 | AnalyzingOverlay + GeneratingOutfitOverlay 接入 |
+| MiniMusicPlayer UI | 浮动播放器（选歌/暂停/静音），集成到 layout |
+| 各组件提示音 | P0 交互点全部接入（见下表） |
+
+**提示音接入详情**：
+
+| 组件 | 接入内容 |
+|------|----------|
+| fashion/page.tsx | 分析错误 error、生成错误 error |
+| OutfitFeedbackButtons | 点击 click、成功 success、失败 error |
+| GeneratedOutfitsGallery | 下载 click+success/error、分享 click+notification |
+| purchase/error | 页面加载播放 error 音效 |
+| purchase/success | 页面加载播放 purchase 音效（已有） |
+
+**Build**: ✅ 通过
+
+---
+
+### 🎯 下一步
+
+- [ ] 本地实机测试音频播放效果
+- [ ] 音量平衡微调（根据实际体验）
+- [ ] P1 交互点补充（升级弹窗、画廊导航等）
 
 ---
 
