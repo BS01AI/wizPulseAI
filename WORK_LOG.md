@@ -12,7 +12,43 @@
 
 ---
 
-## 最新状态 (2025-01-27 - Stripe审查提交完成) 🔄审查中
+## 最新状态 (2025-01-28 - 音频系统 + PWA安装引导)
+
+### 🎯 今日完成
+
+**1. PWA 安装引导功能 ✅** (Git: `fa8ac7c`)
+
+| 组件 | 功能 |
+|------|------|
+| `usePWAInstall` Hook | 设备/平台检测、安装状态管理 |
+| `PWAInstallBanner` | 手机安装引导 + iOS手动步骤 |
+| `DesktopMobileTip` | 电脑用户 QR Code + URL复制 |
+| `PWAPrompt` | 整合组件，集成到 Fashion Layout |
+
+**2. 音频文件准备 ✅**
+
+| 文件 | 大小 | 用途 |
+|------|------|------|
+| `bgm.mp3` | 528KB (45秒) | 等待时自动循环（花鏡90-135秒裁剪+淡入淡出+96kbps） |
+| `花鏡 -HANAKAGAMI-.mp3` | 3.7MB (5:12) | 完整歌曲（播放器） |
+| `ネオン・マジック.mp3` | 5.2MB (3:42) | 完整歌曲（播放器） |
+| `success/error/click/purchase/notification.mp3` | 33-110KB | 提示音（用户准备） |
+
+**工具**: ffmpeg 8.0.1 安装完成（brew）
+**存放**: `fashion-wizpulseai-com/public/sounds/`
+
+---
+
+### 🎯 下一步：音频集成（代码）
+
+- [ ] `useSound` Hook - 统一音频管理
+- [ ] 等待 Overlay 接入 BGM 自动播放
+- [ ] 迷你播放器 UI（选歌、开关、音量）
+- [ ] 各组件接入提示音
+
+---
+
+## 历史状态 (2025-01-27 - Stripe审查提交完成) 🔄审查中
 
 ### 🎯 今日完成
 
