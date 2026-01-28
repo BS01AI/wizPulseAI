@@ -70,7 +70,46 @@
 
 ---
 
-## 历史状态 (2025-01-27 - Stripe审查提交完成) 🔄审查中
+## 历史状态 (2025-01-27~28 - Stripe审查第二轮) 🔄审查中
+
+### 🎯 完成内容
+
+**Stripe审查第一轮** (01-27):
+1. ✅ tokusho页面增强（订阅+积分规则） - `9ed7eae`
+2. ✅ 客服支持页面 /support 创建 - `25d2980`
+3. ✅ 客服邮箱统一为 support.wizpulseai@bs01ai.com - `2a47498`
+4. ✅ 支付欺诈防护文档 - `77ff687`
+5. ✅ Stripe后台设置（URL、邮箱、电话、语言）
+
+**Stripe审查第二轮** (01-28):
+6. ✅ tokusho添加产品/服务说明（マジコーデ详细描述） - `5aefb07`
+7. ✅ tokusho聚焦マジコーデ+积分制，移除订阅/QuickSlide - `11f62c9`
+8. ✅ Stripe追加信息提交：
+   - Stripe产品: Checkout
+   - 卖什么: AIファッション診断サービス「マジコーデ」
+   - 主网站: https://magicoord.wizpulseai.com
+   - tokusho: https://www.wizpulseai.com/ja/tokusho
+   - 開業届: 上传済み
+   - 許認可: 不要（AI SaaSのため）
+
+### 📝 重要确认
+
+- 电话号码: 仅Stripe后台，**不在代码中**
+- 住所: tokusho写"请求时开示"（合法）
+- 邮箱: `support.wizpulseai@bs01ai.com`（全站统一）
+- 订阅: 现在不提供，tokusho页面已注明
+- 主网站: magicoord.wizpulseai.com（不是www）
+
+### 🎯 下一步（等Stripe审查结果）
+
+- [ ] 等待Stripe审查结果
+- [ ] 审查通过后：创建Stripe产品和价格（积分包）
+- [ ] 测试完整支付流程
+- [ ] Radar规则配置（参考 `risk-management/PAYMENT_FRAUD_PREVENTION.md`）
+
+---
+
+## 历史状态 (2025-01-27 - Stripe审查提交完成) ✅ → 需要补充信息
 
 ### 🎯 今日完成
 
