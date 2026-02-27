@@ -9,6 +9,7 @@
 > - 会话日志: [SESSION.md](./SESSION.md)
 > - 进度追踪: [PROGRESS.md](./PROGRESS.md)
 > - 专家团队: [.claude/agents/README.md](./.claude/agents/README.md)
+> - **经营圣典**: [wizPulseAI-docs/business/BUSINESS-BIBLE.md](./wizPulseAI-docs/business/BUSINESS-BIBLE.md) - 定价/安全/合规/运营的唯一权威文档
 
 ---
 
@@ -383,9 +384,69 @@ dashboard: 3012
 - 🚧 Fashion站点多语言待接入
 - 📝 网站架构文档已建立
 
-## 最新进展 (2025-12-03)
+## 最新进展 (2025-02-05)
 
-### ✅ 网站架构与P0任务执行 🆕
+### 🔄 法务页面矩阵整合 (进行中)
+
+#### 问题背景
+四站点法务页面状态混乱：
+| 站点 | tokusho | privacy | terms | Footer入口 | 状态 |
+|------|---------|---------|-------|-----------|------|
+| 主站 www | ✅ /tokusho | ✅ /privacy | ✅ /terms | ✅ 完整 | 🟢 但分散 |
+| Fashion | ✅ /tokusho | ✅ /about/privacy | ✅ /about/terms | ⚠️ 分散 | 🟡 路径不一致 |
+| Dashboard | ❌ 无 | ⚠️ 外链 | ⚠️ 外链 | ⚠️ 缺tokusho | 🟡 需补充 |
+| Auth | ❌ 无 | ❌ 无 | ❌ 无 | ❌ 无Footer | 🔴 严重缺失 |
+
+#### 整合方案
+**原则**：法务内容集中在主站 `/about/` 下，其他站点外链
+
+**目标结构**：
+```
+主站 www.wizpulseai.com:
+/about                    → 公司介绍 + 法务链接卡片入口
+/about/privacy           → 隐私政策
+/about/terms             → 利用规约
+/about/tokusho           → 特商法
+/about/refund            → 退款政策
+/about/cancellation      → 取消政策
+
+旧路径重定向：
+/privacy → /about/privacy
+/terms → /about/terms
+/tokusho → /about/tokusho
+
+其他站点：
+Dashboard/Auth/Fashion → 外链到主站 /about/xxx
+```
+
+#### 品牌层次（已统一）
+```
+販売業者: BS01AI（公司名）
+サービス: BS01AI運営のwizPulseAIブランドのAIデジタルサービス
+提供サービス: マジコーデ（AI ファッションアドバイザー）
+```
+
+#### 实施任务 ✅ 已完成 (2025-02-05)
+- [x] 主站 About 页面添加法务链接区域（类似 Fashion 布局）
+- [x] 移动法务页面到 /about/ 子目录
+- [x] 设置旧路径重定向（middleware 301）
+- [x] 更新 Footer 链接
+- [x] 更新其他站点（Dashboard, Auth, Fashion）外链
+- [x] 修正运营责任者名字：孫 博（そん ひろし）/ Sun Bo
+
+#### 最终状态
+| 站点 | 法务页面 | 入口 | 运营责任者 |
+|------|----------|------|-----------|
+| 主站 www | ✅ /about/xxx (5页) | About卡片+Footer | 孫 博（ソン ボ）|
+| Fashion | ✅ /tokusho自有 | About+Footer | 孫 博（そん ひろし）|
+| Dashboard | 🔗 外链主站 | Footer (4链接) | - |
+| Auth | 🔗 外链主站 | 底部左侧 (3链接) | - |
+
+---
+
+## 历史进展 (2025-12-03)
+
+### ✅ 网站架构与P0任务执行
 
 #### 1. 文档体系建立
 - **网站架构文档**: `/wizPulseAI-docs/WEBSITE_ARCHITECTURE.md`
