@@ -67,24 +67,36 @@
 | 502 | `502-seo-expert.md` | SEO/GEO/AEO优化 | SEO、GEO、关键词、排名 |
 | 503 | `503-marketing-strategist.md` | 价值观营销、文案、A/B测试 | 营销、文案、宣传、口号、slogan |
 
+### 6xx - 审查类（1个）
+
+| 编号 | 文件 | 职责 | 触发词 |
+|------|------|------|--------|
+| 601 | `601-review-agent.md` | 最终质量审查、矛盾/遗漏/风险检查 | review、审查、检查质量 |
+
 ---
 
 ## 使用方式
 
-### 自动调度（推荐）
+### 战队模式（推荐）
 
-主 Claude 根据上下文自动调用专家：
+预定义的并行组合，详见 `.claude/EXECUTION_PRINCIPLES.md`：
+
+| 战队 | 组成 | 场景 |
+|------|------|------|
+| SQUAD-BUILD | 4站点并行构建 | 代码修改后验证 |
+| SQUAD-RELEASE | 203+202+201+204 → 601 review | 发布前全面审查 |
+| SQUAD-FEATURE | 实现→并行验证→review | 功能开发全流程 |
+| SQUAD-I18N | 302调度303→304→305 | 多语言翻译 |
+| SQUAD-HEALTH | git+audit+supabase并行 | 日常健康检查 |
+
+### 单兵调度
 
 ```
 你: "帮我检查一下数据库的 RLS 策略"
-主AI: → 自动调用 101-database-expert
-```
+主AI: → 调用 101-database-expert
 
-### 手动指定
-
-```
 你: "用 201-site-validator 测试登录流程"
-你: "用 401-git-manager 提交改动"
+主AI: → 调用 201-site-validator
 ```
 
 ---
@@ -241,6 +253,6 @@
 
 ---
 
-**最后更新**: 2025-12-23
-**Agent 数量**: 18个
-**架构版本**: v2.2（新增营销策略专家）
+**最后更新**: 2026-04-02
+**Agent 数量**: 19个（+601 review agent）
+**架构版本**: v3.0（并行战队编排模式）

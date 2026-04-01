@@ -748,4 +748,83 @@
 
 ---
 
-**最后更新**: 2025-12-27
+---
+
+## 🚀 発布スプリント (2026-02-27 Cowork PM 策定)
+
+> **策定元**: Cowork AI-helper (プロダクトマネージャー役)
+> **完整計画**: `AI-helper/output/magicoord-launch-plan.md`
+> **目標**: 3日以内に正式発布 → **2026-03-01 (日)**
+
+### 現状サマリー
+- 全57タスク中52完了 (91%)
+- 推定スコア: 88/100
+- **残り5項目のみで上線可能（合計4-5h）**
+
+---
+
+### 🔴 必須修 — これだけ直せば上線できる
+
+#### LAUNCH-1: Stripe 生産環境配置 💳
+- **状態**: [ ] 待完成
+- **担当**: Claude Code (supabase-manager or multi-site-coder)
+- **内容**:
+  - Stripe Dashboard で Live Mode 有効化
+  - 4つの Live Products/Prices 作成
+  - Live Webhook 作成 → `whsec_live_xxx` 取得
+  - Vercel 環境変数更新: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
+  - Redeploy
+- **工時**: 30min
+- **参照**: BUSINESS-BIBLE.md Phase 0-1
+
+#### LAUNCH-2: CORS 域名制限 🔒
+- **状態**: [x] ✅ 完成 (2026-02-27)
+- **担当**: Claude Code
+- **修正**: 6個API を `*` → ホワイトリスト制限、新規 `src/lib/cors.ts` 作成
+- **修正ファイル**: balance, packages, transactions, referrals/shares, referrals/stats, checkout
+
+#### LAUNCH-3: Credits 価格サーバ側検証 🔒
+- **状態**: [x] ✅ 完成 (2026-02-27)
+- **担当**: Claude Code
+- **修正**: Checkout が外部 credits/price を受け付けない、Webhook はサーバ側設定で検証
+- **修正ファイル**: `checkout/route.ts`, `webhooks/stripe/route.ts`, `credits/packages.ts`
+
+#### LAUNCH-4: 密鍵ローテーション 🔒
+- **状態**: [x] ✅ 完成 (2026-02-27)
+- **担当**: Claude Code
+- **修正**: `.mcp.json` を環境変数参照に変更
+- **備考**: `.zshrc` に環境変数設定が必要（ユーザー手動）
+
+#### LAUNCH-5: 完整支付フローテスト 🧪
+- **状態**: [ ] 待完成
+- **担当**: Claude Code (stripe-tester)
+- **内容**:
+  - 本番 Stripe で実カード購入テスト
+  - 積分自動付与確認
+  - Webhook ログ確認
+  - 購入→積分消費→残高確認の完全フロー
+- **工時**: 1h
+
+---
+
+### ✅ 解決済: 積分消費データ統一
+
+- **正解値（コード実装）**: Standard分析 9pt / 提案 29pt
+- **PRICING_PLAN.md**: ✅ 統一済み (2026-02-27 Claude Code が更新)
+
+---
+
+### 🟡 建議修（発布後1週間以内）
+
+| ID | 内容 | 工時 |
+|----|------|------|
+| POST-1 | P0-LEGAL-6~9 法律文書増強 | 4h |
+| POST-2 | getSession→getUser 移行 (セキュリティ) | 2h |
+| POST-3 | P0-ARCH-1 他站点 env.ts 追加 | 1h |
+| POST-4 | Fashion Supabase 2.39→2.81.1 升級 | 1h |
+| POST-5 | P1-SHARE-1 分享統計頁面 | 3h |
+| POST-6 | P1-SHARE-2 充值奨励トリガー | 1h |
+
+---
+
+**最後更新**: 2026-02-27 (LAUNCH-2,3,4 完了、残り LAUNCH-1+5 はユーザー手動操作待ち)

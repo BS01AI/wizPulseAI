@@ -2,6 +2,8 @@
 
 > **协议文件**: 详细行为规范见 [CLAUDE-PROTOCOL.md](./CLAUDE-PROTOCOL.md)
 >
+> **执行原则**: ⭐ 必读 [.claude/EXECUTION_PRINCIPLES.md](./.claude/EXECUTION_PRINCIPLES.md) — 多Agent并行执行 + 与 Cowork 协作规范
+>
 > **记忆系统**:
 > - 长期记忆: 本文件 (CLAUDE.md)
 > - 工作日志: [WORK_LOG.md](./WORK_LOG.md)

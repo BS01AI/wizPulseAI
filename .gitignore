@@ -65,3 +65,6 @@ docs/commit_log.md
 
 # Playwright test outputs
 .playwright-mcp/
+
+# ===== Claude Code 本地设置（CC自动追加，不跟踪）=====
+.claude/settings.local.json
