@@ -1,11 +1,65 @@
 # 会话日志
 
 > 记录每次会话的进度和发现
-> 最终更新: 2026-04-01
+> 最终更新: 2026-04-02
 
 ---
 
-## 2026-04-01 (当前会话) — Hooks 基础设施 + 功能优先级重整
+## 2026-04-02 — Agent编排体系v3.0 + AI公司架构确立
+
+**任务**: Agent体系改造 + 工作方式升级 + 全仓库提交
+
+### ✅ 完成: AI公司架构讨论
+
+bobo确立的核心架构：
+- **Cowork侧**（管理层）：PgM定时巡检 → PM定时检查 → 下发任务到 tasks/
+- **Code侧**（执行层 = 我）：收任务 → 派Agent团队并行 → 综合 → Review → 写results/
+- 两层通过文件系统异步通信
+- **核心理念**：记忆永存，启动的实体不重要
+
+### ✅ 完成: Agent编排体系v3.0
+
+1. **EXECUTION_PRINCIPLES.md 重写**
+   - 5个预定义战队: SQUAD-BUILD/RELEASE/FEATURE/I18N/HEALTH
+   - Agent标准输出格式: Status + Summary + Findings + Actions
+   - Review Agent 强制触发条件
+
+2. **新增 601-review-agent.md**
+   - 质量审查专用，Opus模型
+   - 输出 PASS / NEEDS_FIX / BLOCK
+
+3. **agents/README.md 升到 v3.0**
+   - 战队模式说明
+   - 6xx审查类别
+
+### ✅ 完成: 基础设施
+
+- guard.sh: 加入 ~/.claude/projects 到白名单
+- settings.json: git push 放行（force push 仍禁止）, memory路径放行
+- Memory: 写入 project_ai_company_architecture.md
+
+### ✅ 完成: 全仓库提交+推送
+
+| 仓库 | Commit | 内容 |
+|------|--------|------|
+| 主仓库 | 5b3c4a2 + 2f6fd7b | Agent编排v3.0 + hooks + 子模块 |
+| fashion | 5396879 | 定价统一 + checkout修正 |
+| dashboard | d32d334 | CORS白名単 + credits安全 + referral |
+| auth | 19f7893 | referral統合 + 依赖更新 |
+
+### 🔜 下一步: batch-001 测试
+
+Cowork 已准备好 `.claude/auto-tasks/batch-001.md`（5个任务）：
+- T1: SSO配置验证, T2: TypeScript检查, T4: 依赖审计, T5: 构建验证 → **可并行**
+- T3: Console清理 → 等构建验证通过后执行
+- 预估: 并行模式 ~12min
+
+**执行方式**: `claude --permission-mode auto -p "$(cat .claude/auto-tasks/batch-001.md)"`
+**前置**: `caffeinate -i -s &` 防止Mac睡眠
+
+---
+
+## 2026-04-01 (历史会话) — Hooks 基础设施 + 功能优先级重整
 
 **任务**: Claude Code hooks 调查实施 + magicoord 功能现状评估
 
