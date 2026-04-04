@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- BS01AI Code Agent Scheduler -->
+    <!-- 每4小时检查一次是否有新任务，有就启动 Code session -->
+    <!--
+    安装方法：
+      cp com.bs01ai.code-scheduler.plist ~/Library/LaunchAgents/
+      launchctl load ~/Library/LaunchAgents/com.bs01ai.code-scheduler.plist
+
+    停止：
+      launchctl unload ~/Library/LaunchAgents/com.bs01ai.code-scheduler.plist
+
+    手动触发一次：
+      launchctl start com.bs01ai.code-scheduler
+
+    查看状态：
+      launchctl list | grep bs01ai
+    -->
+
+    <key>Label</key>
+    <string>com.bs01ai.code-scheduler</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/bms/Work/CodeWork/Web/wizPulseAI/.claude/auto-tasks/scheduler.sh</string>
+    </array>
+
+    <!-- 每4小时 = 14400秒 -->
+    <key>StartInterval</key>
+    <integer>14400</integer>
+
+    <!-- 工作目录 -->
+    <key>WorkingDirectory</key>
+    <string>/Users/bms/Work/CodeWork/Web/wizPulseAI</string>
+
+    <!-- 日志 -->
+    <key>StandardOutPath</key>
+    <string>/Users/bms/Work/CodeWork/AI-helper/core/agent-hub/logs/launchd-stdout.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/bms/Work/CodeWork/AI-helper/core/agent-hub/logs/launchd-stderr.log</string>
+
+    <!-- 开机不自动启动，等手动验证后再改为 true -->
+    <key>RunAtLoad</key>
+    <false/>
+
+    <!-- 环境变量（确保 claude CLI 在 PATH 中）-->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin</string>
+        <key>HOME</key>
+        <string>/Users/bms</string>
+    </dict>
+</dict>
+</plist>
