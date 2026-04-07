@@ -34,8 +34,18 @@ const Database = resolve('better-sqlite3');
 const IGNORE_DIRS = new Set([
   'node_modules', '.git', '.next', '.nuxt', 'dist', 'build', 'out',
   '.code-nexus', '.omm', 'coverage', '.turbo', '.cache', '__pycache__',
-  'vendor', '.svelte-kit', '.output', 'public'
+  'vendor', '.svelte-kit', '.output', 'public', '__tests__', '__mocks__'
 ]);
+
+// File patterns to skip (test files, backups, examples)
+const IGNORE_FILE_PATTERNS = [
+  /\.test\.[jt]sx?$/,
+  /\.spec\.[jt]sx?$/,
+  /\.backup\.[jt]sx?$/,
+  /\.old\.[jt]sx?$/,
+  /\.example\.[jt]sx?$/,
+  /\.stories\.[jt]sx?$/,
+];
 
 const LANG_MAP = {
   '.ts': { lang: TypeScript.typescript, name: 'typescript' },
@@ -369,7 +379,7 @@ function collectFiles(root) {
         }
       } else if (entry.isFile()) {
         const ext = path.extname(entry.name);
-        if (LANG_MAP[ext]) {
+        if (LANG_MAP[ext] && !IGNORE_FILE_PATTERNS.some(p => p.test(entry.name))) {
           results.push({ path: path.join(dir, entry.name), ext });
         }
       }
