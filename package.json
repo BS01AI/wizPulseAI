@@ -1,0 +1,29 @@
+{
+  "name": "wizpulseai",
+  "version": "1.0.0",
+  "description": "> 这个仓库管理 WizPulseAI 多站点项目的配置、文档和工具脚本",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "npx playwright test",
+    "test:local": "TEST_ENV=local npx playwright test",
+    "test:report": "npx playwright show-report test-results/html-report"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BS01AI/wizPulseAI.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/BS01AI/wizPulseAI/issues"
+  },
+  "homepage": "https://github.com/BS01AI/wizPulseAI#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.59.1"
+  }
+}
