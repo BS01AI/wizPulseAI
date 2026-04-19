@@ -152,7 +152,7 @@ export function ColorThemeSwitcher({ labels }: ColorThemeSwitcherProps = {}) {
     const themeId = generateThemeId(newConfig);
 
     setConfig(newConfig);
-    setCookie(THEME_COOKIE_NAME, themeId, getCookieOptions());
+    setCookie(THEME_COOKIE_NAME, themeId, getCookieOptions() as any);
     applyTheme(themeId);
   };
 
@@ -162,7 +162,7 @@ export function ColorThemeSwitcher({ labels }: ColorThemeSwitcherProps = {}) {
     const themeId = generateThemeId(newConfig);
 
     setConfig(newConfig);
-    setCookie(THEME_COOKIE_NAME, themeId, getCookieOptions());
+    setCookie(THEME_COOKIE_NAME, themeId, getCookieOptions() as any);
     applyTheme(themeId);
   };
 

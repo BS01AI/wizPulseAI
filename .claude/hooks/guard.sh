@@ -121,15 +121,23 @@ if [ "$TOOL" = "Bash" ]; then
     exit 2
   fi
 
-  # 🟡 push to main/master → 需要人工确认
+  # 🟡 push to main/master → flag file で ALLOW / ASK 切替
+  #    開発期: `touch ~/.config/bs01ai/push-allow` で自動通過
+  #    上線期: `rm ~/.config/bs01ai/push-allow` で人工確認に戻す
   if echo "$CMD" | grep -qE "git push.*(main|master)"; then
-    log_block "Push to main/master (ask)"
+    if [ -f "$HOME/.config/bs01ai/push-allow" ]; then
+      # flag 存在 → 開発期 ALLOW（log に open-flag 印を残す）
+      echo "[$(date '+%Y-%m-%d %H:%M:%S')] ALLOW (push-open-flag): $CMD" >> "$LOG_FILE"
+      exit 0
+    fi
+    # flag 不在 → 従来通り ask（上線期/本番防衛）
+    log_block "Push to main/master (ask, no push-allow flag)"
     cat <<'EOF'
 {
   "hookSpecificOutput": {
     "hookEventName": "PreToolUse",
     "permissionDecision": "ask",
-    "permissionDecisionReason": "Push to main/master = 生产部署，需要人工确认"
+    "permissionDecisionReason": "Push to main/master = 生产部署，需要人工确认 (or touch ~/.config/bs01ai/push-allow to enable dev mode)"
   }
 }
 EOF

@@ -1,7 +1,120 @@
 # 会话日志
 
 > 记录每次会话的进度和发现
-> 最终更新: 2026-04-02
+> 最终更新: 2026-04-11
+
+---
+
+## 2026-04-11 — 技術債務一掃 + コード品質改善
+
+**任务**: bobo決策に基づき5項目実行 + mc全方位調査登録
+
+### ✅ 安全P0修復
+- Dashboard: nonce-based CSP実装（unsafe-inline/unsafe-eval完全排除）
+- Auth: unsafe-eval削除
+- Main/Fashion: CSP新規追加（これまでCSPなし）
+- **4站build全通過**
+
+### ✅ TypeScript型再生成
+- `npm run update-types` 実行（public 29KB + fashion 20KB + combined 2KB）
+- export衝突修正（`export *` → 明示的re-export）
+
+### ✅ @supabase/auth-helpers-nextjs 完全卸載
+- Auth: 3ファイルの`createClientComponentClient`を`@supabase/ssr`に移行
+- Dashboard: 既にコメントアウト済み、パッケージのみ削除
+- 両站npm uninstall + build通過
+
+### ✅ fashion/page.tsx 988行分割
+- **988行 → 394行**（60%削減）
+- 抽出コンポーネント: SettingsPanel(173), AnalysisResultView(130), UploadArea(62), CreditBalanceBar(61), InsufficientCreditsModal(60), SettingsConfirmModal(38), types.ts(36)
+- build通過
+
+### ✅ shared/統一方案
+- `scripts/sync-shared.js` 作成（頂層shared/ = 唯一真実源 → 4站自動コピー）
+- ThemeScript v2.0 + nonce対応に統一
+- LanguageSwitcher named export統一（Dashboard import修正）
+- ColorThemeSwitcher 型修正
+- 4站TypeScript通過
+
+### 📋 bobo決策記録
+1. 安全P0 → 即修復 ✅
+2. 初回ボーナス → 30pt確定（コード変更不要）
+3. Stripe Live → mc機能完成後（延期）
+4. page.tsx分割 → 実施 ✅
+5. TypeScript型再生成 → 実施 ✅
+
+### 📋 大任務登録
+- **mc全方位調査**: 全機能+購入フロー+Prompt品質の包括調査（次セッション実施）
+
+---
+
+## 2026-04-09〜10 — Beta 1.0 三関門 + セキュリティ監査 + Wave A
+
+**任务**: Beta 1.0 Gate 1-3 一気通貫 + 全站セキュリティ総合監査 + Wave A (039/040)
+
+### ✅ Gate 1 (DISPATCH-032): 全站語言共有 + UI統一 (2.5h)
+- DB↔Cookie 言語同期実装（Auth callback → DB読取 → Cookie設定）
+- Dashboard set-locale API に DB書き込み追加
+- Fashion: magicoord-themes.css 3テーマ(noir/clean/pop) 新規作成
+- Auth: themes.css を Main版に同期
+- **4站 build pass + E2E 40/40**
+
+### ✅ Gate 2 (DISPATCH-031): UI「B格」改版 (2h)
+- Auth: GSAP blur entrance + AnimatedBackground (浮遊オーブ) + ロゴ呼吸パルス
+- Main: GSAP parallax hero + マウス追従深度効果
+- Fashion: Framer Motion blur-in hero + staggered reveals
+- GSAP インストール (Auth站)
+
+### ✅ Gate 3 (DISPATCH-033): Beta 1.0 就緒検査 (1.5h)
+- DB: Fashion 9テーブル RLS 全有効確認
+- セキュリティ: 積分先扣後AI ✅, test-vision認証 ✅, 全API認証 ✅
+- 是正1最終検証: Onboarding から3名削除 + API 403バリデーション追加
+- P1問題2件発見→即時修復
+- bobo最終テストガイド作成
+- **判定: P0ゼロ、boboテスト可能**
+
+### ✅ セキュリティ総合監査 (3A品控)
+- 4領域並行監査: Auth/SSO, 全API(50ルート), Frontend/Infra, DB/Payment
+- **P0×3, P1×12, P2×11, P3×7** 発見
+- 全体スコア: 72/100 (YELLOW)
+- 最危険攻撃チェーン特定: XSS→Cookie窃取→Admin JWT偽造→全データ流出
+- 報告: `result-security-audit-20260409.md`
+- 軍師ブリーフィング: `mc-handoff-security-briefing.md`
+
+### ✅ ロゴ + 色彩修正 (bobo指摘対応)
+- 3站 Header: "W" プレースホルダー → logo-wizpulseai.png 実画像
+- Auth: AnimatedBackground 色彩復元 (violet/indigo opacity UP)
+- Main: magicoord製品カード "M" → magicoord-preview.jpg
+- `next/image` → `<img>` (1.4MB PNG 最適化問題回避)
+
+### ✅ Wave A (039/040)
+- 039: Onboarding リダイレクトバグ修正 + 30pt トースト + 翻訳追加 + 中国語テキスト修正
+- 040: DB調査完了（Fashion 9テーブルDDL, 旧テーブル確認, migration衝突, as any リスト）
+
+### 📊 Git Commits (本セッション)
+| 仓库 | Commits | 状態 |
+|------|---------|------|
+| Auth | 5 commits | ✅ pushed to main |
+| Dashboard | 3 commits | ✅ pushed to main |
+| Main | 4 commits | ✅ pushed to main |
+| Fashion | 5 commits | ✅ pushed to main |
+
+### 📁 産出物
+- `result-032-lang-ui-unify-20260409.md`
+- `result-031-ui-upgrade-20260409.md`
+- `result-033-beta-readiness-20260409.md`
+- `result-security-audit-20260409.md`
+- `mc-handoff-security-briefing.md`
+- `result-039-onboarding-20260410.md`
+- `result-040-db-cleanup-20260410.md`
+
+### ⏳ 未解決 (bobo/軍師判断待ち) — 2026-04-12 更新
+- ~~セキュリティP0×3件の修復タイミング~~ → ✅ bobo: 即修復 → 完了
+- ~~初回ボーナス 30pt vs 50pt~~ → ✅ bobo: 30pt確定
+- ~~988行page.tsx分割~~ → ✅ bobo: 可 → 完了 (988→394行)
+- ~~TypeScript型再生成~~ → ✅ bobo: 可 → 完了
+- CI/CD E2Eテスト修正 → ⏳ 未討論
+- ~~Stripe Live切替~~ → ✅ bobo: mc機能完成後に延期
 
 ---
 

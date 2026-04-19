@@ -26,9 +26,10 @@
       "mcp__supabase__list_extensions",
       "mcp__supabase__list_migrations",
       "mcp__supabase__execute_sql",
+      "mcp__supabase__apply_migration",
+      "mcp__supabase__generate_typescript_types",
       "mcp__supabase__get_logs",
-      "mcp__supabase__get_project",
-      "mcp__supabase__generate_typescript_types"
+      "mcp__supabase__get_project"
     ],
     "deny": [
       "Read(/Users/bms/Desktop/**)",
@@ -49,11 +50,11 @@
       "Bash(rm -rf .)",
       "Bash(git push --force *)",
       "Bash(git push -f *)",
-      "Bash(git checkout main)",
-      "Bash(git checkout master)",
+      "Bash(git reset --hard *)",
+      "Bash(git clean -fd *)",
+      "Bash(git checkout -- .)",
       "Edit(/.env*)",
       "Edit(/.git/**)",
-      "mcp__supabase__apply_migration",
       "mcp__supabase__create_project",
       "mcp__supabase__pause_project",
       "mcp__supabase__deploy_edge_function"
