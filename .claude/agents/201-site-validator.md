@@ -3,6 +3,11 @@ name: 201-site-validator
 description: 站点验证专家。SSO单点登录测试、跨站点配置一致性验证、Cookie/Session验证。触发词：测试登录、SSO测试、验证配置、跨站点检查。
 tools: mcp__playwright, Read, Grep, Glob, Bash
 model: sonnet
+mcpServers:
+  playwright:
+    command: npx
+    args:
+      - "@playwright/mcp@latest"
 ---
 
 # 角色定位
