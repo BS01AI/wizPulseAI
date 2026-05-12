@@ -1,0 +1,526 @@
+/* ============================================================================
+ * DESIGN-MATRIX v4.0 — MASTER TOKEN FILE (DISPATCH-142 Phase B)
+ *
+ * 🚨 SOURCE OF TRUTH 🚨
+ *
+ * This is the ONE place where theme tokens are defined.
+ * 4 site `src/styles/themes.css` are GENERATED from this file via:
+ *
+ *   ./tools/sync-themes.sh
+ *
+ * DO NOT edit per-site themes.css directly — sync will overwrite.
+ * To change a token: edit THIS file, run sync, commit + push 5 repos.
+ *
+ * CI guard at .github/workflows/sync-themes.yml validates no drift.
+ *
+ * --------------------------------------------------------------------------
+ *
+ * Two axes (orthogonal):
+ *   data-theme=light/dark/warm  → COLOR MODE (lightness curve)
+ *   data-variant=sucre|luminous|editorial|wabi|urban → DESIGN DNA
+ *
+ * Default = light theme, no variant (current production visual unchanged).
+ * Master can preview a variant via cookie/localStorage (DISPATCH-145 ships
+ * dashboard switcher). DISPATCH-146 ships component-level adapter.
+ *
+ * --------------------------------------------------------------------------
+ *
+ * 5 Variants (DISPATCH-143 + 144 master pool):
+ *   sucre      — Sucré: cream + rose-gold + plum (sweet/playful)
+ *   luminous   — Luminous Grimoire: indigo + violet + dark (AI-tech mystical)
+ *   editorial  — Editorial Mono: pure B/W + red accent (NYT/Vogue)
+ *   wabi       — Wabi-Sabi: paper + ink + moss + 朱紫 (Japanese contemplative)
+ *   urban      — Urban Edge: carbon + neon-orange + violet (developer-edgy)
+ * ============================================================================ */
+
+/* ============================================
+   Theme: Precision Light (DEFAULT)
+   Selector: [data-theme="light"], :root
+   ============================================ */
+
+[data-theme="light"], :root {
+  /* --- Brand --- */
+  --color-primary: #4F46E5;           /* Indigo 600 */
+  --color-primary-hover: #4338CA;     /* Indigo 700 */
+  --color-primary-subtle: #EEF2FF;    /* Indigo 50 */
+  --color-secondary: #7C3AED;         /* Violet 600 */
+  --color-accent: #2563EB;            /* Blue 600 */
+
+  /* --- Backgrounds --- */
+  --color-bg: #FFFFFF;
+  --color-bg-subtle: #F9FAFB;         /* Gray 50 */
+  --color-bg-muted: #F3F4F6;          /* Gray 100 */
+  --color-surface: #FFFFFF;
+  --color-surface-raised: #FFFFFF;
+
+  /* --- Text --- */
+  --color-text: #111827;              /* Gray 900 */
+  --color-text-secondary: #4B5563;    /* Gray 600 */
+  --color-text-muted: #9CA3AF;        /* Gray 400 */
+  --color-text-on-primary: #FFFFFF;
+
+  /* --- Borders --- */
+  --color-border: #E5E7EB;            /* Gray 200 */
+  --color-border-subtle: #F3F4F6;     /* Gray 100 */
+  --color-border-focus: #4F46E5;
+
+  /* --- Semantic --- */
+  --color-success: #10B981;           /* Emerald 500 */
+  --color-warning: #F59E0B;           /* Amber 500 */
+  --color-error: #EF4444;             /* Red 500 */
+  --color-info: #3B82F6;              /* Blue 500 */
+
+  /* --- Typography --- */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+
+  /* --- Font sizes --- */
+  --font-size-xs: 0.75rem;     /* 12px */
+  --font-size-sm: 0.875rem;    /* 14px */
+  --font-size-base: 1rem;      /* 16px */
+  --font-size-lg: 1.125rem;    /* 18px */
+  --font-size-xl: 1.25rem;     /* 20px */
+  --font-size-2xl: 1.5rem;     /* 24px */
+  --font-size-3xl: 1.875rem;   /* 30px */
+  --font-size-4xl: 2.25rem;    /* 36px */
+
+  /* --- Spacing (4px base unit) --- */
+  --space-1: 0.25rem;    /* 4px */
+  --space-2: 0.5rem;     /* 8px */
+  --space-3: 0.75rem;    /* 12px */
+  --space-4: 1rem;       /* 16px */
+  --space-5: 1.25rem;    /* 20px */
+  --space-6: 1.5rem;     /* 24px */
+  --space-8: 2rem;       /* 32px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-12: 3rem;      /* 48px */
+  --space-16: 4rem;      /* 64px */
+
+  /* --- Radius --- */
+  --radius-sm: 0.25rem;   /* 4px */
+  --radius-md: 0.375rem;  /* 6px */
+  --radius-lg: 0.5rem;    /* 8px */
+  --radius-xl: 0.75rem;   /* 12px */
+  --radius-full: 9999px;
+
+  /* --- Shadows --- */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.03);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  --shadow-focus: 0 0 0 3px rgba(79, 70, 229, 0.15);
+
+  /* --- Transitions --- */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* --- shadcn/ui backward compatibility (HSL format) --- */
+  --background: 0 0% 100%;
+  --foreground: 220 13% 9%;
+  --card: 0 0% 100%;
+  --card-foreground: 220 13% 9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 220 13% 9%;
+  --primary: 239 84% 67%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 263 70% 58%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 220 14% 96%;
+  --muted-foreground: 220 9% 46%;
+  --accent: 220 14% 96%;
+  --accent-foreground: 239 84% 50%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 220 13% 91%;
+  --input: 220 13% 91%;
+  --ring: 239 84% 67%;
+  --radius: 0.5rem;
+}
+
+/* ============================================
+   Theme: Obsidian (Dark)
+   Selector: [data-theme="dark"]
+   ============================================ */
+
+[data-theme="dark"] {
+  --color-primary: #818CF8;
+  --color-primary-hover: #A5B4FC;
+  --color-primary-subtle: rgba(129, 140, 248, 0.1);
+  --color-secondary: #A78BFA;
+  --color-accent: #60A5FA;
+  --color-bg: #09090B;
+  --color-bg-subtle: #18181B;
+  --color-bg-muted: #27272A;
+  --color-surface: #18181B;
+  --color-surface-raised: #27272A;
+  --color-text: #FAFAFA;
+  --color-text-secondary: #A1A1AA;
+  --color-text-muted: #71717A;
+  --color-text-on-primary: #09090B;
+  --color-border: #27272A;
+  --color-border-subtle: #1C1C1F;
+  --color-border-focus: #818CF8;
+  --color-success: #34D399;
+  --color-warning: #FBBF24;
+  --color-error: #F87171;
+  --color-info: #60A5FA;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+  --shadow-focus: 0 0 0 3px rgba(129, 140, 248, 0.25);
+  --background: 240 6% 4%;
+  --foreground: 0 0% 98%;
+  --card: 240 6% 10%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 6% 10%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 235 89% 74%;
+  --primary-foreground: 240 6% 4%;
+  --secondary: 263 70% 76%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 240 4% 16%;
+  --muted-foreground: 240 5% 65%;
+  --accent: 240 4% 16%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 4% 16%;
+  --input: 240 4% 16%;
+  --ring: 235 89% 74%;
+}
+
+/* ============================================
+   Theme: Warmth
+   Selector: [data-theme="warm"]
+   ============================================ */
+
+[data-theme="warm"] {
+  --color-primary: #B45309;
+  --color-primary-hover: #92400E;
+  --color-primary-subtle: #FFFBEB;
+  --color-secondary: #DC2626;
+  --color-accent: #059669;
+  --color-bg: #FEFDFB;
+  --color-bg-subtle: #FBF8F3;
+  --color-bg-muted: #F5F0E8;
+  --color-surface: #FFFFFF;
+  --color-surface-raised: #FFFFFF;
+  --color-text: #1C1917;
+  --color-text-secondary: #57534E;
+  --color-text-muted: #A8A29E;
+  --color-text-on-primary: #FFFFFF;
+  --color-border: #E7E5E4;
+  --color-border-subtle: #F5F5F4;
+  --color-border-focus: #D97706;
+  --color-success: #059669;
+  --color-warning: #D97706;
+  --color-error: #DC2626;
+  --color-info: #2563EB;
+  --font-display: 'Poppins', 'Inter', -apple-system, sans-serif;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --shadow-sm: 0 1px 2px 0 rgba(28, 25, 23, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(28, 25, 23, 0.06), 0 2px 4px -2px rgba(28, 25, 23, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(28, 25, 23, 0.07), 0 4px 6px -4px rgba(28, 25, 23, 0.03);
+  --shadow-xl: 0 20px 25px -5px rgba(28, 25, 23, 0.08), 0 8px 10px -6px rgba(28, 25, 23, 0.04);
+  --shadow-focus: 0 0 0 3px rgba(217, 119, 6, 0.15);
+  --background: 36 33% 99%;
+  --foreground: 24 10% 10%;
+  --primary: 28 93% 38%;
+  --secondary: 0 72% 51%;
+  --muted: 30 22% 93%;
+  --accent: 30 22% 93%;
+  --accent-foreground: 28 93% 38%;
+  --border: 24 6% 90%;
+  --input: 24 6% 90%;
+  --ring: 28 93% 38%;
+}
+
+/* ============================================================================
+ * VARIANTS — DESIGN DNA AXIS (DISPATCH-142 Phase B)
+ *
+ * Apply via:  <html data-variant="sucre">
+ * or cookie:  WIZPULSE_VARIANT=sucre
+ *
+ * Default (no data-variant): falls back to data-theme (current production).
+ * Variants override KEY tokens to express their design DNA.
+ * Mockups: /Users/bms/Work/CodeWork/AI-helper/core/docs/matrix-themes-2026-05-11/
+ * ============================================================================ */
+
+/* ============================================
+   Variant: Sucré — Sweet / Playful / Café-au-lait
+   Selector: [data-variant="sucre"]
+   ============================================ */
+
+[data-variant="sucre"] {
+  --color-primary: #C99A8B;           /* Rose-gold */
+  --color-primary-hover: #B68372;
+  --color-primary-subtle: #FBE9E0;
+  --color-secondary: #5B4B6B;         /* Plum */
+  --color-accent: #F4D9D0;             /* Dusty pink */
+  --color-bg: #FDF6EC;                 /* Cream */
+  --color-bg-subtle: #FAF1E2;
+  --color-bg-muted: #F4E5D2;
+  --color-surface: #FFFDF7;
+  --color-surface-raised: #FFFFFF;
+  --color-text: #3D2E2A;               /* Dark plum-brown */
+  --color-text-secondary: #6B5950;
+  --color-text-muted: #A89C92;
+  --color-text-on-primary: #FFFDF7;
+  --color-border: #E8D9C9;
+  --color-border-subtle: #F2E6D6;
+  --color-border-focus: #C99A8B;
+  --font-display: 'DM Serif Display', 'Georgia', serif;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --shadow-focus: 0 0 0 3px rgba(201, 154, 139, 0.2);
+  --background: 36 71% 95%;
+  --foreground: 18 18% 20%;
+  --primary: 14 33% 67%;
+  --secondary: 264 18% 36%;
+  --accent: 14 60% 89%;
+  --accent-foreground: 18 18% 20%;
+  --border: 30 35% 85%;
+  --input: 30 35% 85%;
+  --ring: 14 33% 67%;
+}
+
+/* ============================================
+   Variant: Luminous Grimoire — AI-tech Mystical
+   Selector: [data-variant="luminous"]
+   ============================================ */
+
+[data-variant="luminous"] {
+  --color-primary: #4F46E5;           /* Indigo */
+  --color-primary-hover: #4338CA;
+  --color-primary-subtle: #EEF2FF;
+  --color-secondary: #7C3AED;         /* Violet */
+  --color-accent: #2563EB;             /* Blue */
+  --color-bg: #F8FAFC;
+  --color-bg-subtle: #F1F5F9;
+  --color-bg-muted: #E2E8F0;
+  --color-surface: #FFFFFF;
+  --color-surface-raised: #FFFFFF;
+  --color-text: #0F172A;               /* Slate 900 */
+  --color-text-secondary: #475569;
+  --color-text-muted: #94A3B8;
+  --color-text-on-primary: #FFFFFF;
+  --color-border: #E2E8F0;
+  --color-border-subtle: #F1F5F9;
+  --color-border-focus: #4F46E5;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'Inter', -apple-system, sans-serif;
+  --shadow-focus: 0 0 0 3px rgba(124, 58, 237, 0.2);
+  --background: 210 40% 98%;
+  --foreground: 222 47% 11%;
+  --primary: 243 75% 59%;
+  --secondary: 262 83% 58%;
+  --accent: 220 91% 53%;
+  --accent-foreground: 0 0% 100%;
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 243 75% 59%;
+}
+
+/* ============================================
+   Variant: Editorial Mono — NYT / Vogue
+   Selector: [data-variant="editorial"]
+   ============================================ */
+
+[data-variant="editorial"] {
+  --color-primary: #0A0A0A;           /* Near-black */
+  --color-primary-hover: #262626;
+  --color-primary-subtle: #F5F5F5;
+  --color-secondary: #525252;
+  --color-accent: #DC2626;             /* Red */
+  --color-bg: #FFFFFF;
+  --color-bg-subtle: #FAFAFA;
+  --color-bg-muted: #F5F5F5;
+  --color-surface: #FFFFFF;
+  --color-surface-raised: #FFFFFF;
+  --color-text: #0A0A0A;
+  --color-text-secondary: #262626;
+  --color-text-muted: #525252;
+  --color-text-on-primary: #FFFFFF;
+  --color-border: #E5E5E5;
+  --color-border-subtle: #F5F5F5;
+  --color-border-focus: #DC2626;
+  --font-sans: 'Inter Tight', 'Inter', -apple-system, sans-serif;
+  --font-display: 'Playfair Display', 'Cormorant Garamond', serif;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0.125rem;
+  --shadow-focus: 0 0 0 3px rgba(220, 38, 38, 0.2);
+  --background: 0 0% 100%;
+  --foreground: 0 0% 4%;
+  --primary: 0 0% 4%;
+  --secondary: 0 0% 32%;
+  --accent: 0 84% 51%;
+  --accent-foreground: 0 0% 100%;
+  --border: 0 0% 90%;
+  --input: 0 0% 90%;
+  --ring: 0 84% 51%;
+}
+
+/* ============================================
+   Variant: Wabi-Sabi (侘び寂び) — Japanese Contemplative
+   Selector: [data-variant="wabi"]
+   ============================================ */
+
+[data-variant="wabi"] {
+  --color-primary: #1A1A1A;           /* 墨黒 ink */
+  --color-primary-hover: #2D2D2D;
+  --color-primary-subtle: #E8E2D3;
+  --color-secondary: #6B7F5C;         /* 苔緑 moss */
+  --color-accent: #7E4344;             /* 朱紫 vermilion-plum */
+  --color-bg: #F5EFE2;                 /* 米紙 washi paper */
+  --color-bg-subtle: #F0E9DA;
+  --color-bg-muted: #E8DFCD;
+  --color-surface: #FAF5E8;
+  --color-surface-raised: #FFFFFF;
+  --color-text: #1A1A1A;
+  --color-text-secondary: #4A4A4A;
+  --color-text-muted: #8A8A8A;
+  --color-text-on-primary: #F5EFE2;
+  --color-border: #D9D0BA;
+  --color-border-subtle: #E8DFCD;
+  --color-border-focus: #6B7F5C;
+  --font-sans: 'Inter Tight', 'Inter', -apple-system, sans-serif;
+  --font-display: 'Shippori Mincho', 'YuMincho', 'Hiragino Mincho ProN', serif;
+  --shadow-sm: 0 1px 2px 0 rgba(26, 26, 26, 0.06);
+  --shadow-md: 0 2px 6px -1px rgba(26, 26, 26, 0.07);
+  --shadow-lg: 0 4px 12px -2px rgba(26, 26, 26, 0.08);
+  --shadow-xl: 0 8px 24px -4px rgba(26, 26, 26, 0.09);
+  --shadow-focus: 0 0 0 3px rgba(107, 127, 92, 0.25);
+  --background: 41 41% 92%;
+  --foreground: 0 0% 10%;
+  --primary: 0 0% 10%;
+  --secondary: 96 16% 43%;
+  --accent: 359 31% 38%;
+  --accent-foreground: 41 41% 92%;
+  --border: 41 30% 79%;
+  --input: 41 30% 79%;
+  --ring: 96 16% 43%;
+}
+
+/* ============================================
+   Variant: Urban Edge — Developer / Cyberpunk
+   Selector: [data-variant="urban"]
+   ============================================ */
+
+[data-variant="urban"] {
+  --color-primary: #FF6B1A;           /* Neon orange */
+  --color-primary-hover: #E55A0E;
+  --color-primary-subtle: rgba(255, 107, 26, 0.12);
+  --color-secondary: #A855F7;         /* Violet accent */
+  --color-accent: #EF4444;             /* Alert red */
+  --color-bg: #0A0E1A;                 /* Carbon dark */
+  --color-bg-subtle: #131722;
+  --color-bg-muted: #1C2233;
+  --color-surface: #131722;
+  --color-surface-raised: #1C2233;
+  --color-text: #F3F4F6;
+  --color-text-secondary: #9CA3AF;
+  --color-text-muted: #6B7280;
+  --color-text-on-primary: #0A0E1A;
+  --color-border: #2D3748;
+  --color-border-subtle: #1C2233;
+  --color-border-focus: #FF6B1A;
+  --font-sans: 'Space Grotesk', 'Inter', sans-serif;
+  --font-display: 'Space Grotesk', 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+  --shadow-sm: 0 0 12px rgba(255, 107, 26, 0.08);
+  --shadow-md: 0 4px 16px rgba(255, 107, 26, 0.12), 0 0 24px rgba(168, 85, 247, 0.06);
+  --shadow-lg: 0 8px 32px rgba(255, 107, 26, 0.16), 0 0 48px rgba(168, 85, 247, 0.08);
+  --shadow-xl: 0 16px 48px rgba(255, 107, 26, 0.2), 0 0 64px rgba(168, 85, 247, 0.12);
+  --shadow-focus: 0 0 0 3px rgba(255, 107, 26, 0.35);
+  --background: 222 36% 7%;
+  --foreground: 220 14% 96%;
+  --card: 222 26% 11%;
+  --card-foreground: 220 14% 96%;
+  --primary: 19 100% 55%;
+  --primary-foreground: 222 36% 7%;
+  --secondary: 271 91% 65%;
+  --secondary-foreground: 220 14% 96%;
+  --accent: 0 84% 60%;
+  --accent-foreground: 220 14% 96%;
+  --muted: 222 20% 16%;
+  --muted-foreground: 220 9% 64%;
+  --border: 222 14% 26%;
+  --input: 222 14% 26%;
+  --ring: 19 100% 55%;
+}
+
+/* ============================================
+   Utility classes (unified --color-* namespace)
+   ============================================ */
+
+.bg-brand { background-color: var(--color-primary); }
+.bg-brand-subtle { background-color: var(--color-primary-subtle); }
+.text-brand { color: var(--color-primary); }
+.border-brand { border-color: var(--color-primary); }
+
+.bg-base { background-color: var(--color-bg); }
+.bg-subtle { background-color: var(--color-bg-subtle); }
+
+.text-primary-custom { color: var(--color-text); }
+.text-secondary-custom { color: var(--color-text-secondary); }
+.text-muted-custom { color: var(--color-text-muted); }
+
+/* Card */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* Button */
+.btn-brand {
+  background: var(--color-primary);
+  color: var(--color-text-on-primary);
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: var(--space-2) var(--space-4);
+  font-weight: 500;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  cursor: pointer;
+}
+
+.btn-brand:hover {
+  background: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Input */
+.input {
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-text);
+  transition: all var(--transition-fast);
+}
+
+.input:focus {
+  background: var(--color-bg);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-focus);
+  outline: none;
+}
