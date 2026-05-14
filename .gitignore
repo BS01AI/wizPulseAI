@@ -2,6 +2,9 @@
 auth-wizpulseai-com/
 db-wizPulseAI-com/
 wizPulseAI-com/
+fashion-wizpulseai-com/
+ExpoGeo/
+dino-kids-app/
 
 # ===== Node.js =====
 node_modules/
@@ -68,5 +71,27 @@ docs/commit_log.md
 
 # ===== Claude Code 本地设置（CC自动追加，不跟踪）=====
 .claude/settings.local.json
+.claude/scheduled_tasks.lock
 fashion-home.png
 fashion-wizpulseai-com/
+
+# ===== Tooling caches / agent runtime (DISPATCH-158 cleanup) =====
+.agents/
+.codex/
+
+# ===== Test artifacts / Playwright reports =====
+playwright-report/
+e2e/test-results/
+
+# ===== Throwaway audit screenshots (root level) =====
+/kh-*.png
+/prod-*.png
+/after-*.png
+/baseline-*.png
+
+# ===== AI-helper untracked dirs (managed by AI-helper repo) =====
+AI-helper/core/docs/
+AI-helper/core/wisdom/
+AI-helper/core/agent-hub/results/mc-feature-audit-*.md
+test-results/
+workspace/
