@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WizPulseAI 矩阵网站账号、Cookie、付费与产品扩展架构说明</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172033;
+      --muted: #607086;
+      --soft: #eef3f8;
+      --line: #d8e1ea;
+      --panel: #ffffff;
+      --brand: #126a78;
+      --brand-2: #1f8f65;
+      --warn: #9a5b00;
+      --danger: #a52828;
+      --ok: #14723c;
+      --code: #f6f8fb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background: #f5f7fb;
+      line-height: 1.65;
+    }
+
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 32px 22px 72px;
+    }
+
+    header {
+      padding: 34px 0 28px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 28px;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(30px, 5vw, 48px);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin: 46px 0 14px;
+      font-size: 26px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 26px 0 10px;
+      font-size: 19px;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 10px 0;
+    }
+
+    a {
+      color: var(--brand);
+    }
+
+    .lead {
+      max-width: 860px;
+      font-size: 18px;
+      color: var(--muted);
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 4px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin: 16px 0;
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+    }
+
+    .card h3,
+    .card h4 {
+      margin-top: 0;
+    }
+
+    .note {
+      border-left: 4px solid var(--brand);
+      background: #eaf5f7;
+      padding: 14px 16px;
+      margin: 18px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .risk {
+      border-left: 4px solid var(--danger);
+      background: #fff1f1;
+      padding: 14px 16px;
+      margin: 18px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .decision {
+      border-left: 4px solid var(--brand-2);
+      background: #edf8f2;
+      padding: 14px 16px;
+      margin: 18px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .map {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .node {
+      position: relative;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      min-height: 112px;
+    }
+
+    .node strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 16px;
+    }
+
+    .node span {
+      display: block;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .arrow {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      margin: -2px 0 2px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background: #eef3f8;
+      font-weight: 700;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    code {
+      padding: 2px 5px;
+      border-radius: 5px;
+      background: var(--code);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.92em;
+    }
+
+    ul,
+    ol {
+      padding-left: 22px;
+    }
+
+    li {
+      margin: 7px 0;
+    }
+
+    .status {
+      display: inline-block;
+      min-width: 58px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .p1 {
+      background: #ffe5e5;
+      color: var(--danger);
+    }
+
+    .p2 {
+      background: #fff2d5;
+      color: var(--warn);
+    }
+
+    .p3 {
+      background: #e8f3ff;
+      color: #286090;
+    }
+
+    .ok {
+      background: #e8f7ee;
+      color: var(--ok);
+    }
+
+    footer {
+      margin-top: 52px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 820px) {
+      main {
+        padding: 22px 14px 52px;
+      }
+
+      .grid,
+      .grid.two,
+      .flow {
+        grid-template-columns: 1fr;
+      }
+
+      table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>WizPulseAI 矩阵网站账号、Cookie、付费与产品扩展架构说明</h1>
+    <p class="lead">
+      这份资料用“人能读懂”的方式总结当前矩阵网站的账号体系、子域登录共享、积分/Stripe 设计、各 App 扩展方式，以及我在代码 review 中发现的具体问题和建议路线。
+    </p>
+    <div class="meta">
+      <span class="pill">生成日期：2026-05-14</span>
+      <span class="pill">范围：只读 review，无业务代码修改</span>
+      <span class="pill">重点：注册、SSO、Cookie、付费、ExpoGeo 接入</span>
+    </div>
+  </header>
+
+  <section>
+    <h2>1. 一句话总览</h2>
+    <div class="decision">
+      当前矩阵网站的方向是正确的：把登录注册放在 <code>auth</code>，把付费、用户中心、积分、权益放在 <code>dashboard/db</code>，每个产品 App 保持独立。这样未来可以继续增加 ExpoGeo、Dino、Fashion 等产品，而不需要每个 App 都重复做账号和付费。
+    </div>
+    <p>
+      现在的问题不是“大方向错了”，而是底座代码里有一些半成品和历史遗留：订阅字段不一致、redirect 校验不够安全、Stripe checkout 校验不完整、积分充值并发不够稳、SSO cookie 的安全边界需要统一说明。它们在早期可以跑起来，但不适合直接作为长期商业系统的底座。
+    </p>
+  </section>
+
+  <section>
+    <h2>2. 当前矩阵网站由哪些部分组成</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>主站</h3>
+        <p><code>wizPulseAI-com</code></p>
+        <p>负责品牌、内容、入口、SEO、产品介绍。它不应该承载复杂付费逻辑。</p>
+      </div>
+      <div class="card">
+        <h3>认证中心</h3>
+        <p><code>auth-wizpulseai-com</code></p>
+        <p>负责登录、注册、OAuth callback、logout、语言 cookie 同步、跨子域登录跳转。</p>
+      </div>
+      <div class="card">
+        <h3>用户/付费中心</h3>
+        <p><code>db-wizPulseAI-com</code></p>
+        <p>负责 dashboard、用户资料、订阅、积分、Stripe webhook、管理员后台、权益判断。</p>
+      </div>
+      <div class="card">
+        <h3>产品站：Fashion</h3>
+        <p><code>fashion-wizpulseai-com</code></p>
+        <p>独立产品 App，使用矩阵账号和积分，不自己处理 Stripe 底层。</p>
+      </div>
+      <div class="card">
+        <h3>产品站：ExpoGeo</h3>
+        <p><code>ExpoGeo</code></p>
+        <p>国家学习工具，后续应接入矩阵账号、权益、学习进度同步，但保留独立代码仓库。</p>
+      </div>
+      <div class="card">
+        <h3>其他产品站</h3>
+        <p><code>dino-kids-app</code> 等</p>
+        <p>适合按同样模式扩展：独立产品体验，共用账号和付费底座。</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>3. 注册和登录应该如何工作</h2>
+    <div class="flow">
+      <div class="node">
+        <strong>用户在产品站点击登录</strong>
+        <span>例如 ExpoGeo 的“登录/保存进度”按钮。</span>
+      </div>
+      <div class="node">
+        <strong>跳到 Auth 中心</strong>
+        <span>URL 带上 <code>redirect_to</code>，说明登录后回到哪里。</span>
+      </div>
+      <div class="node">
+        <strong>Supabase 完成认证</strong>
+        <span>邮箱、OAuth、magic link 等流程都应收口在 auth。</span>
+      </div>
+      <div class="node">
+        <strong>带 session 回到产品站</strong>
+        <span>产品站读取共享 cookie，得到登录状态。</span>
+      </div>
+    </div>
+
+    <div class="note">
+      正确的产品站接入方式不是“每个 App 自己做一套注册登录”，而是每个 App 都把用户送到统一的 auth 中心，登录完成后再回到原 App。
+    </div>
+
+    <h3>当前需要修正的点</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>问题</th>
+          <th>影响</th>
+          <th>建议</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>redirect 白名单用 <code>startsWith</code> 判断</td>
+          <td>可能被伪造域名绕过，形成开放重定向风险。</td>
+          <td>改成解析 URL 后比较 <code>origin</code>，使用环境变量管理允许域名。</td>
+        </tr>
+        <tr>
+          <td>callback 中相对路径会回到 auth 自己</td>
+          <td>如果某些入口传的是 <code>/xxx</code>，登录后不一定回到原产品站。</td>
+          <td>产品站传绝对 URL，auth 只允许白名单 origin。</td>
+        </tr>
+        <tr>
+          <td>多个 auth helper 实现并存</td>
+          <td>不同站点的 cookie 行为可能慢慢分叉。</td>
+          <td>抽成共享包或固定复制源，减少重复实现。</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>4. 子域 Cookie 和 SSO 的本质</h2>
+    <p>
+      现在的目标是让 <code>www.wizpulseai.com</code>、<code>auth.wizpulseai.com</code>、<code>dashboard.wizpulseai.com</code>、<code>geo.wizpulseai.com</code> 这些子域共享登录状态。核心方式是把 Supabase session cookie 写到顶级域 <code>.wizpulseai.com</code>。
+    </p>
+
+    <div class="map">
+      <div class="node">
+        <strong><code>.wizpulseai.com</code> 顶级 cookie</strong>
+        <span>子域都能读取同一份登录状态，因此用户登录一次，可以在多个产品间切换。</span>
+      </div>
+      <div class="arrow">适用于</div>
+      <div class="flow">
+        <div class="node"><strong>auth</strong><span>写入/刷新登录 cookie。</span></div>
+        <div class="node"><strong>dashboard</strong><span>读取登录状态，展示账户和付费。</span></div>
+        <div class="node"><strong>Fashion</strong><span>读取登录状态，调用积分/权益。</span></div>
+        <div class="node"><strong>ExpoGeo</strong><span>未来读取登录状态，保存学习进度。</span></div>
+      </div>
+    </div>
+
+    <div class="risk">
+      需要注意：当前 browser client 使用 <code>document.cookie</code> 写 Supabase auth cookie，这类 cookie 无法设置为 <code>HttpOnly</code>。如果文档里承诺的是完全服务端 HttpOnly 模型，就需要统一实现或调整文档表述。
+    </div>
+
+    <h3>我建议的安全边界</h3>
+    <ul>
+      <li>登录 token 只服务于身份识别，不把高风险管理动作放在纯前端判断里。</li>
+      <li>所有付费、扣积分、发权益，都必须由 dashboard/db 后端二次校验。</li>
+      <li>产品站可以读“我是谁”和“我有什么权益”，但不能自己决定付款是否成功。</li>
+      <li>跨域跳转必须走 allowlist，新增产品域名必须显式加入。</li>
+      <li>后续如果商业化增强，应优先考虑更严格的服务端 session/cookie 策略。</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>5. Stripe、积分和订阅的设计</h2>
+    <p>
+      你现在实际使用的是 point 买断模式，每个 App 可以有自己的积分消费场景。订阅代码目前还没有真正上线，属于半成品状态。我的建议是：短期把积分买断做稳，中期再把订阅补完整。
+    </p>
+
+    <h3>推荐的付费分层</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>类型</th>
+          <th>适合用途</th>
+          <th>应该由谁管理</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>积分买断</td>
+          <td>图片生成、单次 AI 调用、某个 App 的消耗型功能。</td>
+          <td>Dashboard 统一收款和记账，产品站调用积分 API。</td>
+        </tr>
+        <tr>
+          <td>订阅</td>
+          <td>持续权益，例如高级地图、完整音频、专题内容、家庭账号。</td>
+          <td>Dashboard 管 Stripe subscription，产品站只读权益。</td>
+        </tr>
+        <tr>
+          <td>单 App 买断包</td>
+          <td>例如 ExpoGeo 某个国家包、文化包、离线语音包。</td>
+          <td>可以仍然通过 Dashboard checkout，记录到产品权益表。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>当前付费代码的具体问题</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>优先级</th>
+          <th>问题</th>
+          <th>为什么重要</th>
+          <th>建议动作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="status p1">P1</span></td>
+          <td>订阅表字段使用不一致：<code>stripe_id</code> 与 <code>stripe_subscription_id</code> 混用。</td>
+          <td>取消、恢复、webhook 同步可能失效。</td>
+          <td>统一成数据库实际字段，补测试。</td>
+        </tr>
+        <tr>
+          <td><span class="status p1">P1</span></td>
+          <td>Stripe price id 查本地价格时可能查错字段。</td>
+          <td>Stripe 返回的是 price id，通常应匹配本地 <code>prices.stripe_id</code>。</td>
+          <td>确认数据模型后统一查询逻辑。</td>
+        </tr>
+        <tr>
+          <td><span class="status p2">P2</span></td>
+          <td>订阅 checkout 接收客户端传来的 <code>priceId</code>。</td>
+          <td>用户可能传入不应该购买的 Stripe price。</td>
+          <td>服务端先查本地 active/public price，再创建 checkout。</td>
+        </tr>
+        <tr>
+          <td><span class="status p2">P2</span></td>
+          <td>积分充值先读余额再写余额，不是原子操作。</td>
+          <td>并发购买时理论上可能丢积分。</td>
+          <td>用数据库 RPC 做 <code>add_credits</code>，类似扣积分。</td>
+        </tr>
+        <tr>
+          <td><span class="status p2">P2</span></td>
+          <td>success/cancel URL 可由客户端传入。</td>
+          <td>可能出现跳转到非预期页面的问题。</td>
+          <td>限制到允许域名，或按 product 在服务端生成。</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>6. 不同 App 应该如何快速扩展</h2>
+    <p>
+      新 App 不应该复制一整套登录、用户表、Stripe、积分系统。它应该只实现自己的产品体验，然后通过矩阵底座拿到身份、权益和消费能力。
+    </p>
+
+    <div class="grid two">
+      <div class="card">
+        <h3>产品 App 自己负责</h3>
+        <ul>
+          <li>核心用户体验和页面。</li>
+          <li>本地状态和游客体验。</li>
+          <li>调用产品自己的业务 API。</li>
+          <li>展示登录、订阅、积分余额入口。</li>
+          <li>根据权益开关隐藏或开放功能。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>矩阵底座统一负责</h3>
+        <ul>
+          <li>注册、登录、OAuth、logout。</li>
+          <li>跨子域 SSO cookie。</li>
+          <li>Stripe checkout、webhook、退款/取消。</li>
+          <li>积分余额、交易记录、权益判断。</li>
+          <li>管理员后台和用户中心。</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>标准接入清单</h3>
+    <ol>
+      <li>给产品确定域名，例如 <code>geo.wizpulseai.com</code>。</li>
+      <li>把产品域名加入 auth redirect allowlist 和 Supabase redirect settings。</li>
+      <li>产品站接入共享 auth helper，读取当前用户。</li>
+      <li>dashboard 创建 product code，例如 <code>expo_geo</code>。</li>
+      <li>定义 feature code，例如 <code>expo_geo.audio</code>、<code>expo_geo.real_map</code>。</li>
+      <li>产品站调用权益接口，决定功能是否开放。</li>
+      <li>需要跨设备同步时，再把 localStorage 里的游客数据迁移到数据库。</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>7. ExpoGeo 的融合路线</h2>
+    <p>
+      ExpoGeo 现在最适合先作为免费学习工具推出，再逐步接入账号、进度同步和付费权益。不要一开始就把它变成复杂的付费系统。
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>阶段</th>
+          <th>目标</th>
+          <th>具体内容</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Phase 0</td>
+          <td>独立稳定运行</td>
+          <td>ExpoGeo 保持独立目录和仓库，完成国家学习、搜索、地图、基础多语言 UI。</td>
+        </tr>
+        <tr>
+          <td>Phase 1</td>
+          <td>接入矩阵登录</td>
+          <td>增加登录按钮、用户状态、跳转 auth 后返回 ExpoGeo。</td>
+        </tr>
+        <tr>
+          <td>Phase 2</td>
+          <td>接入权益</td>
+          <td>dashboard 增加 <code>expo_geo</code> 产品和功能码，ExpoGeo 读取权益。</td>
+        </tr>
+        <tr>
+          <td>Phase 3</td>
+          <td>同步学习记录</td>
+          <td>游客继续用 localStorage；登录后同步收藏、已学国家、测验记录。</td>
+        </tr>
+        <tr>
+          <td>Phase 4</td>
+          <td>商业化内容</td>
+          <td>高级语音、国家专题、真实地图入口、旅游/商务会话包、儿童模式。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="decision">
+      对 ExpoGeo 来说，短期不需要单独数据库。游客数据用 localStorage 足够。只有登录用户的跨设备同步、付费权益、收藏和学习进度，才需要接入矩阵数据库。
+    </div>
+  </section>
+
+  <section>
+    <h2>8. 当前 7 个问题的处理建议</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>编号</th>
+          <th>问题</th>
+          <th>处理人建议</th>
+          <th>上线前要求</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Auth redirect 安全校验</td>
+          <td>我来修</td>
+          <td>必须修</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>订阅字段不一致</td>
+          <td>我来修或我 review</td>
+          <td>订阅上线前必须修</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Stripe price 查询/校验</td>
+          <td>我来修或我 review</td>
+          <td>订阅上线前必须修</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>SSO cookie 策略说明和统一</td>
+          <td>先整理策略，再小步改</td>
+          <td>产品扩展前应统一</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Dashboard middleware 性能</td>
+          <td>后续优化</td>
+          <td>流量增长前处理</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>积分充值原子化</td>
+          <td>建议尽早修</td>
+          <td>point 买断正式推广前处理</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>ExpoGeo 权益接口</td>
+          <td>接入登录/付费时做</td>
+          <td>ExpoGeo 商业化前处理</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>9. 推荐的下一步</h2>
+    <ol>
+      <li>先修 auth redirect，让新增产品域名接入时不会留下安全问题。</li>
+      <li>整理付费模型：短期以 point 买断为主，订阅代码先修到“不坏”，但不急着开放。</li>
+      <li>把积分充值改成数据库原子操作，这是当前真实业务更需要的稳定性。</li>
+      <li>为 ExpoGeo 做最小登录接入：登录状态、登录按钮、用户菜单、跳转 dashboard。</li>
+      <li>再做统一权益接口，让所有产品 App 都用同一套判断方式。</li>
+    </ol>
+    <div class="note">
+      核心原则：产品 App 要快，底座要稳。ExpoGeo 这类 App 应该专注学习体验，不要背负账号、Stripe、权限、账单这些复杂逻辑。
+    </div>
+  </section>
+
+  <footer>
+    <p>文档路径：<code>docs/reports/matrix-auth-billing-expansion-review-20260514.html</code></p>
+    <p>本文件是架构说明和 review 资料，不包含代码修改。</p>
+  </footer>
+</main>
+</body>
+</html>
