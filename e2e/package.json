@@ -14,6 +14,9 @@
     "test:local": "PLAY_MODE=local playwright test",
     "test:online": "PLAY_MODE=online playwright test",
     "codegen": "playwright codegen"
+  },
+  "dependencies": {
+    "@axe-core/playwright": "^4.11.3",
+    "axe-playwright": "^2.2.2"
   }
 }
-
