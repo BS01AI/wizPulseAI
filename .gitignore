@@ -72,6 +72,7 @@ docs/commit_log.md
 # ===== Claude Code 本地设置（CC自动追加，不跟踪）=====
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
+.claude/worktrees/
 fashion-home.png
 fashion-wizpulseai-com/
 
