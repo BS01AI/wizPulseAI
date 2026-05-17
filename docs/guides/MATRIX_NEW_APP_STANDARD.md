@@ -1,6 +1,6 @@
 # Matrix New App Integration Standard
 
-This is the standard for adding a new WizPulseAI matrix app. ExpoGeo is the clean reference sample.
+This is the standard for adding a new WizPulseAI matrix app. ExpoGeo is the full entitlement reference sample. Dino Kids is the lightweight auth + app-data reference sample.
 
 ## Core Rule
 
@@ -35,6 +35,26 @@ Existing ExpoGeo feature examples:
 - `pro_country_pack`: entitlement-controlled paid pack.
 - `unlimited_quizzes`: entitlement-controlled paid feature.
 
+## Dino Kids Reference Shape
+
+Dino Kids uses:
+
+- Product code: `dino_kids`.
+- App schema: `app_dino_kids`.
+- Billing owner: matrix billing in `db-wizPulseAI-com`.
+- Stripe owner: matrix billing only.
+- Entitlement source: `billing.entitlements` / free feature definitions.
+- Product feature registry: `billing.feature_definitions`.
+- App-owned data example: `app_dino_kids.user_favorites`.
+
+Existing Dino Kids feature examples:
+
+- `basic_access`: free feature.
+- `cloud_favorites`: free signed-in favorite sync.
+- `learning_profile`: reserved for future learning profile and progress.
+
+Use Dino Kids as the reference for a simple app that needs matrix login and synced user data, but does not need paid access yet.
+
 ## Required Database Shape
 
 Every new app needs one product registry row:
@@ -63,7 +83,7 @@ Cross-app state stays in `billing`:
 
 ## Standard App Bootstrap API
 
-New apps should start by calling the matrix bootstrap endpoint from the product frontend or its server layer:
+New apps that need matrix credits, feature gates, or Dashboard account context should start by calling the matrix bootstrap endpoint from the product frontend or its server layer:
 
 ```http
 GET /api/apps/bootstrap?product=expo_geo&features=basic_access,pro_country_pack,unlimited_quizzes
@@ -113,6 +133,8 @@ Apps should treat this as their first integration contract:
 - Use `credits.balance` for product-scoped credit UI.
 - Do not infer paid access from Stripe objects.
 
+Very lightweight apps may begin with matrix login plus public RPCs for app-owned data, as Dino Kids does for favorites. They should still register a product row and feature definitions first so Dashboard, billing, and future paid access have a stable product identity.
+
 ## Standard New App Checklist
 
 1. Choose a stable product code, for example `expo_geo`.
@@ -134,11 +156,13 @@ Magicoord is useful as a migrated app example, but it is not the clean new-app t
 - It previously had app-local credit tables and functions.
 - Some dashboard screens still contain Fashion/Magicoord-specific history.
 
-For new apps, copy the ExpoGeo shape instead:
+For new apps, copy the ExpoGeo or Dino Kids shape depending on the product need:
 
 ```text
 product_code -> app_<product_code> schema -> billing entitlements/credits -> matrix Stripe
 ```
+
+Use ExpoGeo style when the app needs feature gates, paid packs, credits, or learning progress. Use Dino Kids style when the app only needs login plus a small app-owned sync surface.
 
 ## Ownership Boundary
 

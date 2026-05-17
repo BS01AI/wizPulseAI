@@ -2,7 +2,7 @@
 
 日期：2026-05-15
 
-本文是 WizPulseAI 矩阵网站的长期数据库设计基线，用来指导后续注册用户管理、点数管理、Stripe 管理、用户资料、奖励等级、多 App 专属数据表和 ExpoGeo 接入。
+本文是 WizPulseAI 矩阵网站的长期数据库设计基线，用来指导后续注册用户管理、点数管理、Stripe 管理、用户资料、奖励等级、多 App 专属数据表，以及 ExpoGeo、Dino Kids 等 App 接入。
 
 它不是当前数据库现状审计。现有测试阶段的积分数据可以删除、重建或迁移，因此本文按目标架构设计。
 
@@ -36,6 +36,7 @@ public.*            矩阵核心：用户、App 注册、共享配置
 billing.*           点数、Stripe、订阅、权益、账本
 app_fashion.*       Fashion 专属业务数据
 app_expo_geo.*      ExpoGeo 专属业务数据
+app_dino_kids.*     Dino Kids 专属业务数据
 app_xxx.*           未来 App 专属业务数据
 ops.*               可选：审计、后台操作、任务日志
 ```
@@ -122,6 +123,7 @@ last_login_at
 
 - Fashion 身材/风格偏好。
 - ExpoGeo 学习目标。
+- Dino Kids 收藏、学习档案。
 - 某个 App 的业务状态。
 
 ## 4. App 注册表
@@ -135,6 +137,7 @@ last_login_at
 ```text
 fashion
 expo_geo
+dino_kids
 quickslide
 codespark
 chatbot
@@ -170,7 +173,7 @@ updated_at
 product_code = null
   全站通用点数，多个 App 都能消耗
 
-product_code = "expo_geo" / "fashion"
+product_code = "expo_geo" / "fashion" / "dino_kids"
   指定 App 点数，只能在对应 App 使用
 ```
 
@@ -534,7 +537,35 @@ app_expo_geo.content_packs
 5. 点数消费写 `billing.credit_ledger`。
 6. 不接 Stripe。
 
-### 9.3 新 App 模板
+### 9.3 Dino Kids
+
+目标 schema：
+
+```text
+app_dino_kids
+```
+
+当前表：
+
+```text
+app_dino_kids.user_favorites
+```
+
+当前 RPC：
+
+```text
+public.get_dino_favorites()
+public.sync_dino_favorites(text[])
+```
+
+边界：
+
+- Dino Kids 使用矩阵账号登录。
+- Dino Kids 可以保存登录用户的收藏、学习档案和进度。
+- 当前基础功能是 free feature，不接 Stripe。
+- 未来如果增加付费包、家庭档案、高级学习记录，先在 `billing.feature_definitions` 和 `billing.entitlements` 中定义权益，再让 App 查询矩阵接口。
+
+### 9.4 新 App 模板
 
 每个新 App：
 
@@ -560,7 +591,7 @@ public.users / public.user_profiles
   矩阵资料：昵称、头像、语言、角色、状态
 
 app_*.user_profiles
-  App 资料：Fashion 风格偏好、ExpoGeo 学习目标
+  App 资料：Fashion 风格偏好、ExpoGeo 学习目标、Dino Kids 学习档案
 ```
 
 不要把所有信息塞进 `public.users`。
@@ -637,7 +668,7 @@ ops.audit_logs
 - 保留当前注册、登录、点数购买可用路径。
 - 订阅继续关闭。
 - 明确积分测试数据可以重建。
-- 确认目标 schema：`public`、`billing`、`app_fashion`、`app_expo_geo`。
+- 确认目标 schema：`public`、`billing`、`app_fashion`、`app_expo_geo`、`app_dino_kids`。
 
 ### Phase 2：建立 billing 核心
 
@@ -669,6 +700,14 @@ ops.audit_logs
 - 建学习进度、测验、收藏等业务表。
 - ExpoGeo 使用矩阵账号。
 - ExpoGeo 使用 `billing.entitlements` 和 `billing.credit_ledger`。
+
+### Phase 5B：接入轻量 App 样本
+
+- 注册 `dino_kids` 到 `public.ai_products`。
+- 新建 `app_dino_kids` schema。
+- 先接矩阵账号和小型 app-owned 数据同步，例如收藏。
+- 基础功能使用 free feature。
+- 未来付费能力仍然通过 `billing.entitlements`、`billing.credit_ledger` 和矩阵 Stripe 层扩展。
 
 ### Phase 6：后台管理产品化
 
