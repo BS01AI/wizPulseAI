@@ -179,3 +179,14 @@ New app code must not:
 - Write to `billing.credit_ledger` directly from browser code.
 - Create its own user account system.
 - Create app-local copies of matrix credit or entitlement tables.
+
+## iOS Companion App Boundary
+
+If a matrix app is shipped to the iOS App Store, treat it as a free companion client by default:
+
+- iOS is a usage and traffic surface, not a billing surface.
+- The app must not include Stripe, checkout creation, purchase links, recharge buttons, pricing, upgrade prompts, or external purchase calls to action.
+- The app may read matrix account state, credits, quotas, and entitlements through approved matrix APIs.
+- Lack-of-access copy must stay neutral, for example: `This feature is not available for the current account.`
+
+See `docs/architecture/ios-companion-app-policy.md` before starting any iOS app work.
