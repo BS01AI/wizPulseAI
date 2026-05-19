@@ -128,6 +128,50 @@ Next manual check:
 
 If Dashboard website login succeeds but profile/credits are missing, the next area to inspect is matrix profile initialization, not Apple OAuth.
 
+## Web Apple Login Follow-up
+
+After the iOS login path worked, web Apple login exposed a database-side registration failure:
+
+```text
+Database error saving new user
+```
+
+Root cause:
+
+```text
+auth.users trigger public.handle_new_auth_user()
+  still wrote to removed legacy tables:
+    fashion.user_credits
+    fashion.credit_transactions
+```
+
+Fix:
+
+```text
+db-wizPulseAI-com/supabase/migrations/20260519010000_fix_auth_user_trigger_matrix_billing.sql
+```
+
+The trigger now:
+
+```text
+Creates public.users safely
+Truncates long OAuth display names to fit the current full_name constraint
+Uses a placeholder local email only when Supabase does not provide an email
+Does not block auth user creation on duplicate public.users.email
+Creates billing.user_reward_profiles
+Writes welcome bonus credits to billing.credit_wallets / billing.credit_ledger
+No longer references fashion.* legacy credit tables
+```
+
+Remote validation:
+
+```text
+Created and deleted a temporary Supabase Auth user through the Admin API.
+Profile creation succeeded.
+Long full_name was constrained safely.
+Auth user creation was not blocked by the trigger.
+```
+
 ## Billing Boundary
 
 iOS apps should not contain:
