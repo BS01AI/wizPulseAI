@@ -14,6 +14,8 @@ Stage 1: TestFlight MVP
   Useful demo mode
   Local progress
   Cloud sync after login
+  Account deletion
+  Privacy / terms / support links
   No payment surface
 
 Stage 2: App Store public release
@@ -22,6 +24,7 @@ Stage 2: App Store public release
   Privacy metadata
   Support / privacy / terms URLs
   Demo account
+  Privacy nutrition labels
 ```
 
 ## Required Boundary
@@ -99,6 +102,7 @@ Apple / Google / email login
 OAuth deep-link callback handling
 Dashboard bootstrap call
 Sign out
+Account deletion
 ```
 
 Product progress hook owns:
@@ -171,11 +175,13 @@ Login callback refreshes app state immediately
 Demo mode is useful without login
 Local progress survives app restart
 Local progress merges into cloud after login
+Account deletion works from inside the app
+Privacy, terms, and support links open
 Dashboard website can log in with the same account
 No visible purchase or web billing copy
 No Stripe SDK or secrets in app
 App Review Notes draft exists
-Privacy Policy / Support URL planned
+Privacy Policy / Support URL configured
 ```
 
 ## ExpoGeo Current State
@@ -188,6 +194,8 @@ Apple Services ID via matrix auth
 Dashboard bootstrap with bearer token
 Local learning progress
 Cloud progress RPC merge/sync
+Account deletion through Dashboard bearer-token API
+Privacy / terms / support links
 App Store companion-app billing boundary
 ```
 
