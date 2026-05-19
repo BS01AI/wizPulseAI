@@ -69,6 +69,12 @@ Apple Developer 的 Services ID 里也要填写同一个 callback URL，并配�
 auth.wizpulseai.com
 ```
 
+Secret Key 需要用 Apple `.p8` 私钥、Team ID、Key ID、Services ID 重新生成。切换到新的 `com.wizpulseai.auth` 后，client secret 的 `sub` 必须也是：
+
+```text
+com.wizpulseai.auth
+```
+
 如果本地测试或迁移期间仍保留旧的 ExpoGeo Services ID，可以临时把多个 Client IDs 放进 Supabase：
 
 ```text
@@ -106,6 +112,54 @@ com.wizpulseai.expogeo.auth
 5. 测试通过后，再删除旧的 `com.wizpulseai.expogeo.auth`。
 
 删除旧 Services ID 之前，不要把 Supabase Client IDs 里的旧值提前移除，否则还在使用旧 client id 的测试包会出现 `invalid_request` 或 `invalid_client`。
+
+## Apple Client Secret 本地生成
+
+仓库里提供了一个只含代码、不含密钥的脚本：
+
+```text
+scripts/generate-apple-client-secret.mjs
+```
+
+`.p8` 私钥不要放进仓库、docs、截图或聊天。Downloads 访问权限关闭没有问题，建议把 `.p8` 移到本机私密目录：
+
+```bash
+mkdir -p "$HOME/.config/wizpulseai/apple"
+mv "$HOME/Downloads/AuthKey_YOUR_KEY_ID.p8" "$HOME/.config/wizpulseai/apple/"
+chmod 700 "$HOME/.config/wizpulseai" "$HOME/.config/wizpulseai/apple"
+chmod 600 "$HOME/.config/wizpulseai/apple/AuthKey_YOUR_KEY_ID.p8"
+```
+
+生成 Supabase Apple Provider 的 Secret Key：
+
+```bash
+node scripts/generate-apple-client-secret.mjs \
+  --team-id "YOUR_APPLE_TEAM_ID" \
+  --key-id "YOUR_APPLE_KEY_ID" \
+  --client-id "com.wizpulseai.auth" \
+  --private-key "$HOME/.config/wizpulseai/apple/AuthKey_YOUR_KEY_ID.p8" \
+  --days 180
+```
+
+如果不想把 secret 显示在终端，可以写入本机文件：
+
+```bash
+node scripts/generate-apple-client-secret.mjs \
+  --team-id "YOUR_APPLE_TEAM_ID" \
+  --key-id "YOUR_APPLE_KEY_ID" \
+  --client-id "com.wizpulseai.auth" \
+  --private-key "$HOME/.config/wizpulseai/apple/AuthKey_YOUR_KEY_ID.p8" \
+  --days 180 \
+  --out "$HOME/.config/wizpulseai/apple/apple-client-secret.jwt"
+```
+
+然后把生成的 JWT 填到 Supabase Dashboard：
+
+```text
+Authentication → Providers → Apple → Secret Key
+```
+
+生成完成后可以删除输出文件，或继续用 `chmod 600` 保存在本机私密目录。不要把输出 JWT 写进 `.env.local`，除非某个后端服务明确需要；当前矩阵登录使用 Supabase Provider 后台保存即可。
 
 ## 与 App Store 收费规则的关系
 
