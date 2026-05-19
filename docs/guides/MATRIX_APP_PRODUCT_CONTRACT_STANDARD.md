@@ -63,6 +63,7 @@ List every active client and its role:
 ```text
 Web: primary product client / SEO / public entry
 iOS: free companion app / traffic entry / logged-in usage
+Android: free companion app / traffic entry / logged-in usage
 Dashboard: account, credits, entitlements, support
 ```
 
@@ -175,6 +176,8 @@ iOS clients must not show:
 - QR codes to paid web pages.
 - "Go to website to buy" style copy.
 
+Android clients should follow the same default companion boundary. If an Android client sells digital features inside the app, that requires a separate Google Play Billing design and must not be mixed into the free companion path.
+
 Allowed iOS behavior:
 
 - Login.
@@ -210,6 +213,7 @@ ExpoGeo should use this baseline until it gets a dedicated `docs/PRODUCT_CONTRAC
 Product code: expo_geo
 App schema: app_expo_geo
 Required clients: Web, iOS
+Future optional client: Android
 Core features:
   - daily_country
   - country_catalog

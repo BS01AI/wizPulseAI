@@ -197,3 +197,19 @@ If a matrix app is shipped to the iOS App Store, treat it as a free companion cl
 - Lack-of-access copy must stay neutral, for example: `This feature is not available for the current account.`
 
 See `docs/architecture/ios-companion-app-policy.md` before starting any iOS app work.
+
+## Android Companion App Boundary
+
+If a matrix app is shipped to Google Play, use the same free companion posture by default:
+
+- Reuse the Expo / React Native product code where practical.
+- Android is a usage and traffic surface, not a billing surface by default.
+- The app must not include Stripe, checkout creation, purchase links, recharge buttons, pricing, upgrade prompts, or external purchase calls to action.
+- The app may read matrix account state, credits, quotas, and entitlements through approved matrix APIs.
+- If Android ever sells digital features inside the app, create a separate Google Play Billing design instead of extending the companion path.
+
+See:
+
+```text
+docs/guides/MATRIX_ANDROID_COMPANION_APP_STANDARD.md
+```
