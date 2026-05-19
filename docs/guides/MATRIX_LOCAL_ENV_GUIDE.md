@@ -223,23 +223,26 @@ EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 
 ## Apple Sign In
 
-中长期目标：Supabase Apple Provider 使用矩阵账户 Services ID 支持 web 登录：
+Supabase Apple Provider 使用矩阵账户 Services ID 支持 Web 和 iOS 登录：
 
 ```text
 com.wizpulseai.auth
 ```
 
-ExpoGeo 在测试阶段可以暂时保留 App 专用 Services ID：
+Apple Developer 侧的对应关系：
 
 ```text
-com.wizpulseai.expogeo.auth
+Primary App ID: com.wizpulseai.account
+Services ID:    com.wizpulseai.auth
 ```
 
-Supabase Apple Provider 可以填写多个 Client IDs：
+Supabase Apple Provider 的 Client IDs 保持：
 
 ```text
-com.wizpulseai.auth,com.wizpulseai.expogeo.auth
+com.wizpulseai.auth
 ```
+
+旧的 ExpoGeo 专用 Services ID 已不再作为标准路径使用。
 
 生成的 Apple client secret 不要写入 git。
 
