@@ -4,6 +4,14 @@ Last updated: 2026-05-19
 
 This guide captures the reusable iOS pattern proven by ExpoGeo. Future WizPulseAI apps such as Dino Kids and Magicoord should start from this shape instead of reinventing auth, billing boundaries, and App Store compliance.
 
+Before building an iOS companion client, write or update the product contract:
+
+```text
+docs/guides/MATRIX_APP_PRODUCT_CONTRACT_STANDARD.md
+```
+
+The iOS UI does not need to match Web pixel-for-pixel. It must match the product contract: feature inventory, data shape, account states, localization meaning, entitlement gates, and billing boundaries.
+
 ## Release Strategy
 
 Ship in two stages:
@@ -168,6 +176,7 @@ Avatar                     -> do not expect Apple to provide one
 ## TestFlight MVP Checklist
 
 ```text
+Product contract exists or has been updated
 Email login works
 Apple login works
 Google login works or is intentionally hidden

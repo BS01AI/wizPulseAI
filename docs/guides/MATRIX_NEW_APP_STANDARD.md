@@ -138,15 +138,22 @@ Very lightweight apps may begin with matrix login plus public RPCs for app-owned
 ## Standard New App Checklist
 
 1. Choose a stable product code, for example `expo_geo`.
-2. Add or verify `public.ai_products` row.
-3. Add app schema as `app_<product_code>`.
-4. Add app-owned tables only for product data.
-5. Add `billing.feature_definitions` rows for feature gates.
-6. Use `/api/apps/bootstrap` for user, credit, and entitlement context.
-7. Use `/api/entitlements/check` for focused feature checks after bootstrap.
-8. Use `/api/credits/balance?product=<product_code>` for product-scoped balance refresh.
-9. Put all Stripe checkout and webhook work in `db-wizPulseAI-com`.
-10. Keep subscription features disabled unless the matrix billing layer explicitly promotes them to production.
+2. Write the product contract before implementing multiple clients.
+3. Add or verify `public.ai_products` row.
+4. Add app schema as `app_<product_code>`.
+5. Add app-owned tables only for product data.
+6. Add `billing.feature_definitions` rows for feature gates.
+7. Use `/api/apps/bootstrap` for user, credit, and entitlement context.
+8. Use `/api/entitlements/check` for focused feature checks after bootstrap.
+9. Use `/api/credits/balance?product=<product_code>` for product-scoped balance refresh.
+10. Put all Stripe checkout and webhook work in `db-wizPulseAI-com`.
+11. Keep subscription features disabled unless the matrix billing layer explicitly promotes them to production.
+
+For Web/iOS parity and product specification rules, see:
+
+```text
+docs/guides/MATRIX_APP_PRODUCT_CONTRACT_STANDARD.md
+```
 
 ## What Not To Copy From Magicoord
 
