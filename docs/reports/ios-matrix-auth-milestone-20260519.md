@@ -46,6 +46,32 @@ Matrix profile / credits / entitlements rows:
 
 The iOS app should treat the Supabase session as the source of identity, then call Dashboard bootstrap to read matrix account state.
 
+## Apple Profile Behavior
+
+Sign in with Apple can behave differently from Google/email login:
+
+```text
+Name:
+  Apple may return it only on the first authorization, and may not return it at all.
+
+Email:
+  If the user chooses Hide My Email, Apple returns a relay address such as:
+  random-id@privaterelay.appleid.com
+
+Avatar:
+  Apple does not provide a profile avatar.
+```
+
+Dashboard should not treat the random relay email local part as a public display name. The current database trigger uses this fallback:
+
+```text
+Apple/relay/no-name user -> WizPulseAI User
+Normal email/no-name user -> email local part
+User-edited display name -> preserved
+```
+
+The user can still edit the public display name in Dashboard settings.
+
 ## Website Login Compatibility
 
 Because iOS and web use the same Supabase project and the same Apple Services ID, the same Apple account can log in through:
@@ -157,6 +183,7 @@ The trigger now:
 Creates public.users safely
 Truncates long OAuth display names to fit the current full_name constraint
 Uses a placeholder local email only when Supabase does not provide an email
+Avoids using Apple privaterelay random local parts as display names
 Does not block auth user creation on duplicate public.users.email
 Creates billing.user_reward_profiles
 Writes welcome bonus credits to billing.credit_wallets / billing.credit_ledger
@@ -170,6 +197,7 @@ Created and deleted a temporary Supabase Auth user through the Admin API.
 Profile creation succeeded.
 Long full_name was constrained safely.
 Auth user creation was not blocked by the trigger.
+Apple relay email test user defaulted to WizPulseAI User.
 ```
 
 ## Billing Boundary
