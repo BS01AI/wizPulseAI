@@ -1,6 +1,6 @@
 # WizPulseAI Matrix 本地环境配置指南
 
-Last updated: 2026-05-19
+Last updated: 2026-05-23
 
 矩阵根仓库不是统一 Node monorepo。每个 App 保留自己的依赖、lockfile 和本地环境文件。
 
@@ -48,7 +48,7 @@ SSO callback
 
 ```text
 NEXT_PUBLIC_SUPABASE_URL
-NEXT_PUBLIC_SUPABASE_ANON_KEY
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 SUPABASE_SERVICE_ROLE_KEY
 NEXT_PUBLIC_AUTH_URL
 NEXT_PUBLIC_APP_URL
@@ -99,7 +99,7 @@ Stripe checkout/webhooks
 
 ```text
 NEXT_PUBLIC_SUPABASE_URL
-NEXT_PUBLIC_SUPABASE_ANON_KEY
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 SUPABASE_SERVICE_ROLE_KEY
 NEXT_PUBLIC_APP_URL
 NEXT_PUBLIC_AUTH_URL
@@ -212,12 +212,25 @@ OpenAI or provider server keys
 ```text
 Next.js web apps:
 NEXT_PUBLIC_SUPABASE_URL
-NEXT_PUBLIC_SUPABASE_ANON_KEY
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+
+Vite web apps:
+VITE_SUPABASE_URL
+VITE_SUPABASE_PUBLISHABLE_KEY
 
 Expo iOS:
 EXPO_PUBLIC_SUPABASE_URL
 EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 ```
+
+Auth、Dashboard、Magicoord、Dino Kids 当前代码保留旧 key fallback：
+
+```text
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+VITE_SUPABASE_ANON_KEY
+```
+
+fallback 只用于兼容旧部署环境。新环境变量配置一律使用 `sb_publishable_` 开头的 publishable key。
 
 旧的 `SUPABASE_URL` / `SUPABASE_ANON_KEY` 不要再加回 App 的 `.env.local`，除非某个 CLI 或脚本明确需要。
 
