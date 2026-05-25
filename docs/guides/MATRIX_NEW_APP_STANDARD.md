@@ -155,6 +155,12 @@ For Web/iOS parity and product specification rules, see:
 docs/guides/MATRIX_APP_PRODUCT_CONTRACT_STANDARD.md
 ```
 
+For API rate limits, AI cost protection, and abuse-control rules, see:
+
+```text
+docs/guides/MATRIX_APP_SECURITY_COST_STANDARD.md
+```
+
 ## What Not To Copy From Magicoord
 
 Magicoord is useful as a migrated app example, but it is not the clean new-app template:
