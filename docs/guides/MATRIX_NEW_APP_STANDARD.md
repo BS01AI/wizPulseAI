@@ -155,6 +155,12 @@ For Web/iOS parity and product specification rules, see:
 docs/guides/MATRIX_APP_PRODUCT_CONTRACT_STANDARD.md
 ```
 
+For a short handoff brief that can be given to another AI agent or developer before full matrix integration, see:
+
+```text
+docs/guides/MATRIX_NEW_APP_AI_DEVELOPMENT_BRIEF.md
+```
+
 For API rate limits, AI cost protection, and abuse-control rules, see:
 
 ```text
