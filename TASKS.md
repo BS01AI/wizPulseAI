@@ -23,10 +23,21 @@
 | 3A审查 | ✅ | review-agent(1 BLOCK已修) + security-auditor(1 P0已修) |
 | BUSINESS-BIBLE 同步 | ✅ | 定价39/98pt、30pt bonus、points包、Price ID 对照 |
 
-**⚠️ 待 bobo/线上操作**：
-- [ ] **migration 20260610010000 需应用到线上 DB**（Supabase MCP token 401 无法远程执行；不应用则扣分仍断）
-- [ ] magicoord 在 ai_products 仍是 is_active=false（05-25 暂停），开放时需激活
-- [ ] 跑调查报告附录的诊断 SQL 验证 fashion RLS / bucket / migration 状态
+**✅ 线上验证（2026-06-10 晚，矩阵侧应用 migration 后实测 8 项全过）**：
+- [x] migration 20260610010000 已由矩阵侧应用到线上 DB
+- [x] access_context 返回余额/tier/价格表 ✅
+- [x] 分析 9/23pt、变身 39/98pt 精确扣点 ✅
+- [x] clientActionId 幂等重试零重复扣 ✅
+- [x] refund 用户态被拒 + service_role 只退一次 ✅
+- [x] P0 权限修复线上生效（apply_credit_delta/give_share_reward 均 permission denied）✅
+- [x] Dashboard summary 用量归类（magicoord 169pt + last_activity 更新）✅
+- [x] 前端零自行扣点，余额不足 → modal → Dashboard /dashboard/credits ✅
+- [x] Stripe 全部移出 magicoord（依赖/代码/env 校验全删），service key 无客户端泄漏 ✅
+
+**剩余（公开前）**：
+- [ ] magicoord ai_products.is_active 保持关闭（管理员/测试入口），公开时机待 bobo 决裁
+- [ ] 公开前跑完整 Playwright 回归：登录→查余额→分析扣点→失败退款→余额刷新→购买跳转
+- [ ] 跑调查报告附录的诊断 SQL 验证 fashion RLS / bucket 状态（MCP token 仍 401）
 
 **审查遗留 P1/P2（后续批次）**：
 - [x] ~~P1: 分享奖励自刷 + share/create TOCTOU~~ → 已随奖励功能整体删除而消解（2026-06-10 bobo决裁）
