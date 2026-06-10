@@ -126,9 +126,11 @@ BS01AI（法人）
 | points_3000 | ¥2,800 | 3,000 | 約7%OFF | ~333次 |
 | points_10000 | ¥9,300 | 10,000 | 約7%OFF | ~1,111次 |
 
-> **初回特典**: matrix onboarding 完成时发放 **30pt**（幂等、一次性）。
-> 权威: `public.grant_onboarding_welcome_bonus`（migration 20260529010000）。
-> 旧 fashion 本地的「先着100名=100pt/其后50pt」「初回特典50pt」已全部废止。
+> **初回特典（30pt）**: 由 **matrix Dashboard 的 onboarding 流程**发放（幂等、一次性，
+> 权威: `public.grant_onboarding_welcome_bonus`，migration 20260529010000）。
+> **奖励/活动类全部归 Dashboard 管辖**（bobo 2026-06-10 决裁）——マジコーデ侧
+> 不做任何奖励的宣传与发放：旧「先着100名=100pt/50pt」「初回特典50pt」
+> 「分享+2pt/+5pt」「邀请+100pt」等宣传文案与发放逻辑已全部删除。
 
 ### 3.3 用户能做什么（积分消耗表 - 对外公示用）
 
@@ -138,7 +140,7 @@ BS01AI（法人）
 | 魔法変身（画像編集） | **39pt** | **98pt** | AI生成编辑后效果图 |
 | 顾问聊天 | 免费 | 免费 | 限流保护（Free 30条/h） |
 
-初回特典 30pt = 3次 Standard 分析，足够体验核心价值。
+初回特典 30pt（Dashboard onboarding 发放）= 3次 Standard 分析，足够体验核心价值。
 
 ### 3.4 Stripe Price ID 对照（全局 points 包）
 
