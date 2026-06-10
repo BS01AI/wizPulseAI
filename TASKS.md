@@ -5,7 +5,39 @@
 
 ---
 
-## 最新完成 (2025-01-14) ✅
+## 最新完成 (2026-06-10) ✅
+
+### Magicoord → matrix billing 统一积分迁移 + 聊天接真AI
+
+> 背景调查报告: [wizPulseAI-docs/reports/MAGICOORD-READINESS-AUDIT-20260610.md](./wizPulseAI-docs/reports/MAGICOORD-READINESS-AUDIT-20260610.md)
+> 起因: 旧 fashion.* 积分表/RPC 已被 20260516006000 删除，但 Fashion 站 main 分支仍在调用 → 生产扣分链路断裂（P0-4）
+
+| 任务 | 状态 | 说明 |
+|------|------|------|
+| DB migration 20260610010000 | ✅ | consume/refund_magicoord_feature + fashion.feature_usage + access context |
+| 积分服务迁移 | ✅ | credits.service / tier / analyze / edit-outfit / chat 全走 matrix RPC |
+| 初回ボーナス统一 | ✅ | 旧100/50pt退役 → matrix onboarding 30pt（幂等） |
+| 购买包切换 | ✅ | 旧fashion专属包 → 全局 points_100~10000 |
+| 顾问聊天接真AI | ✅ | Gemini Flash 服务端生成（限流+预算帽已有），1对1禁伪造persona |
+| 安全修复 P0×2 | ✅ | apply_credit_delta + give_*_reward 三兄弟 REVOKE authenticated |
+| 3A审查 | ✅ | review-agent(1 BLOCK已修) + security-auditor(1 P0已修) |
+| BUSINESS-BIBLE 同步 | ✅ | 定价39/98pt、30pt bonus、points包、Price ID 对照 |
+
+**⚠️ 待 bobo/线上操作**：
+- [ ] **migration 20260610010000 需应用到线上 DB**（Supabase MCP token 401 无法远程执行；不应用则扣分仍断）
+- [ ] magicoord 在 ai_products 仍是 is_active=false（05-25 暂停），开放时需激活
+- [ ] 跑调查报告附录的诊断 SQL 验证 fashion RLS / bucket / migration 状态
+
+**审查遗留 P1/P2（后续批次）**：
+- [ ] P1: 分享点击奖励无"访客≠分享者"校验（可自刷）+ share/create TOCTOU（需 share_records(analysis_id) UNIQUE，加前先查线上重复数据）
+- [ ] P1: fashion 主路径 rate-limiter 是 read-modify-write 竞态，应迁移到 Redis 原子滑窗
+- [ ] P2: analyze/edit-outfit 成本未计入每日 AI 预算帽；budget 估算应改用真实 token
+- [ ] P2: chat prompt 改结构化 multi-turn API（现为文本拼接+标签剥离缓解）
+- [ ] 清理: lib/db/fashion.mapper.ts 等死代码仍引用已删表；TS 类型需 supabase gen 重新生成
+
+---
+
+## 历史完成 (2025-01-14) ✅
 
 ### PWA 安装引导功能
 
